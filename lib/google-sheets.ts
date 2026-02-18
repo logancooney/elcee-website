@@ -13,12 +13,21 @@ interface BookingData {
 
 export async function saveToGoogleSheets(booking: BookingData) {
   // Check if Google Sheets credentials are configured
+  console.log('🔍 Google Sheets check:', {
+    hasPrivateKey: !!process.env.GOOGLE_SHEETS_PRIVATE_KEY,
+    hasClientEmail: !!process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
+    hasSheetId: !!process.env.GOOGLE_SHEET_ID,
+    clientEmail: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
+    sheetId: process.env.GOOGLE_SHEET_ID,
+  });
+  
   if (!process.env.GOOGLE_SHEETS_PRIVATE_KEY || !process.env.GOOGLE_SHEETS_CLIENT_EMAIL) {
     console.log('⚠️ Google Sheets not configured - booking not saved to CRM');
     return { success: false, reason: 'not-configured' };
   }
 
   try {
+    console.log('📊 Attempting to save to Google Sheets...');
     const { google } = await import('googleapis');
     
     // Initialize auth
@@ -58,7 +67,8 @@ export async function saveToGoogleSheets(booking: BookingData) {
     ];
 
     // Append to sheet
-    await sheets.spreadsheets.values.append({
+    console.log('📝 Writing row to sheet:', row);
+    const result = await sheets.spreadsheets.values.append({
       spreadsheetId,
       range: 'Bookings!A:J', // Assumes sheet named "Bookings"
       valueInputOption: 'USER_ENTERED',
@@ -67,11 +77,16 @@ export async function saveToGoogleSheets(booking: BookingData) {
       },
     });
 
-    console.log('✅ Booking saved to Google Sheets');
+    console.log('✅ Booking saved to Google Sheets:', result.data);
     return { success: true };
     
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ Google Sheets error:', error);
+    console.error('Error details:', {
+      message: error.message,
+      code: error.code,
+      errors: error.errors,
+    });
     // Don't fail the whole booking if Sheets fails
     return { success: false, error };
   }
