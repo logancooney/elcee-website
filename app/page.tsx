@@ -35,7 +35,7 @@ export default function Home() {
             </p>
             <div className="flex gap-4">
               <a 
-                href="#" 
+                href="https://open.spotify.com/artist/6E8xwOloHnzGWVlNV9K8n7" 
                 className="bg-white text-black px-8 py-3 font-semibold hover:bg-gray-200 transition"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -89,7 +89,7 @@ export default function Home() {
           <h2 className="text-4xl font-bold mb-12">Listen</h2>
           <div className="grid md:grid-cols-3 gap-6">
             <a 
-              href="#" 
+              href="https://open.spotify.com/artist/6E8xwOloHnzGWVlNV9K8n7" 
               className="border border-white p-8 hover:bg-white hover:text-black transition"
               target="_blank"
               rel="noopener noreferrer"
@@ -98,7 +98,7 @@ export default function Home() {
               <p className="text-sm text-gray-400">Stream now</p>
             </a>
             <a 
-              href="#" 
+              href="https://music.apple.com/gb/artist/elcee-the-alchemist/1479992060" 
               className="border border-white p-8 hover:bg-white hover:text-black transition"
               target="_blank"
               rel="noopener noreferrer"
@@ -107,13 +107,31 @@ export default function Home() {
               <p className="text-sm text-gray-400">Stream now</p>
             </a>
             <a 
-              href="#" 
+              href="https://youtube.com/@elceethealchemist" 
               className="border border-white p-8 hover:bg-white hover:text-black transition"
               target="_blank"
               rel="noopener noreferrer"
             >
               <h3 className="text-2xl font-bold mb-2">YouTube</h3>
               <p className="text-sm text-gray-400">Watch now</p>
+            </a>
+            <a 
+              href="https://soundcloud.com/elceethealchemist" 
+              className="border border-white p-8 hover:bg-white hover:text-black transition"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <h3 className="text-2xl font-bold mb-2">SoundCloud</h3>
+              <p className="text-sm text-gray-400">Stream now</p>
+            </a>
+            <a 
+              href="https://elceethealchemist.bandcamp.com" 
+              className="border border-white p-8 hover:bg-white hover:text-black transition"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <h3 className="text-2xl font-bold mb-2">Bandcamp</h3>
+              <p className="text-sm text-gray-400">Support directly</p>
             </a>
           </div>
         </div>
@@ -124,10 +142,11 @@ export default function Home() {
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl font-bold mb-12">Connect</h2>
           <div className="flex justify-center gap-8 flex-wrap">
-            <a href="#" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">Instagram</a>
-            <a href="#" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">TikTok</a>
-            <a href="#" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">Twitter</a>
-            <a href="#" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">YouTube</a>
+            <a href="https://instagram.com/elceethealchemist" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://tiktok.com/@elceethealchemist" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">TikTok</a>
+            <a href="https://twitter.com/elceejpg" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">Twitter</a>
+            <a href="https://youtube.com/@elceethealchemist" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">YouTube</a>
+            <a href="https://facebook.com/elceethealchemist" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">Facebook</a>
           </div>
         </div>
       </section>

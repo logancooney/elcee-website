@@ -82,9 +82,9 @@ export default function ContactPage() {
               DM for quick questions or just to connect.
             </p>
             <div className="flex flex-col gap-2 items-center">
-              <a href="#" className="hover:underline" target="_blank" rel="noopener noreferrer">Instagram</a>
-              <a href="#" className="hover:underline" target="_blank" rel="noopener noreferrer">Twitter</a>
-              <a href="#" className="hover:underline" target="_blank" rel="noopener noreferrer">TikTok</a>
+              <a href="https://instagram.com/elceethealchemist" className="hover:underline" target="_blank" rel="noopener noreferrer">Instagram</a>
+              <a href="https://twitter.com/elceejpg" className="hover:underline" target="_blank" rel="noopener noreferrer">Twitter</a>
+              <a href="https://tiktok.com/@elceethealchemist" className="hover:underline" target="_blank" rel="noopener noreferrer">TikTok</a>
             </div>
           </div>
         </div>
