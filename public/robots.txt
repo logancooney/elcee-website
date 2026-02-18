@@ -1,0 +1,10 @@
+# robots.txt for elceethealchemist.com
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://elceethealchemist.com/sitemap.xml
+
+# Disallow admin/API routes (none public yet)
+Disallow: /api/
