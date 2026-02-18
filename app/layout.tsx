@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   description: "Independent alternative rap artist from Manchester. Six years in the game. Raw lyricism, alchemical soundscapes. Book studio sessions for recording, mixing, mastering, and production.",
   keywords: ["Elcee the Alchemist", "alternative rap", "Manchester artist", "independent rapper", "recording studio Manchester", "music producer"],
   authors: [{ name: "Elcee the Alchemist" }],
+  verification: {
+    google: "X66hpF7OJfSszJUNCc2bfsvTQqj0dZiW-RKwn0Rprp4",
+  },
   openGraph: {
     title: "Elcee the Alchemist",
     description: "Alternative rap artist from Manchester. Independent. Raw. Alchemical.",
