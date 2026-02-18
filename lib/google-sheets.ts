@@ -149,7 +149,7 @@ export async function updateBookingStatus(
     const spreadsheetId = process.env.GOOGLE_SHEET_ID;
 
     // Update status column (I) and notes column (J)
-    const updates = [
+    const updates: Array<{ range: string; values: string[][] }> = [
       {
         range: `Bookings!I${rowNumber}`,
         values: [[status]],
