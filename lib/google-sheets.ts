@@ -30,11 +30,32 @@ export async function saveToGoogleSheets(booking: BookingData) {
     console.log('📊 Attempting to save to Google Sheets...');
     const { google } = await import('googleapis');
     
+    // Parse the private key - handle both escaped and unescaped formats
+    let privateKey = process.env.GOOGLE_SHEETS_PRIVATE_KEY || '';
+    
+    // If it starts with a quote, it's the raw JSON value - parse it
+    if (privateKey.startsWith('"')) {
+      try {
+        privateKey = JSON.parse(privateKey);
+      } catch (e) {
+        console.error('Failed to parse private key as JSON:', e);
+      }
+    }
+    
+    // Replace literal \n with actual newlines
+    privateKey = privateKey.replace(/\\n/g, '\n');
+    
+    console.log('🔑 Private key format check:', {
+      startsCorrectly: privateKey.startsWith('-----BEGIN'),
+      endsCorrectly: privateKey.trim().endsWith('-----END PRIVATE KEY-----'),
+      length: privateKey.length,
+    });
+    
     // Initialize auth
     const auth = new google.auth.GoogleAuth({
       credentials: {
         client_email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
-        private_key: process.env.GOOGLE_SHEETS_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+        private_key: privateKey,
       },
       scopes: ['https://www.googleapis.com/auth/spreadsheets'],
     });
