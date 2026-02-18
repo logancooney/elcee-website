@@ -25,8 +25,8 @@ export default function EPKPage() {
     
     if (password.toLowerCase() === CORRECT_PASSWORD) {
       localStorage.setItem(PASSWORD_KEY, CORRECT_PASSWORD);
-      setIsAuthenticated(true);
-      setError("");
+      // Redirect to Readymag EPK
+      window.location.href = "https://readymag.website/u816280127/elcee/";
     } else {
       setError("Incorrect password. Please contact for access.");
       setPassword("");
@@ -103,41 +103,15 @@ export default function EPKPage() {
     );
   }
 
-  // Authenticated - show EPK
+  // Authenticated - redirect happened in handleSubmit
+  // This code shouldn't normally render, but just in case:
   return (
-    <div className="min-h-screen bg-black">
-      {/* Header with logout */}
-      <div className="bg-black/90 backdrop-blur-sm border-b border-white/10 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <Link href="/">
-            <Image 
-              src="/logos/eta-logo-white.png" 
-              alt="Elcee the Alchemist" 
-              width={120} 
-              height={40}
-              className="h-10 w-auto"
-            />
-          </Link>
-          <button
-            onClick={() => {
-              localStorage.removeItem(PASSWORD_KEY);
-              setIsAuthenticated(false);
-            }}
-            className="text-sm text-gray-400 hover:text-white transition"
-          >
-            Logout
-          </button>
-        </div>
-      </div>
-
-      {/* EPK Embed */}
-      <div className="w-full h-[calc(100vh-73px)]">
-        <iframe
-          src="https://readymag.website/u816280127/elcee/"
-          className="w-full h-full border-0"
-          title="Elcee the Alchemist - Electronic Press Kit"
-          allowFullScreen
-        />
+    <div className="min-h-screen bg-black text-white flex items-center justify-center px-6">
+      <div className="text-center">
+        <p className="text-xl mb-4">Redirecting to EPK...</p>
+        <p className="text-sm text-gray-400">
+          If not redirected, <a href="https://readymag.website/u816280127/elcee/" className="underline">click here</a>
+        </p>
       </div>
     </div>
   );
