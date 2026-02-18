@@ -11,11 +11,11 @@ interface GalleryImage {
 
 // TODO: Add real studio photos here
 const images: GalleryImage[] = [
-  // Placeholder - will be replaced with real studio photos
-  { src: "/photos/studio-1.jpg", alt: "Recording booth", caption: "Professional recording booth" },
-  { src: "/photos/studio-2.jpg", alt: "Control room", caption: "Control room with industry-standard equipment" },
-  { src: "/photos/studio-3.jpg", alt: "Equipment setup", caption: "High-end microphones and preamps" },
-  { src: "/photos/studio-4.jpg", alt: "Production space", caption: "Music production workstation" },
+  // Using existing photos as placeholders until real studio photos are added
+  { src: "/photos/press-shot-bw.jpg", alt: "Studio", caption: "Professional recording environment" },
+  { src: "/photos/headshot.jpg", alt: "Studio", caption: "Manchester based studio" },
+  { src: "/photos/full-fit.jpg", alt: "Studio", caption: "Professional equipment" },
+  { src: "/photos/press-shot-1.jpg", alt: "Studio", caption: "Industry standard setup" },
 ];
 
 export default function StudioGallery() {
