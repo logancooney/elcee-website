@@ -50,7 +50,7 @@ export async function POST(request: Request) {
       service: data.service,
       date: data.date,
       time: data.time,
-      email: emailResult.status === 'fulfilled' ? emailResult.value.method : 'failed',
+      emailNotification: emailResult.status === 'fulfilled' ? emailResult.value.method : 'failed',
       sheets: sheetsResult.status === 'fulfilled' ? sheetsResult.value.success : false,
       calendar: calendarResult.status === 'fulfilled' ? calendarResult.value.success : false,
       timestamp: new Date().toISOString(),
