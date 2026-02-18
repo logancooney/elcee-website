@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const CORRECT_PASSWORD = "industry access";
+const CORRECT_PASSWORD = "industryaccess";
 const PASSWORD_KEY = "epk_access";
 
 export default function EPKPage() {
