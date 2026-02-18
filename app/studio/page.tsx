@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import StudioGallery from "./components/StudioGallery";
 
 export default function StudioPage() {
   const [formData, setFormData] = useState({
@@ -124,8 +125,11 @@ export default function StudioPage() {
         </div>
       </section>
 
+      {/* Studio Gallery */}
+      <StudioGallery />
+
       {/* Booking Form */}
-      <section className="py-20 px-6">
+      <section className="py-20 px-6 bg-black text-white">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl font-bold mb-4 text-center">Book a Session</h2>
           <p className="text-center text-gray-400 mb-12">

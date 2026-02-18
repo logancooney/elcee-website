@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { sendBookingNotification, sendCustomerConfirmation } from '@/lib/email-service';
+import { saveToGoogleSheets } from '@/lib/google-sheets';
+import { createTentativeBooking } from '@/lib/google-calendar';
 
 export async function POST(request: Request) {
   try {
@@ -22,28 +24,46 @@ export async function POST(request: Request) {
       );
     }
 
-    // Send notification to studio owner
-    const notificationResult = await sendBookingNotification(data);
-    
-    // Send confirmation to customer (best effort)
+    // Run all booking actions in parallel (best effort)
+    const [emailResult, sheetsResult, calendarResult] = await Promise.allSettled([
+      // 1. Send email notification (critical)
+      sendBookingNotification(data),
+      
+      // 2. Save to Google Sheets CRM (important but not critical)
+      saveToGoogleSheets(data),
+      
+      // 3. Create tentative calendar event (if date/time provided)
+      data.date && data.time 
+        ? createTentativeBooking(data.name, data.email, data.service, data.date, data.time)
+        : Promise.resolve({ success: false, reason: 'no-date-time' }),
+    ]);
+
+    // Send customer confirmation (best effort)
     await sendCustomerConfirmation(data).catch(err => {
       console.error('Customer confirmation failed (non-critical):', err);
     });
 
-    // Log to Vercel logs for debugging
+    // Log comprehensive result
     console.log('✅ Booking processed:', {
       name: data.name,
       email: data.email,
       service: data.service,
       date: data.date,
-      method: notificationResult.method,
+      time: data.time,
+      email: emailResult.status === 'fulfilled' ? emailResult.value.method : 'failed',
+      sheets: sheetsResult.status === 'fulfilled' ? sheetsResult.value.success : false,
+      calendar: calendarResult.status === 'fulfilled' ? calendarResult.value.success : false,
       timestamp: new Date().toISOString(),
     });
 
     return NextResponse.json({ 
       success: true, 
       message: 'Booking request received. We\'ll contact you within 24 hours.',
-      method: notificationResult.method // For debugging
+      details: { // For debugging (only visible to you in logs)
+        email: emailResult.status === 'fulfilled',
+        crm: sheetsResult.status === 'fulfilled' && sheetsResult.value.success,
+        calendar: calendarResult.status === 'fulfilled' && calendarResult.value.success,
+      }
     });
     
   } catch (error) {
