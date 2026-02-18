@@ -14,18 +14,28 @@ interface BookingData {
 export async function sendBookingNotification(booking: BookingData) {
   const emailBody = formatBookingEmail(booking);
   
+  // Debug logging
+  console.log('🔍 Email service check:', {
+    hasApiKey: !!process.env.RESEND_API_KEY,
+    apiKeyPrefix: process.env.RESEND_API_KEY?.substring(0, 5),
+    bookingEmail: process.env.BOOKING_EMAIL,
+  });
+  
   // Try Resend if API key is configured
   if (process.env.RESEND_API_KEY) {
+    console.log('✉️ Attempting to send via Resend...');
     return await sendViaResend(booking, emailBody);
   }
   
   // Fallback: Log to console (visible in Vercel logs)
+  console.log('⚠️ No RESEND_API_KEY - falling back to console logging');
   console.log('📧 BOOKING RECEIVED:', emailBody);
   return { success: true, method: 'console' };
 }
 
 async function sendViaResend(booking: BookingData, emailBody: string) {
   try {
+    console.log('📤 Calling Resend API...');
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -42,10 +52,13 @@ async function sendViaResend(booking: BookingData, emailBody: string) {
     });
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('❌ Resend API error:', response.status, errorText);
       throw new Error(`Resend API error: ${response.statusText}`);
     }
 
     const data = await response.json();
+    console.log('✅ Resend success:', data.id);
     return { success: true, method: 'resend', id: data.id };
   } catch (error) {
     console.error('Resend failed:', error);
