@@ -16,7 +16,8 @@ export default function EPKPage() {
   useEffect(() => {
     const stored = localStorage.getItem(PASSWORD_KEY);
     if (stored === CORRECT_PASSWORD) {
-      setIsAuthenticated(true);
+      // Already authenticated, redirect immediately
+      window.location.href = "https://readymag.website/u816280127/elcee/";
     }
   }, []);
 
