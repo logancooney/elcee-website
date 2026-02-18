@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import Signature from "./components/Signature";
 
 export default function Home() {
   return (
@@ -148,6 +149,13 @@ export default function Home() {
             <a href="https://youtube.com/@elceethealchemist" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">YouTube</a>
             <a href="https://facebook.com/elceethealchemist" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">Facebook</a>
           </div>
+        </div>
+      </section>
+
+      {/* Signature Section */}
+      <section className="py-20 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <Signature className="w-full max-w-md mx-auto text-white opacity-80" />
         </div>
       </section>
 
