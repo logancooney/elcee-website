@@ -146,6 +146,7 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
       {/* Calendar Header */}
       <div className="flex justify-between items-center mb-6">
         <button 
+          type="button"
           onClick={prevMonth}
           className="px-4 py-2 bg-white/10 hover:bg-white/20 transition"
         >
@@ -153,6 +154,7 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
         </button>
         <h3 className="text-2xl font-bold">{monthName}</h3>
         <button 
+          type="button"
           onClick={nextMonth}
           className="px-4 py-2 bg-white/10 hover:bg-white/20 transition"
         >
@@ -180,6 +182,7 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
           
           return (
             <button
+              type="button"
               key={date.toISOString()}
               onClick={() => handleDateClick(date)}
               disabled={!available}
@@ -221,6 +224,7 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
                         
                         return (
                           <button
+                            type="button"
                             key={slot.time}
                             onClick={() => handleSlotClick(slot)}
                             className={`
@@ -250,6 +254,7 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
               
               {selectedSlots.length > 0 && (
                 <button
+                  type="button"
                   onClick={handleConfirm}
                   className="w-full py-3 font-bold transition bg-white text-black hover:bg-gray-200 cursor-pointer"
                 >
