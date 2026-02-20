@@ -206,30 +206,38 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
             <p className="text-gray-400">Loading available slots...</p>
           ) : (
             <>
-              <div className="grid grid-cols-3 md:grid-cols-6 gap-3 mb-6">
-                {availableSlots.map((slot) => {
-                  const isSelected = selectedSlots.includes(slot.time);
-                  
-                  return (
-                    <button
-                      key={slot.time}
-                      onClick={() => handleSlotClick(slot)}
-                      disabled={!slot.available}
-                      className={`
-                        py-3 px-4 border transition font-semibold
-                        ${!slot.available 
-                          ? 'border-white/10 opacity-30 cursor-not-allowed line-through' 
-                          : isSelected
-                            ? 'bg-white text-black border-white'
-                            : 'border-white/40 hover:bg-white hover:text-black cursor-pointer'
-                        }
-                      `}
-                    >
-                      {slot.time}
-                    </button>
-                  );
-                })}
-              </div>
+              {availableSlots.filter(slot => slot.available).length === 0 ? (
+                <div className="text-center py-8">
+                  <p className="text-gray-400">No available time slots on this date.</p>
+                  <p className="text-sm text-gray-500 mt-2">Please choose a different day.</p>
+                </div>
+              ) : (
+                <>
+                  <div className="grid grid-cols-3 md:grid-cols-6 gap-3 mb-6">
+                    {availableSlots
+                      .filter(slot => slot.available) // Only show available slots
+                      .map((slot) => {
+                        const isSelected = selectedSlots.includes(slot.time);
+                        
+                        return (
+                          <button
+                            key={slot.time}
+                            onClick={() => handleSlotClick(slot)}
+                            className={`
+                              py-3 px-4 border transition font-semibold
+                              ${isSelected
+                                ? 'bg-white text-black border-white'
+                                : 'border-white/40 hover:bg-white hover:text-black cursor-pointer'
+                              }
+                            `}
+                          >
+                            {slot.time}
+                          </button>
+                        );
+                      })}
+                  </div>
+                </>
+              )}
               
               {selectedSlots.length > 0 && (
                 <div className="bg-white/5 border border-white/20 p-4 mb-4">
@@ -240,25 +248,19 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
                 </div>
               )}
               
-              <button
-                onClick={handleConfirm}
-                disabled={selectedSlots.length === 0}
-                className={`
-                  w-full py-3 font-bold transition
-                  ${selectedSlots.length > 0
-                    ? 'bg-white text-black hover:bg-gray-200 cursor-pointer'
-                    : 'bg-white/10 text-white/40 cursor-not-allowed'
-                  }
-                `}
-              >
-                {selectedSlots.length > 0 
-                  ? `Confirm ${totalHours} Hour Session` 
-                  : 'Select at least one time slot'
-                }
-              </button>
+              {selectedSlots.length > 0 && (
+                <button
+                  onClick={handleConfirm}
+                  className="w-full py-3 font-bold transition bg-white text-black hover:bg-gray-200 cursor-pointer"
+                >
+                  Confirm {totalHours} Hour Session
+                </button>
+              )}
               
               <p className="text-sm text-gray-400 mt-4">
-                * Each slot is a 2-hour block. Select multiple slots for longer sessions.
+                * Each slot is a 2-hour block. Select multiple for longer sessions.
+                <br />
+                * Only available times are shown (works around existing calendar commitments).
               </p>
             </>
           )}

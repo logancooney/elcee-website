@@ -23,19 +23,20 @@ export async function GET(request: Request) {
     const bookedSlots = new Set<string>();
 
     events.forEach((event: any) => {
-      if (event.s) { // Start datetime
-        const startTime = new Date(event.s);
-        const endTime = event.e ? new Date(event.e) : new Date(startTime.getTime() + 60 * 60 * 1000); // Default 1hr if no end
+      if (event.time?.start_time && event.time?.end_time) {
+        // Parse start and end times
+        const [startHours, startMinutes] = event.time.start_time.split(':').map(Number);
+        const [endHours, endMinutes] = event.time.end_time.split(':').map(Number);
         
-        // Mark all 2-hour blocks that overlap with this event
-        const startHour = startTime.getHours();
-        const endHour = endTime.getHours() + (endTime.getMinutes() > 0 ? 1 : 0);
+        const startHour = startHours;
+        const endHour = endHours + (endMinutes > 0 ? 1 : 0); // Round up if there are minutes
         
         // Studio hours: 10am-10pm in 2-hour blocks (10, 12, 14, 16, 18, 20)
         for (let blockStart = 10; blockStart <= 20; blockStart += 2) {
           const blockEnd = blockStart + 2;
           
           // Check if event overlaps with this 2-hour block
+          // Event overlaps if: event starts before block ends AND event ends after block starts
           if (startHour < blockEnd && endHour > blockStart) {
             bookedSlots.add(`${blockStart.toString().padStart(2, '0')}:00`);
           }
