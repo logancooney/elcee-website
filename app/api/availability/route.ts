@@ -1,8 +1,4 @@
 import { NextResponse } from 'next/server';
-import { exec } from 'child_process';
-import { promisify } from 'util';
-
-const execAsync = promisify(exec);
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -12,21 +8,61 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Date parameter required' }, { status: 400 });
   }
 
+  const MATON_KEY = process.env.MATON_API_KEY;
+  
+  if (!MATON_KEY) {
+    console.warn('MATON_API_KEY not configured - showing all slots as available');
+    return NextResponse.json({
+      date,
+      bookedSlots: [],
+      totalBooked: 0,
+      warning: 'Calendar not connected'
+    });
+  }
+
   try {
-    // Check multiple calendars to get complete availability picture
-    const calendars = ['Daily', 'Keane Futures', 'Studio time'];
+    // Check multiple calendars via Maton API (works 24/7 from Vercel servers)
+    const calendars = [
+      'Daily',
+      'Keane%20Futures', // URL-encoded
+      'Studio%20time'     // URL-encoded
+    ];
     
-    const allEvents = [];
+    // Calculate time range for the day
+    const startOfDay = new Date(date);
+    startOfDay.setHours(0, 0, 0, 0);
+    
+    const endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 59, 999);
     
     // Fetch events from all calendars in parallel
     const results = await Promise.all(
-      calendars.map(async (calendar) => {
+      calendars.map(async (calendarId) => {
         try {
-          const command = `uvx --from "git+https://github.com/shanemcd/gcalcli@attachments-in-tsv-and-json" --with "google-api-core<2.28.0" gcalcli agenda --calendar "${calendar}" --json "${date}" "${date}"`;
-          const { stdout } = await execAsync(command);
-          return JSON.parse(stdout || '[]');
+          const url = `https://gateway.maton.ai/google-calendar/calendar/v3/calendars/${calendarId}/events?` + 
+            new URLSearchParams({
+              timeMin: startOfDay.toISOString(),
+              timeMax: endOfDay.toISOString(),
+              singleEvents: 'true',
+              orderBy: 'startTime'
+            });
+
+          const response = await fetch(url, {
+            headers: {
+              'Authorization': `Bearer ${MATON_KEY}`,
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (!response.ok) {
+            console.error(`Calendar ${calendarId} fetch failed:`, response.status);
+            return [];
+          }
+
+          const data = await response.json();
+          return data.items || [];
         } catch (err) {
-          console.error(`Failed to fetch ${calendar}:`, err);
+          console.error(`Failed to fetch ${calendarId}:`, err);
           return [];
         }
       })
@@ -39,23 +75,26 @@ export async function GET(request: Request) {
     const bookedSlots = new Set<string>();
 
     events.forEach((event: any) => {
-      if (event.time?.start_time && event.time?.end_time) {
-        // Parse start and end times
-        const [startHours, startMinutes] = event.time.start_time.split(':').map(Number);
-        const [endHours, endMinutes] = event.time.end_time.split(':').map(Number);
+      // Google Calendar API format: event.start.dateTime or event.start.date
+      const startDateTime = event.start?.dateTime || event.start?.date;
+      const endDateTime = event.end?.dateTime || event.end?.date;
+      
+      if (!startDateTime || !endDateTime) return;
+      
+      const startTime = new Date(startDateTime);
+      const endTime = new Date(endDateTime);
+      
+      const startHour = startTime.getHours();
+      const endHour = endTime.getHours() + (endTime.getMinutes() > 0 ? 1 : 0); // Round up if there are minutes
+      
+      // Studio hours: 10am-10pm in 2-hour blocks (10, 12, 14, 16, 18, 20)
+      for (let blockStart = 10; blockStart <= 20; blockStart += 2) {
+        const blockEnd = blockStart + 2;
         
-        const startHour = startHours;
-        const endHour = endHours + (endMinutes > 0 ? 1 : 0); // Round up if there are minutes
-        
-        // Studio hours: 10am-10pm in 2-hour blocks (10, 12, 14, 16, 18, 20)
-        for (let blockStart = 10; blockStart <= 20; blockStart += 2) {
-          const blockEnd = blockStart + 2;
-          
-          // Check if event overlaps with this 2-hour block
-          // Event overlaps if: event starts before block ends AND event ends after block starts
-          if (startHour < blockEnd && endHour > blockStart) {
-            bookedSlots.add(`${blockStart.toString().padStart(2, '0')}:00`);
-          }
+        // Check if event overlaps with this 2-hour block
+        // Event overlaps if: event starts before block ends AND event ends after block starts
+        if (startHour < blockEnd && endHour > blockStart) {
+          bookedSlots.add(`${blockStart.toString().padStart(2, '0')}:00`);
         }
       }
     });
