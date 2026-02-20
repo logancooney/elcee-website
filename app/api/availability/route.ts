@@ -13,11 +13,27 @@ export async function GET(request: Request) {
   }
 
   try {
-    // Use gcalcli to check the "Daily" calendar (main Elcee calendar)
-    const command = `uvx --from "git+https://github.com/shanemcd/gcalcli@attachments-in-tsv-and-json" --with "google-api-core<2.28.0" gcalcli agenda --calendar "Daily" --json "${date}" "${date}"`;
+    // Check multiple calendars to get complete availability picture
+    const calendars = ['Daily', 'Keane Futures', 'Studio time'];
     
-    const { stdout } = await execAsync(command);
-    const events = JSON.parse(stdout || '[]');
+    const allEvents = [];
+    
+    // Fetch events from all calendars in parallel
+    const results = await Promise.all(
+      calendars.map(async (calendar) => {
+        try {
+          const command = `uvx --from "git+https://github.com/shanemcd/gcalcli@attachments-in-tsv-and-json" --with "google-api-core<2.28.0" gcalcli agenda --calendar "${calendar}" --json "${date}" "${date}"`;
+          const { stdout } = await execAsync(command);
+          return JSON.parse(stdout || '[]');
+        } catch (err) {
+          console.error(`Failed to fetch ${calendar}:`, err);
+          return [];
+        }
+      })
+    );
+    
+    // Combine all events from all calendars
+    const events = results.flat();
 
     // Extract booked time slots (2-hour blocks starting on even hours: 10, 12, 14, 16, 18, 20)
     const bookedSlots = new Set<string>();
