@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { google } from 'googleapis';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -10,48 +9,68 @@ export async function GET(request: Request) {
   }
 
   try {
-    // Initialize Google Calendar API
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_CLIENT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      },
-      scopes: ['https://www.googleapis.com/auth/calendar.readonly'],
-    });
+    const matonApiKey = process.env.MATON_API_KEY;
+    
+    if (!matonApiKey) {
+      console.warn('MATON_API_KEY not found - returning all slots as available');
+      return NextResponse.json({
+        date,
+        bookedSlots: [],
+        totalBooked: 0,
+        warning: 'Calendar not connected - showing all slots as available'
+      });
+    }
 
-    const calendar = google.calendar({ version: 'v3', auth });
-
-    // Get events for the specified date
+    // Calculate time range for the day
     const startOfDay = new Date(date);
     startOfDay.setHours(0, 0, 0, 0);
     
     const endOfDay = new Date(date);
     endOfDay.setHours(23, 59, 59, 999);
 
-    const response = await calendar.events.list({
-      calendarId: process.env.GOOGLE_CALENDAR_ID || 'primary',
-      timeMin: startOfDay.toISOString(),
-      timeMax: endOfDay.toISOString(),
-      singleEvents: true,
-      orderBy: 'startTime',
+    // Fetch events from Google Calendar via Maton API
+    const calendarId = 'primary'; // Use primary calendar
+    const url = `https://gateway.maton.ai/google-calendar/calendar/v3/calendars/${calendarId}/events?` + 
+      new URLSearchParams({
+        timeMin: startOfDay.toISOString(),
+        timeMax: endOfDay.toISOString(),
+        singleEvents: 'true',
+        orderBy: 'startTime'
+      });
+
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${matonApiKey}`,
+        'Content-Type': 'application/json'
+      }
     });
 
-    const events = response.data.items || [];
+    if (!response.ok) {
+      throw new Error(`Maton API error: ${response.status}`);
+    }
 
-    // Extract booked time slots
-    const bookedSlots = events.map(event => {
+    const data = await response.json();
+    const events = data.items || [];
+
+    // Extract booked time slots (2-hour blocks starting on even hours)
+    const bookedSlots = events.map((event: any) => {
       if (event.start?.dateTime) {
         const startTime = new Date(event.start.dateTime);
-        return `${startTime.getHours().toString().padStart(2, '0')}:00`;
+        const hour = startTime.getHours();
+        // Round to nearest 2-hour block
+        const blockHour = Math.floor(hour / 2) * 2;
+        return `${blockHour.toString().padStart(2, '0')}:00`;
       }
       return null;
     }).filter(Boolean);
 
-    // Return availability data
+    // Remove duplicates
+    const uniqueBookedSlots = [...new Set(bookedSlots)];
+
     return NextResponse.json({
       date,
-      bookedSlots,
-      totalBooked: bookedSlots.length,
+      bookedSlots: uniqueBookedSlots,
+      totalBooked: uniqueBookedSlots.length,
     });
 
   } catch (error) {
