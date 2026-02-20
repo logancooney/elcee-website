@@ -1,4 +1,8 @@
 import { NextResponse } from 'next/server';
+import { exec } from 'child_process';
+import { promisify } from 'util';
+
+const execAsync = promisify(exec);
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -9,68 +13,40 @@ export async function GET(request: Request) {
   }
 
   try {
-    const matonApiKey = process.env.MATON_API_KEY;
+    // Use gcalcli to check the "Daily" calendar (main Elcee calendar)
+    const command = `uvx --from "git+https://github.com/shanemcd/gcalcli@attachments-in-tsv-and-json" --with "google-api-core<2.28.0" gcalcli agenda --calendar "Daily" --json "${date}" "${date}"`;
     
-    if (!matonApiKey) {
-      console.warn('MATON_API_KEY not found - returning all slots as available');
-      return NextResponse.json({
-        date,
-        bookedSlots: [],
-        totalBooked: 0,
-        warning: 'Calendar not connected - showing all slots as available'
-      });
-    }
+    const { stdout } = await execAsync(command);
+    const events = JSON.parse(stdout || '[]');
 
-    // Calculate time range for the day
-    const startOfDay = new Date(date);
-    startOfDay.setHours(0, 0, 0, 0);
-    
-    const endOfDay = new Date(date);
-    endOfDay.setHours(23, 59, 59, 999);
+    // Extract booked time slots (2-hour blocks starting on even hours: 10, 12, 14, 16, 18, 20)
+    const bookedSlots = new Set<string>();
 
-    // Fetch events from Google Calendar via Maton API
-    const calendarId = 'primary'; // Use primary calendar
-    const url = `https://gateway.maton.ai/google-calendar/calendar/v3/calendars/${calendarId}/events?` + 
-      new URLSearchParams({
-        timeMin: startOfDay.toISOString(),
-        timeMax: endOfDay.toISOString(),
-        singleEvents: 'true',
-        orderBy: 'startTime'
-      });
-
-    const response = await fetch(url, {
-      headers: {
-        'Authorization': `Bearer ${matonApiKey}`,
-        'Content-Type': 'application/json'
+    events.forEach((event: any) => {
+      if (event.s) { // Start datetime
+        const startTime = new Date(event.s);
+        const endTime = event.e ? new Date(event.e) : new Date(startTime.getTime() + 60 * 60 * 1000); // Default 1hr if no end
+        
+        // Mark all 2-hour blocks that overlap with this event
+        const startHour = startTime.getHours();
+        const endHour = endTime.getHours() + (endTime.getMinutes() > 0 ? 1 : 0);
+        
+        // Studio hours: 10am-10pm in 2-hour blocks (10, 12, 14, 16, 18, 20)
+        for (let blockStart = 10; blockStart <= 20; blockStart += 2) {
+          const blockEnd = blockStart + 2;
+          
+          // Check if event overlaps with this 2-hour block
+          if (startHour < blockEnd && endHour > blockStart) {
+            bookedSlots.add(`${blockStart.toString().padStart(2, '0')}:00`);
+          }
+        }
       }
     });
 
-    if (!response.ok) {
-      throw new Error(`Maton API error: ${response.status}`);
-    }
-
-    const data = await response.json();
-    const events = data.items || [];
-
-    // Extract booked time slots (2-hour blocks starting on even hours)
-    const bookedSlots = events.map((event: any) => {
-      if (event.start?.dateTime) {
-        const startTime = new Date(event.start.dateTime);
-        const hour = startTime.getHours();
-        // Round to nearest 2-hour block
-        const blockHour = Math.floor(hour / 2) * 2;
-        return `${blockHour.toString().padStart(2, '0')}:00`;
-      }
-      return null;
-    }).filter(Boolean);
-
-    // Remove duplicates
-    const uniqueBookedSlots = [...new Set(bookedSlots)];
-
     return NextResponse.json({
       date,
-      bookedSlots: uniqueBookedSlots,
-      totalBooked: uniqueBookedSlots.length,
+      bookedSlots: Array.from(bookedSlots),
+      totalBooked: bookedSlots.size,
     });
 
   } catch (error) {

@@ -13,7 +13,7 @@ export default function StudioPage() {
     phone: "",
     service: "",
     date: "",
-    time: "",
+    times: [] as string[], // Changed to array for multiple slots
     message: ""
   });
 
@@ -39,7 +39,7 @@ export default function StudioPage() {
           phone: "",
           service: "",
           date: "",
-          time: "",
+          times: [],
           message: ""
         });
       } else {
@@ -192,20 +192,23 @@ export default function StudioPage() {
             {/* Date & Time Selection */}
             {!showCalendar ? (
               <div className="border border-white/20 p-6 text-center">
-                {formData.date && formData.time ? (
+                {formData.date && formData.times.length > 0 ? (
                   <div className="mb-4">
-                    <p className="text-sm text-gray-400 mb-2">Selected slot:</p>
+                    <p className="text-sm text-gray-400 mb-2">Selected session:</p>
                     <p className="text-xl font-bold">
                       {new Date(formData.date).toLocaleDateString('en-GB', { 
                         weekday: 'long', 
                         day: 'numeric', 
                         month: 'long', 
                         year: 'numeric' 
-                      })} at {formData.time}
+                      })}
+                    </p>
+                    <p className="text-lg mt-2">
+                      {formData.times.join(', ')} ({formData.times.length * 2} hours)
                     </p>
                   </div>
                 ) : (
-                  <p className="text-gray-400 mb-4">Choose your preferred date and time</p>
+                  <p className="text-gray-400 mb-4">Choose your preferred date and time slots</p>
                 )}
                 
                 <button
@@ -213,14 +216,14 @@ export default function StudioPage() {
                   onClick={() => setShowCalendar(!showCalendar)}
                   className="px-6 py-3 bg-white/10 hover:bg-white/20 transition font-semibold"
                 >
-                  {formData.date && formData.time ? 'Change Time Slot' : 'Select Time Slot'}
+                  {formData.date && formData.times.length > 0 ? 'Change Time Slots' : 'Select Time Slots'}
                 </button>
               </div>
             ) : (
               <div className="border border-white/20 p-6">
                 <BookingCalendar 
-                  onSelectSlot={(date, time) => {
-                    setFormData({...formData, date, time});
+                  onSelectSlots={(date, times) => {
+                    setFormData({...formData, date, times});
                     setShowCalendar(false);
                   }}
                 />
@@ -245,18 +248,18 @@ export default function StudioPage() {
 
             <button 
               type="submit"
-              disabled={!formData.date || !formData.time}
+              disabled={!formData.date || formData.times.length === 0}
               className={`
                 w-full py-4 font-bold text-lg transition
-                ${formData.date && formData.time
+                ${formData.date && formData.times.length > 0
                   ? 'bg-white text-black hover:bg-gray-200 cursor-pointer'
                   : 'bg-white/20 text-white/40 cursor-not-allowed'
                 }
               `}
             >
-              {formData.date && formData.time 
+              {formData.date && formData.times.length > 0
                 ? 'Submit Booking Request' 
-                : 'Select a time slot to continue'
+                : 'Select time slots to continue'
               }
             </button>
           </form>

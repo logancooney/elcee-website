@@ -25,15 +25,22 @@ export async function POST(request: Request) {
       );
     }
 
-    // NEW: Check calendar availability if date/time provided
-    if (data.date && data.time) {
-      const isAvailable = await checkAvailability(data.date, data.time);
+    // NEW: Check calendar availability if date/times provided
+    const times = data.times || (data.time ? [data.time] : []); // Handle both old single time and new times array
+    
+    if (data.date && times.length > 0) {
+      // Check availability for all requested time slots
+      const availabilityChecks = await Promise.all(
+        times.map((time: string) => checkAvailability(data.date, time))
+      );
       
-      if (!isAvailable) {
+      const allAvailable = availabilityChecks.every(result => result);
+      
+      if (!allAvailable) {
         return NextResponse.json(
           { 
             success: false, 
-            message: 'This time slot is already booked. Please choose a different time or contact us for availability.' 
+            message: 'One or more selected time slots are already booked. Please choose different times or contact us for availability.' 
           },
           { status: 409 } // Conflict status code
         );
@@ -48,9 +55,9 @@ export async function POST(request: Request) {
       // 2. Save to Google Sheets CRM (important but not critical)
       saveToGoogleSheets(data),
       
-      // 3. Create calendar event (if date/time provided) - using Maton API for availability
-      data.date && data.time 
-        ? createCalendarEvent(data.name, data.email, data.phone, data.service, data.date, data.time)
+      // 3. Create calendar event (if date/times provided) - using Maton API for availability
+      data.date && times.length > 0
+        ? createCalendarEvent(data.name, data.email, data.phone, data.service, data.date, times)
         : Promise.resolve({ success: false, reason: 'no-date-time' }),
     ]);
 
@@ -65,7 +72,8 @@ export async function POST(request: Request) {
       email: data.email,
       service: data.service,
       date: data.date,
-      time: data.time,
+      times: times,
+      duration: `${times.length * 2} hours`,
       emailNotification: emailResult.status === 'fulfilled' ? emailResult.value.method : 'failed',
       sheets: sheetsResult.status === 'fulfilled' ? sheetsResult.value.success : false,
       calendar: calendarResult.status === 'fulfilled' ? calendarResult.value.success : false,

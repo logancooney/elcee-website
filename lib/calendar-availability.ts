@@ -61,8 +61,8 @@ export async function createCalendarEvent(
   phone: string | undefined,
   service: string, 
   date: string, 
-  time: string,
-  durationHours: number = 2
+  times: string | string[], // Accept single time or array of times
+  durationHoursPerSlot: number = 2
 ): Promise<{ success: boolean; eventId?: string }> {
   const MATON_KEY = process.env.MATON_API_KEY;
   
@@ -71,16 +71,29 @@ export async function createCalendarEvent(
   }
 
   try {
-    const [hours, minutes] = time.split(':');
-    const startDateTime = new Date(date);
-    startDateTime.setHours(parseInt(hours), parseInt(minutes || '0'), 0, 0);
+    // Handle both old single time and new times array
+    const timeSlots = Array.isArray(times) ? times : [times];
     
-    const endDateTime = new Date(startDateTime);
-    endDateTime.setHours(startDateTime.getHours() + durationHours);
+    // Sort times to get earliest and latest
+    const sortedTimes = timeSlots.sort();
+    const earliestTime = sortedTimes[0];
+    const latestTime = sortedTimes[sortedTimes.length - 1];
+    
+    // Calculate start from earliest time
+    const [startHours, startMinutes] = earliestTime.split(':');
+    const startDateTime = new Date(date);
+    startDateTime.setHours(parseInt(startHours), parseInt(startMinutes || '0'), 0, 0);
+    
+    // Calculate end from latest time + duration
+    const [endHours, endMinutes] = latestTime.split(':');
+    const endDateTime = new Date(date);
+    endDateTime.setHours(parseInt(endHours) + durationHoursPerSlot, parseInt(endMinutes || '0'), 0, 0);
+    
+    const totalHours = (endDateTime.getTime() - startDateTime.getTime()) / (1000 * 60 * 60);
 
     const event = {
-      summary: `Studio: ${name} - ${service}`,
-      description: `Client: ${name}\nEmail: ${email}\n${phone ? `Phone: ${phone}\n` : ''}Service: ${service}\n\nBooked via website`,
+      summary: `Studio: ${name} - ${service} (${totalHours}h)`,
+      description: `Client: ${name}\nEmail: ${email}\n${phone ? `Phone: ${phone}\n` : ''}Service: ${service}\nDuration: ${totalHours} hours (${timeSlots.length} x ${durationHoursPerSlot}h slots)\nTime slots: ${timeSlots.join(', ')}\n\nBooked via website`,
       start: {
         dateTime: startDateTime.toISOString(),
         timeZone: 'Europe/London'

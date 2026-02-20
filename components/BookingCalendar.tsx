@@ -8,12 +8,13 @@ interface TimeSlot {
 }
 
 interface BookingCalendarProps {
-  onSelectSlot: (date: string, time: string) => void;
+  onSelectSlots: (date: string, times: string[]) => void;
 }
 
-export default function BookingCalendar({ onSelectSlot }: BookingCalendarProps) {
+export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [availableSlots, setAvailableSlots] = useState<TimeSlot[]>([]);
+  const [selectedSlots, setSelectedSlots] = useState<string[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [loading, setLoading] = useState(false);
 
@@ -56,6 +57,7 @@ export default function BookingCalendar({ onSelectSlot }: BookingCalendarProps) 
     };
 
     fetchAvailability();
+    setSelectedSlots([]); // Reset selection when date changes
   }, [selectedDate]);
 
   // Generate calendar days
@@ -100,26 +102,44 @@ export default function BookingCalendar({ onSelectSlot }: BookingCalendarProps) 
   const handleDateClick = (date: Date) => {
     if (!isDateAvailable(date)) return;
     setSelectedDate(date);
+    setSelectedSlots([]);
   };
 
   const handleSlotClick = (slot: TimeSlot) => {
-    if (!slot.available || !selectedDate) return;
+    if (!slot.available) return;
+    
+    const isSelected = selectedSlots.includes(slot.time);
+    
+    if (isSelected) {
+      // Deselect
+      setSelectedSlots(selectedSlots.filter(t => t !== slot.time));
+    } else {
+      // Select (add to array)
+      setSelectedSlots([...selectedSlots, slot.time].sort());
+    }
+  };
+
+  const handleConfirm = () => {
+    if (!selectedDate || selectedSlots.length === 0) return;
     const dateStr = selectedDate.toISOString().split('T')[0];
-    onSelectSlot(dateStr, slot.time);
+    onSelectSlots(dateStr, selectedSlots);
   };
 
   const prevMonth = () => {
     setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1));
     setSelectedDate(null);
+    setSelectedSlots([]);
   };
 
   const nextMonth = () => {
     setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1));
     setSelectedDate(null);
+    setSelectedSlots([]);
   };
 
   const days = getDaysInMonth(currentMonth);
   const monthName = currentMonth.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+  const totalHours = selectedSlots.length * 2;
 
   return (
     <div className="w-full">
@@ -179,35 +199,69 @@ export default function BookingCalendar({ onSelectSlot }: BookingCalendarProps) 
       {selectedDate && (
         <div className="mt-8 pt-8 border-t border-white/20">
           <h4 className="text-xl font-bold mb-4">
-            Available Times - {selectedDate.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}
+            Select Time Slots - {selectedDate.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}
           </h4>
           
           {loading ? (
             <p className="text-gray-400">Loading available slots...</p>
           ) : (
-            <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
-              {availableSlots.map((slot) => (
-                <button
-                  key={slot.time}
-                  onClick={() => handleSlotClick(slot)}
-                  disabled={!slot.available}
-                  className={`
-                    py-3 px-4 border transition font-semibold
-                    ${slot.available 
-                      ? 'border-white/40 hover:bg-white hover:text-black cursor-pointer' 
-                      : 'border-white/10 opacity-30 cursor-not-allowed line-through'
-                    }
-                  `}
-                >
-                  {slot.time}
-                </button>
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-3 md:grid-cols-6 gap-3 mb-6">
+                {availableSlots.map((slot) => {
+                  const isSelected = selectedSlots.includes(slot.time);
+                  
+                  return (
+                    <button
+                      key={slot.time}
+                      onClick={() => handleSlotClick(slot)}
+                      disabled={!slot.available}
+                      className={`
+                        py-3 px-4 border transition font-semibold
+                        ${!slot.available 
+                          ? 'border-white/10 opacity-30 cursor-not-allowed line-through' 
+                          : isSelected
+                            ? 'bg-white text-black border-white'
+                            : 'border-white/40 hover:bg-white hover:text-black cursor-pointer'
+                        }
+                      `}
+                    >
+                      {slot.time}
+                    </button>
+                  );
+                })}
+              </div>
+              
+              {selectedSlots.length > 0 && (
+                <div className="bg-white/5 border border-white/20 p-4 mb-4">
+                  <p className="text-sm text-gray-400 mb-2">Selected slots:</p>
+                  <p className="font-bold text-lg">
+                    {selectedSlots.join(', ')} ({totalHours} hours total)
+                  </p>
+                </div>
+              )}
+              
+              <button
+                onClick={handleConfirm}
+                disabled={selectedSlots.length === 0}
+                className={`
+                  w-full py-3 font-bold transition
+                  ${selectedSlots.length > 0
+                    ? 'bg-white text-black hover:bg-gray-200 cursor-pointer'
+                    : 'bg-white/10 text-white/40 cursor-not-allowed'
+                  }
+                `}
+              >
+                {selectedSlots.length > 0 
+                  ? `Confirm ${totalHours} Hour Session` 
+                  : 'Select at least one time slot'
+                }
+              </button>
+              
+              <p className="text-sm text-gray-400 mt-4">
+                * Each slot is a 2-hour block. Select multiple slots for longer sessions.
+              </p>
+            </>
           )}
-          
-          <p className="text-sm text-gray-400 mt-4">
-            * Sessions are 2-hour blocks. Click a time to select your start time.
-          </p>
         </div>
       )}
     </div>
