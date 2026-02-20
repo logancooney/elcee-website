@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { sendBookingNotification, sendCustomerConfirmation } from '@/lib/email-service';
 import { saveToGoogleSheets } from '@/lib/google-sheets';
 import { createTentativeBooking } from '@/lib/google-calendar';
+import { checkAvailability, createCalendarEvent } from '@/lib/calendar-availability';
 
 export async function POST(request: Request) {
   try {
@@ -24,6 +25,21 @@ export async function POST(request: Request) {
       );
     }
 
+    // NEW: Check calendar availability if date/time provided
+    if (data.date && data.time) {
+      const isAvailable = await checkAvailability(data.date, data.time);
+      
+      if (!isAvailable) {
+        return NextResponse.json(
+          { 
+            success: false, 
+            message: 'This time slot is already booked. Please choose a different time or contact us for availability.' 
+          },
+          { status: 409 } // Conflict status code
+        );
+      }
+    }
+
     // Run all booking actions in parallel (best effort)
     const [emailResult, sheetsResult, calendarResult] = await Promise.allSettled([
       // 1. Send email notification (critical)
@@ -32,9 +48,9 @@ export async function POST(request: Request) {
       // 2. Save to Google Sheets CRM (important but not critical)
       saveToGoogleSheets(data),
       
-      // 3. Create tentative calendar event (if date/time provided)
+      // 3. Create calendar event (if date/time provided) - using Maton API for availability
       data.date && data.time 
-        ? createTentativeBooking(data.name, data.email, data.service, data.date, data.time)
+        ? createCalendarEvent(data.name, data.email, data.phone, data.service, data.date, data.time)
         : Promise.resolve({ success: false, reason: 'no-date-time' }),
     ]);
 
