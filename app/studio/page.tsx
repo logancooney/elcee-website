@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import StudioGallery from "./components/StudioGallery";
+import BookingCalendar from "@/components/BookingCalendar";
 
 export default function StudioPage() {
   const [formData, setFormData] = useState({
@@ -15,6 +16,8 @@ export default function StudioPage() {
     time: "",
     message: ""
   });
+
+  const [showCalendar, setShowCalendar] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -186,26 +189,43 @@ export default function StudioPage() {
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium mb-2">Preferred Date</label>
-                <input 
-                  type="date" 
-                  className="w-full bg-white/5 border border-white/20 px-4 py-3 focus:outline-none focus:border-white"
-                  value={formData.date}
-                  onChange={(e) => setFormData({...formData, date: e.target.value})}
+            {/* Date & Time Selection */}
+            {!showCalendar ? (
+              <div className="border border-white/20 p-6 text-center">
+                {formData.date && formData.time ? (
+                  <div className="mb-4">
+                    <p className="text-sm text-gray-400 mb-2">Selected slot:</p>
+                    <p className="text-xl font-bold">
+                      {new Date(formData.date).toLocaleDateString('en-GB', { 
+                        weekday: 'long', 
+                        day: 'numeric', 
+                        month: 'long', 
+                        year: 'numeric' 
+                      })} at {formData.time}
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-gray-400 mb-4">Choose your preferred date and time</p>
+                )}
+                
+                <button
+                  type="button"
+                  onClick={() => setShowCalendar(!showCalendar)}
+                  className="px-6 py-3 bg-white/10 hover:bg-white/20 transition font-semibold"
+                >
+                  {formData.date && formData.time ? 'Change Time Slot' : 'Select Time Slot'}
+                </button>
+              </div>
+            ) : (
+              <div className="border border-white/20 p-6">
+                <BookingCalendar 
+                  onSelectSlot={(date, time) => {
+                    setFormData({...formData, date, time});
+                    setShowCalendar(false);
+                  }}
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Preferred Time</label>
-                <input 
-                  type="time" 
-                  className="w-full bg-white/5 border border-white/20 px-4 py-3 focus:outline-none focus:border-white"
-                  value={formData.time}
-                  onChange={(e) => setFormData({...formData, time: e.target.value})}
-                />
-              </div>
-            </div>
+            )}
 
             <div>
               <label className="block text-sm font-medium mb-2">Additional Details</label>
@@ -225,9 +245,19 @@ export default function StudioPage() {
 
             <button 
               type="submit"
-              className="w-full bg-white text-black py-4 font-bold text-lg hover:bg-gray-200 transition"
+              disabled={!formData.date || !formData.time}
+              className={`
+                w-full py-4 font-bold text-lg transition
+                ${formData.date && formData.time
+                  ? 'bg-white text-black hover:bg-gray-200 cursor-pointer'
+                  : 'bg-white/20 text-white/40 cursor-not-allowed'
+                }
+              `}
             >
-              Submit Booking Request
+              {formData.date && formData.time 
+                ? 'Submit Booking Request' 
+                : 'Select a time slot to continue'
+              }
             </button>
           </form>
         </div>
