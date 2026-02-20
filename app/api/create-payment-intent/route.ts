@@ -3,7 +3,7 @@ import Stripe from 'stripe';
 
 // Initialize Stripe (will use test key until you add live key)
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2024-12-18.acacia',
+  apiVersion: '2026-01-28.clover',
 });
 
 // Service pricing
@@ -39,8 +39,9 @@ export async function POST(request: Request) {
           { status: 400 }
         );
       }
-      amount = PRICING[service].hourly * hours;
-      description = `${PRICING[service].name} - ${hours} hour${hours > 1 ? 's' : ''}`;
+      const pricing = PRICING[service as 'recording' | 'tutoring'];
+      amount = pricing.hourly * hours;
+      description = `${pricing.name} - ${hours} hour${hours > 1 ? 's' : ''}`;
     } else {
       // Project services - deposit or full
       const pricing = PRICING[service as keyof typeof PRICING];

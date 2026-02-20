@@ -1,12 +1,15 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { Resend } from 'resend';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2024-12-18.acacia',
+  apiVersion: '2026-01-28.clover',
 });
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() {
+  if (!process.env.RESEND_API_KEY) return null;
+  const { Resend } = require('resend');
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 export async function POST(request: Request) {
   const body = await request.text();
@@ -59,17 +62,20 @@ async function handleSuccessfulPayment(paymentIntent: Stripe.PaymentIntent) {
   console.log(`✅ Payment succeeded: ${paymentIntent.id} - ${clientName} - £${paymentIntent.amount / 100}`);
 
   // Send confirmation email
-  try {
-    await resend.emails.send({
-      from: 'The Alchemist Studio <bookings@elceethealchemist.com>',
-      to: clientEmail,
-      subject: isDeposit === 'true' ? 'Deposit Received - Project Starting Soon' : 'Booking Confirmed - Session Details',
-      text: isDeposit === 'true' 
-        ? generateDepositConfirmation(clientName, service, paymentIntent.amount / 100)
-        : generateSessionConfirmation(clientName, service, hours)
-    });
-  } catch (error) {
-    console.error('Failed to send confirmation email:', error);
+  const resend = getResend();
+  if (resend) {
+    try {
+      await resend.emails.send({
+        from: 'The Alchemist Studio <bookings@elceethealchemist.com>',
+        to: clientEmail,
+        subject: isDeposit === 'true' ? 'Deposit Received - Project Starting Soon' : 'Booking Confirmed - Session Details',
+        text: isDeposit === 'true' 
+          ? generateDepositConfirmation(clientName, service, paymentIntent.amount / 100)
+          : generateSessionConfirmation(clientName, service, hours)
+      });
+    } catch (error) {
+      console.error('Failed to send confirmation email:', error);
+    }
   }
 
   // Save to CRM (Google Sheets)
@@ -97,12 +103,14 @@ async function handleFailedPayment(paymentIntent: Stripe.PaymentIntent) {
   console.log(`❌ Payment failed: ${paymentIntent.id} - ${clientName}`);
 
   // Send friendly retry email
-  try {
-    await resend.emails.send({
-      from: 'The Alchemist Studio <bookings@elceethealchemist.com>',
-      to: clientEmail,
-      subject: 'Booking Payment Issue',
-      text: `Hi ${clientName},
+  const resend = getResend();
+  if (resend) {
+    try {
+      await resend.emails.send({
+        from: 'The Alchemist Studio <bookings@elceethealchemist.com>',
+        to: clientEmail,
+        subject: 'Booking Payment Issue',
+        text: `Hi ${clientName},
 
 We had an issue processing your payment for your studio booking.
 
@@ -118,9 +126,10 @@ If you continue having issues, reply to this email and we'll sort it out.
 Cheers,
 Elcee
 The Alchemist Studio`
-    });
-  } catch (error) {
-    console.error('Failed to send payment failed email:', error);
+      });
+    } catch (error) {
+      console.error('Failed to send payment failed email:', error);
+    }
   }
 }
 

@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() {
+  if (!process.env.RESEND_API_KEY) return null;
+  const { Resend } = require('resend');
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 const leadMagnets = {
   'venues-guide': {
@@ -127,6 +130,15 @@ export async function POST(request: Request) {
     }
 
     const magnet = leadMagnets[type as keyof typeof leadMagnets];
+
+    const resend = getResend();
+    if (!resend) {
+      console.warn('Resend API key not configured, skipping email send');
+      return NextResponse.json({ 
+        success: false, 
+        error: 'Email service not configured' 
+      }, { status: 500 });
+    }
 
     await resend.emails.send({
       from: 'Elcee <noreply@elceethealchemist.com>',
