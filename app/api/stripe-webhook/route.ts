@@ -164,7 +164,8 @@ async function createCalendarEvent(booking: {
     }
   };
 
-  const response = await fetch('https://gateway.maton.ai/google-calendar/calendar/v3/calendars/Daily/events', {
+  // Use automation account's primary calendar (it has editor access)
+  const response = await fetch('https://gateway.maton.ai/google-calendar/calendar/v3/calendars/elcee.automation@gmail.com/events', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${MATON_KEY}`,
