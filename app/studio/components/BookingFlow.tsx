@@ -68,6 +68,8 @@ export default function BookingFlow() {
           isDeposit={isProjectWork}
           clientName={formData.name}
           clientEmail={formData.email}
+          bookingDate={formData.date}
+          selectedSlots={formData.times.join(',')}
           onSuccess={() => window.location.href = '/booking-success'}
           onCancel={() => setStep('form')}
         />

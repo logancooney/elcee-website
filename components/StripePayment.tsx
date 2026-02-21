@@ -18,6 +18,8 @@ interface PaymentFormProps {
   isDeposit?: boolean;
   clientName: string;
   clientEmail: string;
+  bookingDate?: string;
+  selectedSlots?: string;
   onSuccess: () => void;
   onCancel: () => void;
 }
@@ -118,6 +120,8 @@ export default function StripePayment(props: PaymentFormProps) {
         isDeposit: props.isDeposit,
         clientName: props.clientName,
         clientEmail: props.clientEmail,
+        bookingDate: props.bookingDate,
+        selectedSlots: props.selectedSlots,
       }),
     })
       .then((res) => res.json())
@@ -135,7 +139,7 @@ export default function StripePayment(props: PaymentFormProps) {
         setError('Failed to initialize payment');
         setLoading(false);
       });
-  }, [props.service, props.hours, props.isDeposit, props.clientName, props.clientEmail]);
+  }, [props.service, props.hours, props.isDeposit, props.clientName, props.clientEmail, props.bookingDate, props.selectedSlots]);
 
   if (loading) {
     return (

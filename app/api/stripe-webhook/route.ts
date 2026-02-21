@@ -94,7 +94,91 @@ async function handleSuccessfulPayment(paymentIntent: Stripe.PaymentIntent) {
     console.error('Failed to save to CRM:', error);
   }
 
-  // TODO: Create calendar event (when calendar API is set up)
+  // Create calendar event
+  if (paymentIntent.metadata.bookingDate && paymentIntent.metadata.selectedSlots) {
+    try {
+      await createCalendarEvent({
+        clientName,
+        clientEmail,
+        service,
+        date: paymentIntent.metadata.bookingDate,
+        timeSlots: paymentIntent.metadata.selectedSlots,
+        hours: hours || '2',
+        isDeposit: isDeposit === 'true'
+      });
+    } catch (error) {
+      console.error('Failed to create calendar event:', error);
+    }
+  }
+}
+
+async function createCalendarEvent(booking: {
+  clientName: string;
+  clientEmail: string;
+  service: string;
+  date: string;
+  timeSlots: string;
+  hours: string;
+  isDeposit: boolean;
+}) {
+  const MATON_KEY = process.env.MATON_API_KEY;
+  
+  if (!MATON_KEY) {
+    console.warn('MATON_API_KEY not configured - skipping calendar event');
+    return;
+  }
+
+  // Parse time slots (e.g., "10:00,12:00" or "10:00")
+  const slots = booking.timeSlots.split(',').map(s => s.trim());
+  const startTime = slots[0];
+  const durationHours = parseInt(booking.hours);
+  
+  // Calculate start and end times
+  const startDateTime = new Date(`${booking.date}T${startTime}:00`);
+  const endDateTime = new Date(startDateTime);
+  endDateTime.setHours(endDateTime.getHours() + durationHours);
+
+  // Create event in "Daily" calendar
+  const eventData = {
+    summary: `${booking.service} - ${booking.clientName}`,
+    description: booking.isDeposit 
+      ? `Project work (deposit paid)\nClient: ${booking.clientName}\nEmail: ${booking.clientEmail}`
+      : `Studio session\nClient: ${booking.clientName}\nEmail: ${booking.clientEmail}\nDuration: ${booking.hours} hours`,
+    start: {
+      dateTime: startDateTime.toISOString(),
+      timeZone: 'Europe/London'
+    },
+    end: {
+      dateTime: endDateTime.toISOString(),
+      timeZone: 'Europe/London'
+    },
+    attendees: [
+      { email: booking.clientEmail }
+    ],
+    reminders: {
+      useDefault: false,
+      overrides: [
+        { method: 'email', minutes: 24 * 60 }, // 24 hours before
+        { method: 'popup', minutes: 60 }       // 1 hour before
+      ]
+    }
+  };
+
+  const response = await fetch('https://gateway.maton.ai/google-calendar/calendar/v3/calendars/Daily/events', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${MATON_KEY}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(eventData)
+  });
+
+  if (!response.ok) {
+    throw new Error(`Calendar event creation failed: ${response.status}`);
+  }
+
+  const event = await response.json();
+  console.log(`✅ Calendar event created: ${event.id}`);
 }
 
 async function handleFailedPayment(paymentIntent: Stripe.PaymentIntent) {

@@ -17,7 +17,7 @@ const PRICING = {
 
 export async function POST(request: Request) {
   try {
-    const { service, hours, isDeposit, clientName, clientEmail } = await request.json();
+    const { service, hours, isDeposit, clientName, clientEmail, bookingDate, selectedSlots } = await request.json();
 
     // Validate input
     if (!service || !clientName || !clientEmail) {
@@ -66,6 +66,8 @@ export async function POST(request: Request) {
         isDeposit: isDeposit?.toString() || 'false',
         clientName,
         clientEmail,
+        bookingDate: bookingDate || '',
+        selectedSlots: selectedSlots || '',
       },
       receipt_email: clientEmail,
     });
