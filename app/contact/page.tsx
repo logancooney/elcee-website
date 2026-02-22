@@ -35,53 +35,73 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Contact Options */}
+      {/* Contact Form */}
       <section className="py-20 px-6">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-12">
-          {/* Studio Bookings */}
-          <div className="text-center">
-            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6">
-              <span className="text-4xl">🎙️</span>
-            </div>
-            <h2 className="text-2xl font-bold mb-4">Studio Bookings</h2>
-            <p className="text-gray-400 mb-6">
-              Book recording, mixing, mastering, or production sessions.
-            </p>
-            <Link 
-              href="/studio" 
-              className="inline-block bg-white text-black px-8 py-3 font-bold rounded-full hover:bg-gray-200 transition-all duration-300"
-            >
-              Book Now
-            </Link>
+        <div className="max-w-3xl mx-auto">
+          <div className="bg-white/5 backdrop-blur-sm p-8 md:p-12 rounded-2xl border border-white/10">
+            <h2 className="text-3xl font-bold mb-8 text-center">Get in Touch</h2>
+            <form className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium mb-2">Name</label>
+                  <input 
+                    type="text" 
+                    id="name" 
+                    name="name"
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:outline-none focus:border-white/40 transition"
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium mb-2">Email</label>
+                  <input 
+                    type="email" 
+                    id="email" 
+                    name="email"
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:outline-none focus:border-white/40 transition"
+                    required
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label htmlFor="subject" className="block text-sm font-medium mb-2">Subject</label>
+                <input 
+                  type="text" 
+                  id="subject" 
+                  name="subject"
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:outline-none focus:border-white/40 transition"
+                  required
+                />
+              </div>
+
+              <div>
+                <label htmlFor="message" className="block text-sm font-medium mb-2">Message</label>
+                <textarea 
+                  id="message" 
+                  name="message"
+                  rows={6}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:outline-none focus:border-white/40 transition resize-none"
+                  required
+                />
+              </div>
+
+              <button 
+                type="submit"
+                className="w-full bg-white text-black px-8 py-4 font-bold rounded-full hover:bg-gray-200 transition-all duration-300"
+              >
+                Send Message
+              </button>
+            </form>
           </div>
 
-          {/* Email */}
-          <div className="text-center">
-            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6">
-              <span className="text-4xl">📧</span>
+          <div className="mt-12 text-center space-y-4">
+            <p className="text-gray-400">Or reach out directly:</p>
+            <div className="flex flex-wrap justify-center gap-6 text-lg">
+              <a href="mailto:elcee.mgmt@gmail.com" className="hover:underline">elcee.mgmt@gmail.com</a>
+              <a href="tel:07552772559" className="hover:underline">07552 772559</a>
             </div>
-            <h2 className="text-2xl font-bold mb-4">Email</h2>
-            <p className="text-gray-400 mb-6">
-              General enquiries, collaborations, business.
-            </p>
-            <a 
-              href="mailto:elcee.mgmt@gmail.com" 
-              className="inline-block border-2 border-white px-8 py-3 font-bold rounded-full hover:bg-white hover:text-black transition-all duration-300"
-            >
-              Send Email
-            </a>
-          </div>
-
-          {/* Social */}
-          <div className="text-center">
-            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6">
-              <span className="text-4xl">💬</span>
-            </div>
-            <h2 className="text-2xl font-bold mb-4">Social Media</h2>
-            <p className="text-gray-400 mb-6">
-              DM for quick questions or just to connect.
-            </p>
-            <div className="flex flex-col gap-2 items-center">
+            <div className="flex flex-wrap justify-center gap-6 text-base pt-4">
               <a href="https://instagram.com/elceethealchemist" className="hover:underline" target="_blank" rel="noopener noreferrer">Instagram</a>
               <a href="https://twitter.com/elceejpg" className="hover:underline" target="_blank" rel="noopener noreferrer">Twitter</a>
               <a href="https://tiktok.com/@elceethealchemist" className="hover:underline" target="_blank" rel="noopener noreferrer">TikTok</a>
@@ -98,6 +118,14 @@ export default function ContactPage() {
           <p className="text-gray-600">
             Studio sessions available in Manchester. Remote mixing and mastering available worldwide.
           </p>
+          <div className="mt-8">
+            <Link 
+              href="/studio"
+              className="inline-block bg-black text-white px-10 py-4 font-bold rounded-full hover:bg-gray-800 transition-all duration-300"
+            >
+              Book Studio Time
+            </Link>
+          </div>
         </div>
       </section>
 

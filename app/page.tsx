@@ -65,6 +65,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Latest Releases - MOVED UP before About */}
+      <MediaGrid />
+
       {/* Avatar Overlay Container - spans multiple sections */}
       <div className="relative bg-white">
         {/* Avatar - floats over right side of multiple sections */}
@@ -107,12 +110,6 @@ export default function Home() {
         {/* Achievements - unchanged, avatar floats over it */}
         <Achievements />
       </div>
-
-      {/* OPTION A: Featured Release (Vertical) - Currently disabled */}
-      {/* <FeaturedRelease /> */}
-
-      {/* OPTION B: Media Grid (Side-by-Side) - Currently active */}
-      <MediaGrid />
 
       {/* All Platforms Links */}
       <section className="py-12 px-6 bg-black text-white">
