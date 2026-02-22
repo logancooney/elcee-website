@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FeaturedRelease, MediaGrid } from "./components/MediaEmbeds";
+import Achievements from "./components/Achievements";
 
 export default function Home() {
   return (
@@ -70,19 +71,25 @@ export default function Home() {
           <h2 className="text-4xl font-bold mb-8">About</h2>
           <div className="prose prose-lg max-w-none">
             <p className="text-lg leading-relaxed mb-6">
-              Six years deep in the game, Elcee the Alchemist is Manchester's independent alternative rap force. 
-              Operating completely solo — no team, no label, just pure vision.
+              Elcee the Alchemist is redefining UK Alternative Rap. Winner of the JBL Martin Garrix Music Academy 
+              and named an adidas Rising Star, he's recorded at Abbey Road Studios and hit 100K views on his 
+              debut Boiler Room performance in just one week.
             </p>
             <p className="text-lg leading-relaxed mb-6">
-              From the studio to the stage, Elcee crafts every element of the experience. 
-              A recording engineer, producer, and performer who doesn't just make music — transforms it.
+              Rooted in London's Grime scene, he moved to Manchester to study Electronic Music Production, 
+              where he's been shaping the next-gen sound of the North ever since. Operating completely solo — 
+              no team, no label, just pure vision.
             </p>
             <p className="text-lg leading-relaxed">
-              2026: Minimum 2 tracks per month. EPs. Evolution. The alchemy continues.
+              Elcee weaves raw energy with deep introspection, alchemizing sound into a force for 
+              empowerment and transcendence.
             </p>
           </div>
         </div>
       </section>
+
+      {/* Achievements */}
+      <Achievements />
 
       {/* OPTION A: Featured Release (Vertical) - Currently disabled */}
       {/* <FeaturedRelease /> */}

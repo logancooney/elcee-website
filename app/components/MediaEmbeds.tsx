@@ -62,16 +62,16 @@ function VideoCarousel({ videos }: VideoCarouselProps) {
 // Option A: Featured Release (Vertical Layout)
 export function FeaturedRelease() {
   const videos = [
-    { id: "7uelRgmMSCQ", title: "Video 1" },
+    { id: "K9Bk3Mw7mIc", title: "Video 1" },
     { id: "KmekR33sMng", title: "Video 2" },
-    { id: "K9Bk3Mw7mIc", title: "Video 3" },
+    { id: "7uelRgmMSCQ", title: "Video 3" },
     { id: "CtM7X9UE9Ls", title: "Video 4" }
   ];
 
   return (
     <section className="py-20 px-6 bg-black text-white">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-4xl font-bold mb-12 text-center">Latest Release</h2>
+        <h2 className="text-4xl font-bold mb-12 text-center">Latest Releases</h2>
         
         {/* Spotify Embed */}
         <div className="mb-12">
@@ -111,16 +111,16 @@ export function FeaturedRelease() {
 // Option B: Media Grid (Side-by-Side Layout)
 export function MediaGrid() {
   const videos = [
-    { id: "7uelRgmMSCQ", title: "Video 1" },
+    { id: "K9Bk3Mw7mIc", title: "Video 1" },
     { id: "KmekR33sMng", title: "Video 2" },
-    { id: "K9Bk3Mw7mIc", title: "Video 3" },
+    { id: "7uelRgmMSCQ", title: "Video 3" },
     { id: "CtM7X9UE9Ls", title: "Video 4" }
   ];
 
   return (
     <section className="py-20 px-6 bg-black text-white">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl font-bold mb-12 text-center">Latest Release</h2>
+        <h2 className="text-4xl font-bold mb-12 text-center">Latest Releases</h2>
         
         {/* Side-by-Side Grid */}
         <div className="grid md:grid-cols-2 gap-8 mb-12">
