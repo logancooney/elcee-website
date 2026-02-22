@@ -105,11 +105,11 @@ export default function ContactPage() {
       <footer className="py-16 px-6 border-t border-white/10">
         <div className="max-w-7xl mx-auto text-center">
           <Image 
-            src="/logos/ankh.png" 
+            src="/logos/ankh-white.png" 
             alt="Ankh" 
             width={50} 
             height={50}
-            className="opacity-40 mx-auto mb-6 invert"
+            className="opacity-40 mx-auto mb-6"
           />
           <p className="text-sm text-gray-500">© 2026 Elcee the Alchemist. All rights reserved.</p>
         </div>
