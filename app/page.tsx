@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import Signature from "./components/Signature";
 
 export default function Home() {
   return (
@@ -37,7 +36,7 @@ export default function Home() {
             <div className="flex gap-4">
               <a 
                 href="https://open.spotify.com/artist/6E8xwOloHnzGWVlNV9K8n7" 
-                className="bg-white text-black px-8 py-3 font-semibold hover:bg-gray-200 transition"
+                className="bg-white text-black px-10 py-4 font-bold rounded-full hover:bg-gray-200 transition-all duration-300"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -45,7 +44,7 @@ export default function Home() {
               </a>
               <Link 
                 href="/studio" 
-                className="border border-white px-8 py-3 font-semibold hover:bg-white hover:text-black transition"
+                className="border-2 border-white px-10 py-4 font-bold rounded-full hover:bg-white hover:text-black transition-all duration-300"
               >
                 Book Studio
               </Link>
@@ -91,7 +90,7 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-6">
             <a 
               href="https://open.spotify.com/artist/6E8xwOloHnzGWVlNV9K8n7" 
-              className="border border-white p-8 hover:bg-white hover:text-black transition"
+              className="border-2 border-white p-8 rounded-2xl hover:bg-white hover:text-black transition-all duration-300"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -100,7 +99,7 @@ export default function Home() {
             </a>
             <a 
               href="https://music.apple.com/gb/artist/elcee-the-alchemist/1479992060" 
-              className="border border-white p-8 hover:bg-white hover:text-black transition"
+              className="border-2 border-white p-8 rounded-2xl hover:bg-white hover:text-black transition-all duration-300"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -109,7 +108,7 @@ export default function Home() {
             </a>
             <a 
               href="https://youtube.com/@elceethealchemist" 
-              className="border border-white p-8 hover:bg-white hover:text-black transition"
+              className="border-2 border-white p-8 rounded-2xl hover:bg-white hover:text-black transition-all duration-300"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -118,7 +117,7 @@ export default function Home() {
             </a>
             <a 
               href="https://soundcloud.com/elceethealchemist" 
-              className="border border-white p-8 hover:bg-white hover:text-black transition"
+              className="border-2 border-white p-8 rounded-2xl hover:bg-white hover:text-black transition-all duration-300"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -127,7 +126,7 @@ export default function Home() {
             </a>
             <a 
               href="https://elceethealchemist.bandcamp.com" 
-              className="border border-white p-8 hover:bg-white hover:text-black transition"
+              className="border-2 border-white p-8 rounded-2xl hover:bg-white hover:text-black transition-all duration-300"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -149,13 +148,6 @@ export default function Home() {
             <a href="https://youtube.com/@elceethealchemist" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">YouTube</a>
             <a href="https://facebook.com/elceethealchemist" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">Facebook</a>
           </div>
-        </div>
-      </section>
-
-      {/* Signature Section */}
-      <section className="py-20 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <Signature className="w-full max-w-md mx-auto text-white opacity-80" />
         </div>
       </section>
 

@@ -49,7 +49,7 @@ export default function ContactPage() {
             </p>
             <Link 
               href="/studio" 
-              className="inline-block bg-white text-black px-6 py-3 font-semibold hover:bg-gray-200 transition"
+              className="inline-block bg-white text-black px-8 py-3 font-bold rounded-full hover:bg-gray-200 transition-all duration-300"
             >
               Book Now
             </Link>
@@ -66,7 +66,7 @@ export default function ContactPage() {
             </p>
             <a 
               href="mailto:elcee.mgmt@gmail.com" 
-              className="inline-block border border-white px-6 py-3 font-semibold hover:bg-white hover:text-black transition"
+              className="inline-block border-2 border-white px-8 py-3 font-bold rounded-full hover:bg-white hover:text-black transition-all duration-300"
             >
               Send Email
             </a>
