@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { FeaturedRelease, MediaGrid } from "./components/MediaEmbeds";
 
 export default function Home() {
   return (
@@ -83,10 +84,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Music Links */}
-      <section className="py-20 px-6">
+      {/* OPTION A: Featured Release (Vertical) */}
+      <FeaturedRelease />
+
+      {/* OPTION B: Media Grid (Side-by-Side) - Uncomment to try this layout */}
+      {/* <MediaGrid /> */}
+
+      {/* All Platforms Links */}
+      <section className="py-12 px-6 bg-white text-black">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-12">Listen</h2>
+          <h2 className="text-3xl font-bold mb-8">All Platforms</h2>
           <div className="flex justify-center gap-8 flex-wrap text-lg">
             <a href="https://open.spotify.com/artist/6E8xwOloHnzGWVlNV9K8n7" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">Spotify</a>
             <a href="https://music.apple.com/gb/artist/elcee-the-alchemist/1479992060" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">Apple Music</a>
