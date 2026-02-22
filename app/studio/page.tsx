@@ -123,9 +123,6 @@ export default function StudioPage() {
       {/* Process */}
       <Process />
 
-      {/* FAQ */}
-      <FAQ />
-
       {/* Booking Form */}
       <section id="booking" className="py-24 px-6 bg-black text-white">
         <div className="max-w-5xl mx-auto text-center mb-12">
@@ -143,6 +140,9 @@ export default function StudioPage() {
           </p>
         </div>
       </section>
+
+      {/* FAQ */}
+      <FAQ />
 
       {/* Footer */}
       <footer className="py-16 px-6 border-t border-white/10">

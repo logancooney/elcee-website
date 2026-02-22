@@ -10,7 +10,7 @@ interface FAQItem {
 const faqs: FAQItem[] = [
   {
     question: "What equipment do you use?",
-    answer: "Professional-grade signal chain including Neumann and AKG microphones, UAD Apollo interface, Yamaha HS8 monitors, and industry-standard plugins (Waves, FabFilter, UAD, iZotope)."
+    answer: "Professional-grade signal chain and industry-standard plugins. The room is acoustically treated for accurate recording and mixing."
   },
   {
     question: "What's your turnaround time?",
