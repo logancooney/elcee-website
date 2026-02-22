@@ -143,17 +143,6 @@ export function MediaGrid() {
             <VideoCarousel videos={videos} />
           </div>
         </div>
-
-        {/* Stream Links */}
-        <div className="text-center">
-          <p className="text-gray-400 mb-4">Stream on all platforms</p>
-          <div className="flex justify-center gap-6 flex-wrap text-lg">
-            <a href="https://open.spotify.com/album/7HF3AA4vFQJARAt1ivCn0w" className="hover:underline" target="_blank" rel="noopener noreferrer">Spotify</a>
-            <a href="https://music.apple.com/gb/artist/elcee-the-alchemist/1479992060" className="hover:underline" target="_blank" rel="noopener noreferrer">Apple Music</a>
-            <a href="https://youtube.com/@elceethealchemist" className="hover:underline" target="_blank" rel="noopener noreferrer">YouTube</a>
-            <a href="https://soundcloud.com/elceethealchemist" className="hover:underline" target="_blank" rel="noopener noreferrer">SoundCloud</a>
-          </div>
-        </div>
       </div>
     </section>
   );
