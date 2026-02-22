@@ -9,36 +9,36 @@ interface FAQItem {
 
 const faqs: FAQItem[] = [
   {
-    question: "How much does studio time cost in Manchester?",
-    answer: "Our hourly rate is £35 for ad-hoc sessions, or £30/hr with a loyalty subscription (£240/month). We also offer package deals: 3-song package for £920 and 5-song package for £1,450."
+    question: "What equipment do you use?",
+    answer: "Professional-grade signal chain including Neumann and AKG microphones, UAD Apollo interface, Yamaha HS8 monitors, and industry-standard plugins (Waves, FabFilter, UAD, iZotope)."
   },
   {
-    question: "What services do you offer?",
-    answer: "We provide recording, mixing, mastering, vocal tuning, music production, and Ableton tutoring. All services are available as standalone or packages. Full mix & master is £340, vocal mix is £190."
+    question: "What's your turnaround time?",
+    answer: "Standard turnaround is 3-5 days for mixing. Rush delivery (24-48 hours) is available with a 40% surcharge for time-sensitive projects."
+  },
+  {
+    question: "Do you work with all genres?",
+    answer: "Yes. While I specialize in rap, hip-hop, and alternative music, I work across all genres with the same professional standard."
+  },
+  {
+    question: "How many revisions are included?",
+    answer: "Up to 3 revision rounds are included with mixing services. Additional revisions can be arranged if needed."
+  },
+  {
+    question: "Can I attend mixing sessions?",
+    answer: "Sessions are typically completed independently for efficiency, but in-person mix sessions can be arranged if preferred."
+  },
+  {
+    question: "What formats do you deliver?",
+    answer: "All industry-standard formats: WAV, MP3, stems, and any specific formats required for your distribution or label."
+  },
+  {
+    question: "Do you offer production services?",
+    answer: "Yes. Custom production starts at £400 for fully bespoke beats. Additional production work on existing tracks starts at £150."
   },
   {
     question: "Where is the studio located?",
-    answer: "We're based in Manchester city centre, easily accessible from Salford, Stockport, Bolton, Oldham, and surrounding areas."
-  },
-  {
-    question: "How quickly can I get my mix back?",
-    answer: "Standard turnaround is 3-5 days. Same-day mixing is available for rush projects with a 40% surcharge."
-  },
-  {
-    question: "Do you work with all music genres?",
-    answer: "Yes! While we specialize in rap, hip-hop, and alternative music, we work with all genres including R&B, pop, rock, and more."
-  },
-  {
-    question: "What should I bring to my first session?",
-    answer: "Just bring your lyrics (memorized if possible), reference tracks on your phone or USB, and a water bottle. All equipment is provided. Arrive 10 minutes early if it's your first time."
-  },
-  {
-    question: "Can I book the studio for just 1 hour?",
-    answer: "Sessions start at 2 hours minimum to ensure quality results. Most recording sessions benefit from at least 2-3 hours for vocals."
-  },
-  {
-    question: "Do you provide beats/instrumentals?",
-    answer: "Yes! Custom production starts at £400 for bespoke tracks, or £150+ for additional production work on existing material."
+    answer: "Cambridge Street, Manchester, M7 1UY — approximately 10 minutes from Manchester city centre. Easily accessible by public transport or car with nearby parking."
   }
 ];
 
@@ -48,12 +48,9 @@ export default function FAQ() {
   return (
     <section className="py-20 px-6 bg-white text-black">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-4xl font-bold mb-4 text-center">
+        <h2 className="text-4xl md:text-5xl font-bold mb-16 text-center">
           Frequently Asked Questions
         </h2>
-        <p className="text-gray-600 text-center mb-12">
-          Common questions about recording in our Manchester studio
-        </p>
         
         <div className="space-y-4">
           {faqs.map((faq, index) => (
