@@ -84,11 +84,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* OPTION A: Featured Release (Vertical) */}
-      <FeaturedRelease />
+      {/* OPTION A: Featured Release (Vertical) - Currently disabled */}
+      {/* <FeaturedRelease /> */}
 
-      {/* OPTION B: Media Grid (Side-by-Side) - Uncomment to try this layout */}
-      {/* <MediaGrid /> */}
+      {/* OPTION B: Media Grid (Side-by-Side) - Currently active */}
+      <MediaGrid />
 
       {/* All Platforms Links */}
       <section className="py-12 px-6 bg-white text-black">
