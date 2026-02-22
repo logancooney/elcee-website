@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import StudioGallery from "./components/StudioGallery";
 import BookingFlow from "./components/BookingFlow";
+import StructuredData from "./components/StructuredData";
+import FAQ from "./components/FAQ";
 
 export default function StudioPage() {
   const services = [
@@ -17,6 +19,7 @@ export default function StudioPage() {
 
   return (
     <div className="min-h-screen bg-black text-white">
+      <StructuredData />
       {/* Navigation */}
       <nav className="fixed top-0 w-full bg-black/90 backdrop-blur-sm z-50 border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
@@ -41,10 +44,12 @@ export default function StudioPage() {
       {/* Hero */}
       <section className="pt-32 pb-12 px-6">
         <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6">STUDIO SERVICES</h1>
+          <h1 className="text-5xl md:text-7xl font-bold mb-6">
+            RECORDING STUDIO MANCHESTER
+          </h1>
           <p className="text-xl text-gray-400 max-w-3xl mx-auto">
             Professional recording, mixing, mastering, and production in Manchester. 
-            Six years of experience transforming artists' visions into reality.
+            Affordable rates for independent artists. Six years transforming visions into reality.
           </p>
         </div>
       </section>
@@ -52,7 +57,9 @@ export default function StudioPage() {
       {/* Services */}
       <section className="py-12 px-6 bg-white text-black">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold mb-12 text-center">Services & Pricing</h2>
+          <h2 className="text-4xl font-bold mb-12 text-center">
+            Professional Studio Services in Manchester
+          </h2>
           <div className="grid md:grid-cols-2 gap-6">
             {services.map((service) => (
               <div key={service.name} className="border border-black p-6">
@@ -85,6 +92,9 @@ export default function StudioPage() {
 
       {/* Studio Gallery */}
       <StudioGallery />
+
+      {/* FAQ Section */}
+      <FAQ />
 
       {/* Booking Form */}
       <section className="py-20 px-6 bg-black text-white">
