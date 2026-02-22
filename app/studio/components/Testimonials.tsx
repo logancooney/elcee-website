@@ -30,15 +30,15 @@ export default function Testimonials() {
   const [current, setCurrent] = useState(0);
 
   return (
-    <section className="py-24 px-6 bg-white text-black">
+    <section className="py-16 px-6 bg-white text-black">
       <div className="max-w-5xl mx-auto">
-        <h2 className="text-4xl md:text-5xl font-bold mb-16 text-center">
+        <h2 className="text-4xl font-bold mb-12 text-center">
           Trusted by Manchester Artists
         </h2>
         
         <div className="relative">
-          <div className="bg-black text-white p-12 md:p-16 rounded-2xl">
-            <p className="text-2xl md:text-3xl font-light leading-relaxed mb-8">
+          <div className="bg-black text-white p-10 md:p-12 rounded-2xl">
+            <p className="text-xl md:text-2xl font-light leading-relaxed mb-6">
               "{testimonials[current].quote}"
             </p>
             <div className="flex items-center justify-between">

@@ -37,13 +37,13 @@ export default function StudioPage() {
       </nav>
 
       {/* Hero */}
-      <section className="pt-40 pb-24 px-6">
+      <section className="pt-32 pb-12 px-6">
         <div className="max-w-5xl mx-auto text-center">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
             Professional Recording Studio in Manchester
           </h1>
-          <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-12 leading-relaxed">
-            Artist-run studio delivering release-ready quality. Recording, mixing, and mastering 
+          <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-8 leading-relaxed">
+            Artist-run studio delivering release-ready quality — recording, mixing, and mastering 
             for artists who take their craft seriously.
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
