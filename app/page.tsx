@@ -8,13 +8,13 @@ export default function Home() {
     <div className="min-h-screen bg-black text-white">
       {/* Navigation */}
       <nav className="fixed top-0 w-full bg-black/90 backdrop-blur-sm z-50 border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <div className="max-w-7xl mx-auto px-6 py-2 flex justify-between items-center">
           <Image 
-            src="/logos/eta-logo-white.png" 
+            src="/logos/eta-logo-white-cropped.png" 
             alt="Elcee the Alchemist" 
-            width={360} 
-            height={120}
-            className="h-24 w-auto"
+            width={400} 
+            height={100}
+            className="h-20 w-auto"
           />
           <div className="flex gap-8 text-sm font-medium">
             <Link href="/" className="hover:text-gray-400 transition">Home</Link>
@@ -66,24 +66,24 @@ export default function Home() {
       </section>
 
       {/* Bio Section */}
-      <section className="py-20 px-6 bg-white text-black relative">
-        <div className="max-w-7xl mx-auto relative">
-          {/* Avatar positioned on right - visible on desktop */}
-          <div className="hidden md:block absolute right-0 top-0 bottom-0 w-1/2 pointer-events-none">
+      <section className="py-20 px-6 bg-white text-black relative overflow-hidden">
+        <div className="max-w-4xl mx-auto relative">
+          {/* Avatar BEHIND text */}
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-full md:w-2/3 pointer-events-none opacity-100 z-0">
             <Image 
               src="/elcee-avatar.png" 
               alt="Elcee the Alchemist" 
-              width={800} 
-              height={1000}
-              className="absolute right-0 top-0 h-full w-auto object-contain object-right"
+              width={700} 
+              height={900}
+              className="w-full h-auto"
               priority
             />
           </div>
           
-          {/* Text Content */}
-          <div className="relative z-10 max-w-2xl">
+          {/* Text Content - ON TOP of avatar */}
+          <div className="relative z-10">
             <h2 className="text-4xl font-bold mb-8">About</h2>
-            <div className="space-y-6">
+            <div className="space-y-6 max-w-xl">
               <p className="text-lg leading-relaxed">
                 Elcee the Alchemist is redefining UK Alternative Rap. Winner of the JBL Martin Garrix Music Academy 
                 and named an adidas Rising Star, he's recorded at Abbey Road Studios and hit 100K views on his 

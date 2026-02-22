@@ -6,14 +6,14 @@ export default function ContactPage() {
     <div className="min-h-screen bg-black text-white">
       {/* Navigation */}
       <nav className="fixed top-0 w-full bg-black/90 backdrop-blur-sm z-50 border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <div className="max-w-7xl mx-auto px-6 py-2 flex justify-between items-center">
           <Link href="/">
             <Image 
-              src="/logos/eta-logo-white.png" 
+              src="/logos/eta-logo-white-cropped.png" 
               alt="Elcee the Alchemist" 
-              width={360} 
-              height={120}
-              className="h-24 w-auto"
+              width={400} 
+              height={100}
+              className="h-20 w-auto"
             />
           </Link>
           <div className="flex gap-8 text-sm font-medium">
