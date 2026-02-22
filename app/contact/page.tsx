@@ -96,12 +96,8 @@ export default function ContactPage() {
           </div>
 
           <div className="mt-12 text-center space-y-4">
-            <p className="text-gray-400">Or reach out directly:</p>
+            <p className="text-gray-400">Or connect on social:</p>
             <div className="flex flex-wrap justify-center gap-6 text-lg">
-              <a href="mailto:elcee.mgmt@gmail.com" className="hover:underline">elcee.mgmt@gmail.com</a>
-              <a href="tel:07552772559" className="hover:underline">07552 772559</a>
-            </div>
-            <div className="flex flex-wrap justify-center gap-6 text-base pt-4">
               <a href="https://instagram.com/elceethealchemist" className="hover:underline" target="_blank" rel="noopener noreferrer">Instagram</a>
               <a href="https://twitter.com/elceejpg" className="hover:underline" target="_blank" rel="noopener noreferrer">Twitter</a>
               <a href="https://tiktok.com/@elceethealchemist" className="hover:underline" target="_blank" rel="noopener noreferrer">TikTok</a>
