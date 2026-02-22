@@ -61,11 +61,11 @@ function VideoCarousel({ videos }: VideoCarouselProps) {
 
 // Option A: Featured Release (Vertical Layout)
 export function FeaturedRelease() {
-  // Placeholder videos - replace with actual video IDs
   const videos = [
-    { id: "dQw4w9WgXcQ", title: "Video 1" },
-    { id: "dQw4w9WgXcQ", title: "Video 2" },
-    { id: "dQw4w9WgXcQ", title: "Video 3" }
+    { id: "7uelRgmMSCQ", title: "Video 1" },
+    { id: "KmekR33sMng", title: "Video 2" },
+    { id: "K9Bk3Mw7mIc", title: "Video 3" },
+    { id: "CtM7X9UE9Ls", title: "Video 4" }
   ];
 
   return (
@@ -111,9 +111,10 @@ export function FeaturedRelease() {
 // Option B: Media Grid (Side-by-Side Layout)
 export function MediaGrid() {
   const videos = [
-    { id: "dQw4w9WgXcQ", title: "Video 1" },
-    { id: "dQw4w9WgXcQ", title: "Video 2" },
-    { id: "dQw4w9WgXcQ", title: "Video 3" }
+    { id: "7uelRgmMSCQ", title: "Video 1" },
+    { id: "KmekR33sMng", title: "Video 2" },
+    { id: "K9Bk3Mw7mIc", title: "Video 3" },
+    { id: "CtM7X9UE9Ls", title: "Video 4" }
   ];
 
   return (
