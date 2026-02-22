@@ -66,24 +66,24 @@ export default function Home() {
       </section>
 
       {/* Bio Section */}
-      <section className="py-20 px-6 bg-white text-black relative overflow-hidden">
-        <div className="max-w-4xl mx-auto relative">
-          {/* Avatar BEHIND text */}
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-full md:w-2/3 pointer-events-none opacity-100 z-0">
+      <section className="py-20 px-6 bg-white text-black relative">
+        <div className="max-w-7xl mx-auto relative min-h-[600px] flex items-center">
+          {/* Avatar BEHIND text - positioned on RIGHT */}
+          <div className="absolute right-0 top-0 bottom-0 w-1/2 flex items-center justify-end pointer-events-none z-0">
             <Image 
               src="/elcee-avatar.png" 
               alt="Elcee the Alchemist" 
-              width={700} 
-              height={900}
-              className="w-full h-auto"
+              width={600} 
+              height={800}
+              className="h-full w-auto object-contain"
               priority
             />
           </div>
           
-          {/* Text Content - ON TOP of avatar */}
-          <div className="relative z-10">
+          {/* Text Content - ON TOP, left side only */}
+          <div className="relative z-10 max-w-xl pr-8">
             <h2 className="text-4xl font-bold mb-8">About</h2>
-            <div className="space-y-6 max-w-xl">
+            <div className="space-y-6">
               <p className="text-lg leading-relaxed">
                 Elcee the Alchemist is redefining UK Alternative Rap. Winner of the JBL Martin Garrix Music Academy 
                 and named an adidas Rising Star, he's recorded at Abbey Road Studios and hit 100K views on his 
