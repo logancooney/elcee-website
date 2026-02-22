@@ -4,7 +4,7 @@ export default function Services() {
       title: "Recording & Engineering",
       description: "Capture your performance with clarity and precision. Professional vocal and instrument tracking in a focused environment built for quality.",
       includes: [
-        "High-end signal chain (Neumann, UAD Apollo, industry-standard processing)",
+        "High-end signal chain",
         "Experienced engineering and session direction",
         "Flexible session lengths",
         "All session files delivered"

@@ -7,13 +7,13 @@ export default function Home() {
     <div className="min-h-screen bg-black text-white">
       {/* Navigation */}
       <nav className="fixed top-0 w-full bg-black/90 backdrop-blur-sm z-50 border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <div className="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
           <Image 
             src="/logos/eta-logo-white.png" 
             alt="Elcee the Alchemist" 
-            width={120} 
-            height={40}
-            className="h-10 w-auto"
+            width={240} 
+            height={80}
+            className="h-16 w-auto"
           />
           <div className="flex gap-8 text-sm font-medium">
             <Link href="/" className="hover:text-gray-400 transition">Home</Link>
@@ -160,16 +160,16 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-6 border-t border-white/10">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-gray-400">© 2026 Elcee the Alchemist. All rights reserved.</p>
+      <footer className="py-16 px-6 border-t border-white/10">
+        <div className="max-w-7xl mx-auto text-center">
           <Image 
             src="/logos/ankh.png" 
             alt="Ankh" 
-            width={30} 
-            height={30}
-            className="opacity-50"
+            width={50} 
+            height={50}
+            className="opacity-40 mx-auto mb-6"
           />
+          <p className="text-sm text-gray-500">© 2026 Elcee the Alchemist. All rights reserved.</p>
         </div>
       </footer>
     </div>

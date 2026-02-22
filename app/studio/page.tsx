@@ -17,14 +17,14 @@ export default function StudioPage() {
       
       {/* Navigation */}
       <nav className="fixed top-0 w-full bg-black/95 backdrop-blur-sm z-50 border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+        <div className="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
           <Link href="/">
             <Image 
               src="/logos/eta-logo-white.png" 
               alt="Elcee the Alchemist" 
-              width={180} 
-              height={60}
-              className="h-12 w-auto"
+              width={240} 
+              height={80}
+              className="h-16 w-auto"
             />
           </Link>
           <div className="flex gap-8 text-sm font-medium">
@@ -49,15 +49,15 @@ export default function StudioPage() {
           <div className="flex gap-4 justify-center flex-wrap">
             <a 
               href="#booking" 
-              className="bg-white text-black px-10 py-4 font-semibold text-lg rounded-full hover:bg-gray-200 transition-all duration-300"
+              className="bg-white text-black px-12 py-4 font-bold text-lg rounded-full hover:bg-gray-200 transition-all duration-300"
             >
-              Book a Session
+              Book Studio Time
             </a>
             <a 
               href="#services" 
-              className="border-2 border-white px-10 py-4 font-semibold text-lg rounded-full hover:bg-white hover:text-black transition-all duration-300"
+              className="border-2 border-white px-12 py-4 font-bold text-lg rounded-full hover:bg-white hover:text-black transition-all duration-300"
             >
-              View Services
+              See Services & Pricing
             </a>
           </div>
         </div>
@@ -85,9 +85,9 @@ export default function StudioPage() {
           </p>
           <a 
             href="#booking" 
-            className="inline-block bg-white text-black px-12 py-5 font-semibold text-lg rounded-full hover:bg-gray-200 transition-all duration-300"
+            className="inline-block bg-white text-black px-12 py-5 font-bold text-lg rounded-full hover:bg-gray-200 transition-all duration-300"
           >
-            View Calendar & Book
+            Book Your Session
           </a>
           <p className="text-gray-500 mt-6">
             Flexible scheduling • Fast turnaround • Professional results
@@ -145,16 +145,16 @@ export default function StudioPage() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-6 border-t border-white/10">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-gray-400">© 2026 Elcee the Alchemist. All rights reserved.</p>
+      <footer className="py-16 px-6 border-t border-white/10">
+        <div className="max-w-7xl mx-auto text-center">
           <Image 
             src="/logos/ankh.png" 
             alt="Ankh" 
-            width={30} 
-            height={30}
-            className="opacity-50"
+            width={50} 
+            height={50}
+            className="opacity-40 mx-auto mb-6"
           />
+          <p className="text-sm text-gray-500">© 2026 Elcee the Alchemist. All rights reserved.</p>
         </div>
       </footer>
     </div>
