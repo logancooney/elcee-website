@@ -117,13 +117,16 @@ export default function Home() {
       <MediaGrid />
 
       {/* All Platforms Links */}
-      <section className="py-12 px-6 bg-white text-black">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-8">All Platforms</h2>
-          <div className="flex justify-center gap-8 flex-wrap text-lg">
+      <section className="py-12 px-6 bg-black text-white">
+        <div className="max-w-5xl mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-8">Stream on all platforms</h2>
+          <div className="flex justify-center gap-6 flex-wrap text-lg">
             <a href="https://open.spotify.com/artist/6E8xwOloHnzGWVlNV9K8n7" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">Spotify</a>
             <a href="https://music.apple.com/gb/artist/elcee-the-alchemist/1479992060" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">Apple Music</a>
+            <a href="https://music.amazon.com/artists/B07V4F5QK4/elcee-the-alchemist" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">Amazon Music</a>
             <a href="https://youtube.com/@elceethealchemist" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">YouTube</a>
+            <a href="https://www.deezer.com/artist/67198962" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">Deezer</a>
+            <a href="https://tidal.com/browse/artist/13513078" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">Tidal</a>
             <a href="https://soundcloud.com/elceethealchemist" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">SoundCloud</a>
             <a href="https://elceethealchemist.bandcamp.com" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">Bandcamp</a>
           </div>
