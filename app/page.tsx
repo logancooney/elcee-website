@@ -65,46 +65,50 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Bio Section */}
-      <section className="py-20 px-6 bg-white text-black relative">
-        <div className="max-w-7xl mx-auto relative min-h-[600px] flex items-center">
-          {/* Avatar BEHIND text - positioned on RIGHT */}
-          <div className="absolute right-0 top-0 bottom-0 w-1/2 flex items-center justify-end pointer-events-none z-0">
+      {/* Avatar Overlay Container - spans multiple sections */}
+      <div className="relative bg-white">
+        {/* Avatar - floats over right side of multiple sections */}
+        <div className="hidden md:block absolute right-0 top-0 bottom-0 w-1/2 pointer-events-none z-10">
+          <div className="sticky top-24 h-screen flex items-center justify-end pr-6">
             <Image 
               src="/elcee-avatar.png" 
               alt="Elcee the Alchemist" 
-              width={600} 
-              height={800}
-              className="h-full w-auto object-contain"
+              width={700} 
+              height={900}
+              className="w-auto max-h-[90vh] object-contain"
               priority
             />
           </div>
-          
-          {/* Text Content - ON TOP, left side only */}
-          <div className="relative z-10 max-w-xl pr-8">
-            <h2 className="text-4xl font-bold mb-8">About</h2>
-            <div className="space-y-6">
-              <p className="text-lg leading-relaxed">
-                Elcee the Alchemist is redefining UK Alternative Rap. Winner of the JBL Martin Garrix Music Academy 
-                and named an adidas Rising Star, he's recorded at Abbey Road Studios and hit 100K views on his 
-                debut Boiler Room performance in just one week.
-              </p>
-              <p className="text-lg leading-relaxed">
-                Rooted in London's Grime scene, he moved to Manchester to study Electronic Music Production, 
-                where he's been shaping the next-gen sound of the North ever since. Operating completely solo — 
-                no team, no label, just pure vision.
-              </p>
-              <p className="text-lg leading-relaxed">
-                Elcee weaves raw energy with deep introspection, alchemizing sound into a force for 
-                empowerment and transcendence.
-              </p>
+        </div>
+
+        {/* Bio Section - text constrained to left */}
+        <section className="py-20 px-6 text-black relative">
+          <div className="max-w-7xl mx-auto">
+            <div className="max-w-xl">
+              <h2 className="text-4xl font-bold mb-8">About</h2>
+              <div className="space-y-6">
+                <p className="text-lg leading-relaxed">
+                  Elcee the Alchemist is redefining UK Alternative Rap. Winner of the JBL Martin Garrix Music Academy 
+                  and named an adidas Rising Star, he's recorded at Abbey Road Studios and hit 100K views on his 
+                  debut Boiler Room performance in just one week.
+                </p>
+                <p className="text-lg leading-relaxed">
+                  Rooted in London's Grime scene, he moved to Manchester to study Electronic Music Production, 
+                  where he's been shaping the next-gen sound of the North ever since. Operating completely solo — 
+                  no team, no label, just pure vision.
+                </p>
+                <p className="text-lg leading-relaxed">
+                  Elcee weaves raw energy with deep introspection, alchemizing sound into a force for 
+                  empowerment and transcendence.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Achievements */}
-      <Achievements />
+        {/* Achievements - unchanged, avatar floats over it */}
+        <Achievements />
+      </div>
 
       {/* OPTION A: Featured Release (Vertical) - Currently disabled */}
       {/* <FeaturedRelease /> */}
