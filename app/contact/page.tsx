@@ -11,9 +11,9 @@ export default function ContactPage() {
             <Image 
               src="/logos/eta-logo-white.png" 
               alt="Elcee the Alchemist" 
-              width={240} 
-              height={80}
-              className="h-16 w-auto"
+              width={480} 
+              height={160}
+              className="h-32 w-auto"
             />
           </Link>
           <div className="flex gap-8 text-sm font-medium">
