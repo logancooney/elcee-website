@@ -109,7 +109,7 @@ export default function ContactPage() {
             alt="Ankh" 
             width={50} 
             height={50}
-            className="opacity-70 mx-auto mb-6"
+            className="mx-auto mb-6"
           />
           <p className="text-sm text-gray-500">© 2026 Elcee the Alchemist. All rights reserved.</p>
         </div>
