@@ -61,10 +61,11 @@ async function handleSuccessfulPayment(paymentIntent: Stripe.PaymentIntent) {
 
   console.log(`✅ Payment succeeded: ${paymentIntent.id} - ${clientName} - £${paymentIntent.amount / 100}`);
 
-  // Send confirmation email
+  // Send confirmation email to client
   const resend = getResend();
   if (resend) {
     try {
+      // Email to client
       await resend.emails.send({
         from: 'The Alchemist Studio <bookings@elceethealchemist.com>',
         to: clientEmail,
@@ -72,6 +73,26 @@ async function handleSuccessfulPayment(paymentIntent: Stripe.PaymentIntent) {
         text: isDeposit === 'true' 
           ? generateDepositConfirmation(clientName, service, paymentIntent.amount / 100)
           : generateSessionConfirmation(clientName, service, hours)
+      });
+
+      // Notification to you
+      await resend.emails.send({
+        from: 'The Alchemist Studio <bookings@elceethealchemist.com>',
+        to: 'elcee.automation@gmail.com',
+        subject: `🎵 New Booking: ${clientName} - ${service}`,
+        text: `New studio booking received!
+
+Client: ${clientName}
+Email: ${clientEmail}
+Service: ${service}
+${paymentIntent.metadata.bookingDate ? `Date: ${paymentIntent.metadata.bookingDate}` : ''}
+${paymentIntent.metadata.selectedSlots ? `Time: ${paymentIntent.metadata.selectedSlots}` : ''}
+Amount: £${paymentIntent.amount / 100}
+Payment Type: ${isDeposit === 'true' ? 'Deposit (50%)' : 'Full Payment'}
+
+Payment ID: ${paymentIntent.id}
+
+Check your Clarence calendar for the scheduled session.`
       });
     } catch (error) {
       console.error('Failed to send confirmation email:', error);
