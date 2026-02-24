@@ -164,8 +164,9 @@ async function createCalendarEvent(booking: {
     }
   };
 
-  // Create event on Daily calendar (automation account now has editor access)
-  const response = await fetch('https://gateway.maton.ai/google-calendar/calendar/v3/calendars/4bde58e7465993008e9a664f9d7f9b94f8e165edca1d334c512b948b29264c8e@group.calendar.google.com/events', {
+  // Create event on Clarence calendar (automation account's primary calendar)
+  const calendarId = encodeURIComponent('elcee.automation@gmail.com');
+  const response = await fetch(`https://gateway.maton.ai/google-calendar/calendar/v3/calendars/${calendarId}/events`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${MATON_KEY}`,
