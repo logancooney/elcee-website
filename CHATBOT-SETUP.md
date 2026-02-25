@@ -138,19 +138,13 @@ Respond via website admin or reply here.
 
 ## Production Environment Variables (Vercel)
 
-**For Telegram notifications to work, add these to Vercel:**
+**For email notifications to work, add this to Vercel:**
 
 1. Go to: https://vercel.com/logancooney/elcee-website/settings/environment-variables
 2. Add:
-   - `OPENCLAW_GATEWAY_URL` = `http://localhost:18789`
-   - `OPENCLAW_GATEWAY_TOKEN` = `0299def5eb2da543c27e8f31b3314da519f4a0cdb78d71f0`
+   - `MATON_API_KEY` = `PMZOf_Je0dHItkcW2zVyhXtqzoxg8nnlg0-rJz-8Wr20tdZdK0EcZiqHKZrLlHJeVSQ5sTRJln2QzHSEcYOlQDDVu6tJTkbZFraldWnjaw`
 
-**Note:** The gateway URL won't work from Vercel (localhost). For production notifications, we'd need to:
-- Option A: Expose gateway via Tailscale (secure remote access)
-- Option B: Use webhook endpoint instead
-- Option C: Email notifications instead of Telegram
-
-**For now:** Chatbot works perfectly, notifications only work when testing locally.
+**Note:** Email notifications work 24/7 regardless of laptop status (sent via Maton cloud API).
 
 ---
 
