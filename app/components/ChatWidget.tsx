@@ -11,6 +11,7 @@ interface Message {
 
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(true);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'welcome',
@@ -23,6 +24,16 @@ export default function ChatWidget() {
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId] = useState(() => `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Hide tooltip after 5 seconds or when chat is opened
+  useEffect(() => {
+    const timer = setTimeout(() => setShowTooltip(false), 5000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) setShowTooltip(false);
+  }, [isOpen]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -58,6 +69,10 @@ export default function ChatWidget() {
 
       const data = await response.json();
 
+      // Add human-like delay (500ms - 2000ms)
+      const delay = Math.floor(Math.random() * 1500) + 500;
+      await new Promise(resolve => setTimeout(resolve, delay));
+
       if (data.response) {
         setMessages((prev) => [...prev, data.response]);
       }
@@ -88,40 +103,50 @@ export default function ChatWidget() {
     <>
       {/* Chat bubble button */}
       {!isOpen && (
-        <button
-          onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-50 bg-purple-600 hover:bg-purple-700 text-white rounded-full p-4 shadow-lg transition-all duration-200 hover:scale-110"
-          aria-label="Open chat"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+        <div className="fixed bottom-6 right-6 z-50">
+          {/* Tooltip */}
+          {showTooltip && (
+            <div className="absolute bottom-20 right-0 bg-white text-gray-800 px-4 py-2 rounded-lg shadow-lg mb-2 whitespace-nowrap animate-fade-in">
+              <p className="text-sm font-medium">Questions? Chat with us here! 💬</p>
+              <div className="absolute bottom-0 right-6 transform translate-y-1/2 rotate-45 w-3 h-3 bg-white"></div>
+            </div>
+          )}
+          
+          <button
+            onClick={() => setIsOpen(true)}
+            className="bg-white hover:bg-gray-100 text-gray-800 rounded-full p-4 shadow-lg transition-all duration-200 hover:scale-110 border-2 border-gray-200"
+            aria-label="Open chat"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-            />
-          </svg>
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+              />
+            </svg>
+          </button>
+        </div>
       )}
 
       {/* Chat window */}
       {isOpen && (
         <div className="fixed bottom-6 right-6 z-50 w-96 h-[600px] bg-white rounded-lg shadow-2xl flex flex-col">
           {/* Header */}
-          <div className="bg-purple-600 text-white p-4 rounded-t-lg flex justify-between items-center">
+          <div className="bg-gray-800 text-white p-4 rounded-t-lg flex justify-between items-center">
             <div>
               <h3 className="font-bold">The Alchemist Studio</h3>
               <p className="text-xs opacity-90">Usually replies instantly</p>
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className="text-white hover:bg-purple-700 rounded p-1"
+              className="text-white hover:bg-gray-700 rounded p-1"
               aria-label="Close chat"
             >
               <svg
@@ -151,7 +176,7 @@ export default function ChatWidget() {
                 <div
                   className={`max-w-[80%] rounded-lg p-3 ${
                     msg.sender === 'user'
-                      ? 'bg-purple-600 text-white'
+                      ? 'bg-gray-800 text-white'
                       : 'bg-white text-gray-800 shadow'
                   }`}
                 >
@@ -182,13 +207,13 @@ export default function ChatWidget() {
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Ask about pricing, availability, services..."
-                className="flex-1 border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600 text-gray-800"
+                className="flex-1 border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-800 text-gray-800"
                 disabled={isLoading}
               />
               <button
                 onClick={sendMessage}
                 disabled={isLoading || !inputMessage.trim()}
-                className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-300 text-white rounded-lg px-4 py-2 transition-colors"
+                className="bg-gray-800 hover:bg-gray-700 disabled:bg-gray-300 text-white rounded-lg px-4 py-2 transition-colors"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
