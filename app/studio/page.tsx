@@ -78,8 +78,7 @@ export default function StudioPage() {
         </div>
       </section>
 
-      {/* The Studio (Gallery - temporarily hidden) */}
-      {/* Will add real studio photos next week */}
+      {/* The Studio Gallery */}
       <section className="py-24 px-6 bg-white text-black">
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
@@ -88,10 +87,21 @@ export default function StudioPage() {
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-12">
             Professional recording environment in Manchester. Built by a working artist with 6+ years industry experience.
           </p>
-          <div className="bg-gray-100 rounded-2xl p-16 border-2 border-dashed border-gray-300">
-            <p className="text-gray-500 text-lg">
-              Studio photos coming soon
-            </p>
+          <div className="grid md:grid-cols-2 gap-6 mb-12">
+            <Image 
+              src="/studio/studio-interior-front.jpg"
+              alt="Studio interior - front view with mixing desk and monitors"
+              width={800}
+              height={600}
+              className="w-full h-auto rounded-lg shadow-lg"
+            />
+            <Image 
+              src="/studio/studio-interior-back.jpg"
+              alt="Studio interior - back view with recording equipment"
+              width={800}
+              height={600}
+              className="w-full h-auto rounded-lg shadow-lg"
+            />
           </div>
           <div className="mt-12 text-left max-w-2xl mx-auto">
             <h3 className="font-bold text-xl mb-3">Location</h3>
