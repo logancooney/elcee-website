@@ -59,43 +59,63 @@ export async function POST(request: NextRequest) {
 
 async function generateResponse(message: string, context: string[] = []): Promise<{ message: string; needsHuman: boolean }> {
   const lowerMessage = message.toLowerCase();
+  const conversationHistory = context.join(' ').toLowerCase();
+  
+  // Check what info we already have from context
+  const hasGenre = /\b(rap|hip hop|drill|trap|pop|rock|indie|r&b|rnb|soul|jazz|electronic|house|techno|dubstep|grime|afrobeat)\b/i.test(conversationHistory);
+  const hasTrackCount = /\b\d+\s*(track|song)/i.test(conversationHistory);
+  const hasTimeline = /\b(today|tomorrow|week|month|asap|urgent|deadline|by\s+\w+)/i.test(conversationHistory);
+  const hasBudget = /\b£?\d+/i.test(conversationHistory);
+  const hasService = /\b(record|mix|master|production|vocal)\b/i.test(conversationHistory);
+  
+  // Count how much info we've gathered
+  const infoGathered = [hasGenre, hasTrackCount, hasTimeline, hasBudget, hasService].filter(Boolean).length;
 
   // Pricing questions
   if (lowerMessage.includes('price') || lowerMessage.includes('cost') || lowerMessage.includes('rate') || lowerMessage.includes('how much')) {
+    let response = '';
+    
     if (lowerMessage.includes('mix') && lowerMessage.includes('master')) {
-      return {
-        message: "Full mix & master is £340 per track. This includes unlimited revisions until you're happy.\n\nWhat genre are you working with? And how many tracks do you have?",
-        needsHuman: false,
-      };
+      response = "Full mix & master is £340 per track. This includes unlimited revisions until you're happy.";
+    } else if (lowerMessage.includes('mix') || lowerMessage.includes('mixing')) {
+      response = "Vocal mixing is £190 per track. Full mix & master is £340. All include unlimited revisions.";
+    } else if (lowerMessage.includes('master')) {
+      response = "Mastering is £40 per track. Fast turnaround, usually 24-48 hours.";
+    } else if (lowerMessage.includes('record')) {
+      response = "Recording sessions are £35/hr (or £30/hr with a monthly subscription).";
+    } else {
+      response = "Here's our pricing:\n\n• Recording: £35/hr\n• Vocal Mix: £190\n• Full Mix & Master: £340\n• Mastering: £40\n• Production: Custom pricing\n\nAll services include unlimited revisions.";
     }
-    if (lowerMessage.includes('mix') || lowerMessage.includes('mixing')) {
-      return {
-        message: "Vocal mixing is £190 per track. Full mix & master is £340. All include unlimited revisions.\n\nTell me about your project — what genre and how many tracks?",
-        needsHuman: false,
-      };
+    
+    // Only ask for missing info
+    if (infoGathered >= 3) {
+      response += "\n\nGreat! I've got enough details. Want to book a time slot now or should I connect you with Elcee to discuss specifics?";
+      return { message: response, needsHuman: false };
     }
-    if (lowerMessage.includes('master')) {
-      return {
-        message: "Mastering is £40 per track. Fast turnaround, usually 24-48 hours.\n\nHow many tracks do you need mastered? Any specific deadline?",
-        needsHuman: false,
-      };
+    
+    const missingInfo = [];
+    if (!hasGenre) missingInfo.push('genre');
+    if (!hasTrackCount) missingInfo.push('how many tracks');
+    if (!hasTimeline) missingInfo.push('timeline');
+    
+    if (missingInfo.length > 0) {
+      response += `\n\nTo give you an accurate quote, what's your ${missingInfo.slice(0, 2).join(' and ')}?`;
     }
-    if (lowerMessage.includes('record')) {
-      return {
-        message: "Recording sessions are £35/hr (or £30/hr with a monthly subscription).\n\nWhat are you looking to record? Vocals, instruments, or a full band?",
-        needsHuman: false,
-      };
-    }
-    return {
-      message: "Here's our pricing:\n\n• Recording: £35/hr\n• Vocal Mix: £190\n• Full Mix & Master: £340\n• Mastering: £40\n• Production: Custom pricing\n\nAll services include unlimited revisions. What kind of project are you working on?",
-      needsHuman: false,
-    };
+    
+    return { message: response, needsHuman: false };
   }
 
   // Booking/availability
   if (lowerMessage.includes('book') || lowerMessage.includes('available') || lowerMessage.includes('appointment') || lowerMessage.includes('session')) {
+    if (infoGathered >= 2) {
+      return {
+        message: "Perfect! Book your session here: elceethealchemist.com/studio\n\nThe calendar shows real-time availability. Pick your time slots and confirm instantly.\n\nSee you in the studio! 🎙️",
+        needsHuman: false,
+      };
+    }
+    
     return {
-      message: "You can book studio time directly here: elceethealchemist.com/studio\n\nThe calendar shows real-time availability. Pick your time slots and book instantly. Need help with anything specific?",
+      message: "You can book studio time directly here: elceethealchemist.com/studio\n\nThe calendar shows real-time availability. What service are you looking to book?",
       needsHuman: false,
     };
   }
@@ -118,10 +138,15 @@ async function generateResponse(message: string, context: string[] = []): Promis
 
   // Examples/portfolio
   if (lowerMessage.includes('example') || lowerMessage.includes('portfolio') || lowerMessage.includes('hear') || lowerMessage.includes('listen') || lowerMessage.includes('work')) {
-    return {
-      message: "You can hear my work on all streaming platforms — search 'Elcee the Alchemist'. I produce, mix, and master all my own music (40+ tracks released).\n\nWorked with JBL, adidas, and Boiler Room.\n\nWhat genre are you working in? I can point you to similar examples or share before/after clips from client work.",
-      needsHuman: false,
-    };
+    let response = "You can hear my work on all streaming platforms — search 'Elcee the Alchemist'. I produce, mix, and master all my own music (40+ tracks released).\n\nWorked with JBL, adidas, and Boiler Room.";
+    
+    if (!hasGenre) {
+      response += "\n\nWhat genre are you working in? I can point you to similar examples.";
+    } else {
+      response += "\n\nWant me to send before/after clips from similar projects to your email?";
+    }
+    
+    return { message: response, needsHuman: false };
   }
 
   // Genre/style questions
@@ -142,8 +167,22 @@ async function generateResponse(message: string, context: string[] = []): Promis
 
   // Project details gathering
   if (lowerMessage.includes('track') || lowerMessage.includes('song') || lowerMessage.includes('album') || lowerMessage.includes('ep') || lowerMessage.includes('single')) {
+    // If we have enough info, move forward
+    if (infoGathered >= 3) {
+      return {
+        message: "Perfect! I've got the details. You can book a session directly at elceethealchemist.com/studio or I can pass this to Elcee for a detailed quote. What works better?",
+        needsHuman: false,
+      };
+    }
+    
+    const missing = [];
+    if (!hasTrackCount) missing.push('How many tracks?');
+    if (!hasGenre) missing.push('What genre?');
+    if (!hasService) missing.push('What service? (recording/mixing/mastering)');
+    if (!hasTimeline) missing.push('Any deadline?');
+    
     return {
-      message: "Nice! Tell me more about your project:\n\n• How many tracks?\n• What genre/style?\n• What do you need? (recording, mixing, mastering, or production)\n• Any deadline?\n\nThis helps me give you accurate pricing and availability.",
+      message: `Nice! To help you out, I just need:\n\n${missing.slice(0, 2).map(q => `• ${q}`).join('\n')}`,
       needsHuman: false,
     };
   }
@@ -165,44 +204,83 @@ async function generateResponse(message: string, context: string[] = []): Promis
   }
 
   // Ready to connect with Elcee (after gathering info)
-  if (lowerMessage.includes('sounds good') || lowerMessage.includes('perfect') || lowerMessage.includes('yes') || 
-      lowerMessage.includes('that works') || lowerMessage.includes('let\'s do it') || lowerMessage.includes('book') ||
-      lowerMessage.includes('connect me') || lowerMessage.includes('talk to elcee') || lowerMessage.includes('speak to')) {
-    // Only flag if they seem ready and have provided some context
-    const hasContext = message.split(' ').length > 3;
-    if (hasContext) {
+  if (lowerMessage.includes('quote') || lowerMessage.includes('send to elcee') || lowerMessage.includes('connect me') || 
+      lowerMessage.includes('talk to elcee') || lowerMessage.includes('speak to') || lowerMessage.includes('elcee')) {
+    // Only flag if we have enough context (3+ pieces of info)
+    if (infoGathered >= 3) {
       return {
-        message: "Perfect! I'm passing all your details to Elcee now. They'll get back to you within the hour (usually much faster).\n\nYou can also book studio time directly at elceethealchemist.com/studio if you want to lock in a slot right away.",
+        message: "Perfect! I'm sending all your details to Elcee now:\n\n" + 
+                 `${hasGenre ? '✅ Genre/style\n' : ''}` +
+                 `${hasTrackCount ? '✅ Number of tracks\n' : ''}` +
+                 `${hasTimeline ? '✅ Timeline\n' : ''}` +
+                 `${hasBudget ? '✅ Budget\n' : ''}` +
+                 `${hasService ? '✅ Service needed\n' : ''}` +
+                 "\nThey'll email you within the hour (usually much faster). You'll hear from elcee.automation@gmail.com",
         needsHuman: true,
+      };
+    } else {
+      // Not enough info yet
+      const stillNeed = [];
+      if (!hasService) stillNeed.push('what service you need');
+      if (!hasGenre) stillNeed.push('what genre');
+      if (!hasTrackCount) stillNeed.push('how many tracks');
+      
+      return {
+        message: `Before I send to Elcee, I just need: ${stillNeed.slice(0, 2).join(' and ')}`,
+        needsHuman: false,
       };
     }
   }
 
   // Contact requests with info
   if ((lowerMessage.includes('contact') || lowerMessage.includes('email') || lowerMessage.includes('call')) && 
-      message.split(' ').length > 5) {
+      infoGathered >= 2) {
     return {
-      message: "Great! I've got your details and I'm sending them to Elcee now. They'll reach out within the hour.\n\nFeel free to book online anytime at elceethealchemist.com/studio",
+      message: "I'll send your details to Elcee right now. They'll reach out within the hour via elcee.automation@gmail.com\n\nOr book instantly: elceethealchemist.com/studio",
       needsHuman: true,
     };
   }
 
-  // Check if user is providing details (numbers, genres, specific info)
-  const hasDetails = /\d+/.test(message) || 
-                     lowerMessage.length > 100 || 
-                     (lowerMessage.includes('i') && (lowerMessage.includes('need') || lowerMessage.includes('want') || lowerMessage.includes('looking')));
-
-  // If they're giving detailed info, gather it for Elcee
-  if (hasDetails) {
+  // If we have enough info (3+ pieces), ready to hand off or book
+  if (infoGathered >= 3) {
     return {
-      message: "Got it! That's really helpful.\n\nTo make sure Elcee has everything they need:\n\n• What's your timeline/deadline?\n• What's your budget range?\n• Any specific sound/vibe you're going for?\n\nOnce I have these details, I'll pass everything to Elcee and they'll get back to you within an hour.",
+      message: "Perfect! I've got all the key details about your project.\n\nYou have two options:\n\n1. Book a time slot now at elceethealchemist.com/studio\n2. I can send your details to Elcee for a personalized quote (they'll reply within an hour)\n\nWhich would you prefer?",
+      needsHuman: false,
+    };
+  }
+
+  // Check if user is providing details (numbers, genres, specific info)
+  const hasDetails = /\d+/.test(message) || lowerMessage.length > 50;
+
+  // If they're giving detailed info but we're still missing some, ask for missing pieces
+  if (hasDetails) {
+    const stillMissing = [];
+    if (!hasGenre && !hasService) stillMissing.push('What service do you need? (recording/mixing/mastering)');
+    else if (!hasGenre) stillMissing.push('What genre are you working with?');
+    else if (!hasTrackCount) stillMissing.push('How many tracks?');
+    else if (!hasTimeline) stillMissing.push('What\'s your timeline?');
+    
+    if (stillMissing.length === 0) {
+      return {
+        message: "Great! I think I've got everything. Want to book a session or get a quote from Elcee?",
+        needsHuman: false,
+      };
+    }
+    
+    return {
+      message: `Thanks! Just need one more thing: ${stillMissing[0]}`,
       needsHuman: false,
     };
   }
 
   // Default: gather more info before flagging
+  const needed = [];
+  if (!hasService) needed.push('What service? (recording/mixing/mastering/production)');
+  if (!hasGenre) needed.push('What genre/style?');
+  if (!hasTrackCount) needed.push('How many tracks?');
+  
   return {
-    message: "I can definitely help with that!\n\nTo give you the best answer, tell me a bit more:\n\n• What service are you interested in? (recording, mixing, mastering, production)\n• What genre/style?\n• How many tracks?\n• Any deadline?\n\nOr if you prefer, you can book directly at elceethealchemist.com/studio and we'll discuss details there.",
+    message: `I can help with that!\n\nJust need a few quick details:\n\n${needed.slice(0, 2).map(q => `• ${q}`).join('\n')}\n\nOr book directly: elceethealchemist.com/studio`,
     needsHuman: false,
   };
 }
