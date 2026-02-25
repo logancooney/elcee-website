@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import Navigation from "../components/Navigation";
 
 export const metadata = {
   title: "EPK - Electronic Press Kit | Elcee the Alchemist",
@@ -10,25 +11,7 @@ export default function EPKPage() {
   return (
     <div className="min-h-screen bg-white text-black">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/90 backdrop-blur-sm z-50 border-b border-black/10">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <Link href="/">
-            <Image 
-              src="/logos/eta-logo-black.png" 
-              alt="Elcee the Alchemist" 
-              width={120} 
-              height={40}
-              className="h-10 w-auto"
-            />
-          </Link>
-          <div className="flex gap-8 text-sm font-medium">
-            <Link href="/" className="hover:text-gray-600 transition">Home</Link>
-            <Link href="/studio" className="hover:text-gray-600 transition">Studio</Link>
-            <Link href="/shop" className="hover:text-gray-600 transition">Shop</Link>
-            <Link href="/contact" className="hover:text-gray-600 transition">Contact</Link>
-          </div>
-        </div>
-      </nav>
+      <Navigation theme="light" />
 
       {/* Header */}
       <section className="pt-32 pb-12 px-6 bg-black text-white">

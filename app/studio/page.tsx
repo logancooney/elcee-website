@@ -9,6 +9,7 @@ import Testimonials from "./components/Testimonials";
 import Services from "./components/Services";
 import Pricing from "./components/Pricing";
 import Process from "./components/Process";
+import Navigation from "../components/Navigation";
 
 export default function StudioPage() {
   return (
@@ -16,25 +17,7 @@ export default function StudioPage() {
       <StructuredData />
       
       {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-black/95 backdrop-blur-sm z-50 border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-2 flex justify-between items-center">
-          <Link href="/">
-            <Image 
-              src="/logos/eta-logo-white-cropped.png" 
-              alt="Elcee the Alchemist" 
-              width={400} 
-              height={100}
-              className="h-20 w-auto"
-            />
-          </Link>
-          <div className="flex gap-8 text-sm font-medium">
-            <Link href="/" className="hover:text-gray-400 transition-colors duration-300">Home</Link>
-            <Link href="/studio" className="hover:text-gray-400 transition-colors duration-300">Studio</Link>
-            <Link href="/shop" className="hover:text-gray-400 transition-colors duration-300">Shop</Link>
-            <Link href="/contact" className="hover:text-gray-400 transition-colors duration-300">Contact</Link>
-          </div>
-        </div>
-      </nav>
+      <Navigation />
 
       {/* Hero */}
       <section className="pt-32 pb-12 px-6">
