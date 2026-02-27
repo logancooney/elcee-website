@@ -287,11 +287,11 @@ async function generateResponse(message: string, context: string[] = []): Promis
 
 async function notifyHuman(conversation: string[], sessionId: string) {
   try {
-    // Send email notification via Maton API
-    const matonApiKey = process.env.MATON_API_KEY;
+    // Send email notification via Resend
+    const resendApiKey = process.env.RESEND_API_KEY;
 
-    if (!matonApiKey) {
-      console.warn('No Maton API key configured - skipping notification');
+    if (!resendApiKey) {
+      console.warn('No Resend API key configured - skipping notification');
       return;
     }
 
@@ -315,18 +315,14 @@ async function notifyHuman(conversation: string[], sessionId: string) {
       <p><a href="https://elceethealchemist.com/studio" style="background: #333; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">View Booking Calendar</a></p>
     `;
 
-    await fetch('https://api.maton.ai/v1/gmail/send', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${matonApiKey}`,
-      },
-      body: JSON.stringify({
-        to: 'elcee.mgmt@gmail.com',
-        subject: '🔔 New Studio Inquiry from Website',
-        html: emailHtml,
-        from: 'elcee.automation@gmail.com',
-      }),
+    const { Resend } = require('resend');
+    const resend = new Resend(resendApiKey);
+
+    await resend.emails.send({
+      from: 'studio@elceethealchemist.com',
+      to: 'elcee.mgmt@gmail.com',
+      subject: '🔔 New Studio Inquiry from Website',
+      html: emailHtml,
     });
   } catch (error) {
     console.error('Failed to notify human:', error);
