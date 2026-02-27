@@ -10,19 +10,19 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    quote: "Professional setup, quality results. Exactly what I needed for my EP.",
-    author: "Artist Name",
-    location: "Manchester"
-  },
-  {
-    quote: "Great experience from start to finish. Mix came back polished and ready to release.",
-    author: "Artist Name",
+    quote: "I've been working with Elcee for the past year, you won't find a better space to build your craft.",
+    author: "Malaki",
     location: "Salford"
   },
   {
-    quote: "Reliable, consistent quality. Been working here for over a year.",
-    author: "Artist Name",
-    location: "Stockport"
+    quote: "Elcee provides not only an exceptional studio environment with everything an artist might need, but he's also an excellent creative partner to bounce ideas off. It's really useful to talk to someone who has direct experience producing music for brands.",
+    author: "Fieves",
+    location: "Manchester"
+  },
+  {
+    quote: "Elcee is a true multi-disciplinary creative and master of his crafts - from creative direction, song-writing, production, mixing and mastering and more.",
+    author: "Ninja Tea",
+    location: "Manchester"
   }
 ];
 
