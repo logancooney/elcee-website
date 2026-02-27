@@ -4,6 +4,39 @@ import { NextRequest, NextResponse } from 'next/server';
 let chatMessages: { id: string; message: string; sender: 'user' | 'bot'; timestamp: number; sessionId?: string }[] = [];
 const sessionContexts: Record<string, string[]> = {};
 
+// Rate limiting store
+const rateLimits = new Map<string, { count: number; resetAt: number }>();
+
+function checkRateLimit(identifier: string): boolean {
+  const now = Date.now();
+  const limit = rateLimits.get(identifier);
+  
+  if (!limit || now > limit.resetAt) {
+    rateLimits.set(identifier, { count: 1, resetAt: now + 60000 }); // 1 minute window
+    return true;
+  }
+  
+  if (limit.count >= 10) { // Max 10 messages per minute
+    return false;
+  }
+  
+  limit.count++;
+  return true;
+}
+
+function sanitizeInput(input: string): string {
+  // Remove potential injection patterns
+  return input
+    .replace(/[<>]/g, '') // Remove HTML tags
+    .replace(/system:/gi, '') // Remove system role attempts
+    .replace(/assistant:/gi, '') // Remove assistant role attempts
+    .replace(/api[_\s-]?key/gi, '[REDACTED]') // Block API key fishing
+    .replace(/password/gi, '[REDACTED]') // Block password fishing
+    .replace(/token/gi, '[REDACTED]') // Block token fishing
+    .trim()
+    .slice(0, 500); // Max 500 characters
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { message, sessionId } = await request.json();
@@ -12,24 +45,41 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Message required' }, { status: 400 });
     }
 
+    // Rate limiting
+    const clientIp = request.headers.get('x-forwarded-for') || 'unknown';
+    if (!checkRateLimit(clientIp)) {
+      return NextResponse.json({ 
+        error: 'Rate limit exceeded. Please wait a moment.' 
+      }, { status: 429 });
+    }
+
+    // Sanitize input
+    const sanitizedMessage = sanitizeInput(message);
+    
+    if (sanitizedMessage.length < 1) {
+      return NextResponse.json({ 
+        error: 'Invalid message' 
+      }, { status: 400 });
+    }
+
     // Initialize session context if needed
     if (!sessionContexts[sessionId]) {
       sessionContexts[sessionId] = [];
     }
 
-    // Store user message
+    // Store user message (sanitized)
     const userMsg = {
       id: `${Date.now()}-user`,
-      message,
+      message: sanitizedMessage,
       sender: 'user' as const,
       timestamp: Date.now(),
       sessionId,
     };
     chatMessages.push(userMsg);
-    sessionContexts[sessionId].push(`User: ${message}`);
+    sessionContexts[sessionId].push(`User: ${sanitizedMessage}`);
 
     // Auto-response logic
-    const response = await generateResponse(message, sessionContexts[sessionId]);
+    const response = await generateResponse(sanitizedMessage, sessionContexts[sessionId]);
 
     // Store bot response
     const botMsg = {
