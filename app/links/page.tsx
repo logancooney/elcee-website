@@ -63,7 +63,7 @@ export default function LinksPage() {
             </a>
 
             <a
-              href="https://music.apple.com/artist/YOUR_APPLE_MUSIC_ID"
+              href="https://music.apple.com/artist/1479992060"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center bg-pink-600 hover:bg-pink-700 text-white font-medium py-3 px-4 rounded-lg transition"
