@@ -27,7 +27,7 @@ export default function LinksPage() {
 
           {/* Latest Release - Update this when new music drops */}
           <a
-            href="https://open.spotify.com/artist/YOUR_ARTIST_ID"
+            href="https://open.spotify.com/artist/6E8xwOloHnzGWVlNV9K8n7"
             target="_blank"
             rel="noopener noreferrer"
             className="block w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-semibold text-center py-4 px-6 rounded-lg transition"
@@ -51,7 +51,7 @@ export default function LinksPage() {
           <div className="grid grid-cols-2 gap-3">
             
             <a
-              href="https://open.spotify.com/artist/YOUR_ARTIST_ID"
+              href="https://open.spotify.com/artist/6E8xwOloHnzGWVlNV9K8n7"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-lg transition"
