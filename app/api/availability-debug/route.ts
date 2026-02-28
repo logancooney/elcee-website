@@ -11,6 +11,7 @@ export async function GET(request: Request) {
   }
 
   const calendars = [
+    'elcee.mgmt@gmail.com', // Elcee (main calendar)
     '4bde58e7465993008e9a664f9d7f9b94f8e165edca1d334c512b948b29264c8e@group.calendar.google.com', // Daily
     'cae911eaa575f5813787c590c16bc2def04f291478bce19273ba6236ab055b47@group.calendar.google.com', // Keane Futures
     'a9b669dc8e3a79d29cf63ffbd2494e204dd13c4e1c58644bebb586811ebce974@group.calendar.google.com'  // Studio time
@@ -40,7 +41,7 @@ export async function GET(request: Request) {
         const data = await response.json();
         
         return {
-          calendarName: ['Daily', 'Keane Futures', 'Studio time'][index],
+          calendarName: ['Elcee', 'Daily', 'Keane Futures', 'Studio time'][index],
           calendarId,
           status: response.status,
           eventCount: data.items?.length || 0,
@@ -54,7 +55,7 @@ export async function GET(request: Request) {
         };
       } catch (err: any) {
         return {
-          calendarName: ['Daily', 'Keane Futures', 'Studio time'][index],
+          calendarName: ['Elcee', 'Daily', 'Keane Futures', 'Studio time'][index],
           calendarId,
           error: err.message
         };
