@@ -345,7 +345,7 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
                         `}
                       >
                         <div className="text-xs opacity-70">
-                          {slot.split(':')[0] >= 12 ? 'PM' : 'AM'}
+                          {parseInt(slot.split(':')[0]) >= 12 ? 'PM' : 'AM'}
                         </div>
                         <div className="font-bold">
                           {parseInt(slot.split(':')[0]) > 12 

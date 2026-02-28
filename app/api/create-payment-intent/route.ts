@@ -1,10 +1,15 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-// Initialize Stripe (will use test key until you add live key)
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2026-01-28.clover',
-});
+// Initialize Stripe lazily (don't fail build if key missing)
+const getStripe = () => {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    throw new Error('STRIPE_SECRET_KEY not configured');
+  }
+  return new Stripe(process.env.STRIPE_SECRET_KEY, {
+    apiVersion: '2026-01-28.clover',
+  });
+};
 
 // Service pricing
 const PRICING = {
@@ -17,6 +22,7 @@ const PRICING = {
 
 export async function POST(request: Request) {
   try {
+    const stripe = getStripe();
     const { service, hours, isDeposit, clientName, clientEmail, bookingDate, selectedSlots } = await request.json();
 
     // Validate input
