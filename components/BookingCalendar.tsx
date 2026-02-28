@@ -2,31 +2,16 @@
 
 import { useState, useEffect } from "react";
 
-interface TimeSlot {
-  time: string;
-  available: boolean;
-}
-
 interface BookingCalendarProps {
   onSelectSlots: (date: string, times: string[]) => void;
 }
 
 export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [availableSlots, setAvailableSlots] = useState<TimeSlot[]>([]);
-  const [selectedSlots, setSelectedSlots] = useState<string[]>([]);
+  const [availableSlots, setAvailableSlots] = useState<string[]>([]);
+  const [selectedSlot, setSelectedSlot] = useState<string>("");
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [loading, setLoading] = useState(false);
-
-  // Studio hours: 10am - 10pm, 2-hour blocks
-  const generateTimeSlots = (): string[] => {
-    const slots = [];
-    for (let hour = 10; hour <= 20; hour += 2) {
-      const timeStr = `${hour.toString().padStart(2, '0')}:00`;
-      slots.push(timeStr);
-    }
-    return slots;
-  };
 
   // Fetch available slots for selected date
   useEffect(() => {
@@ -39,28 +24,47 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
         const response = await fetch(`/api/availability?date=${dateStr}`);
         const data = await response.json();
         
-        const allSlots = generateTimeSlots();
-        const slots: TimeSlot[] = allSlots.map(time => ({
-          time,
-          available: !data.bookedSlots?.includes(time)
-        }));
+        // All possible 2-hour slots (10am-10pm)
+        const allSlots = ['10:00', '12:00', '14:00', '16:00', '18:00', '20:00'];
         
-        setAvailableSlots(slots);
+        // Filter to only available slots (not in bookedSlots)
+        const available = allSlots.filter(slot => !data.bookedSlots?.includes(slot));
+        
+        setAvailableSlots(available);
       } catch (error) {
         console.error('Failed to fetch availability:', error);
-        // Default: all slots available
-        const allSlots = generateTimeSlots();
-        setAvailableSlots(allSlots.map(time => ({ time, available: true })));
+        setAvailableSlots([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchAvailability();
-    setSelectedSlots([]); // Reset selection when date changes
+    setSelectedSlot("");
   }, [selectedDate]);
 
-  // Generate calendar days
+  const handleSlotSelect = (slot: string) => {
+    setSelectedSlot(slot);
+  };
+
+  const handleConfirm = () => {
+    if (!selectedDate || !selectedSlot) return;
+    
+    const dateStr = selectedDate.toISOString().split('T')[0];
+    
+    // Generate 30-min slots for the 2-hour block
+    const hour = parseInt(selectedSlot.split(':')[0]);
+    const slots = [
+      `${hour.toString().padStart(2, '0')}:00`,
+      `${hour.toString().padStart(2, '0')}:30`,
+      `${(hour + 1).toString().padStart(2, '0')}:00`,
+      `${(hour + 1).toString().padStart(2, '0')}:30`,
+    ];
+    
+    onSelectSlots(dateStr, slots);
+  };
+
+  // Calendar generation
   const getDaysInMonth = (date: Date) => {
     const year = date.getFullYear();
     const month = date.getMonth();
@@ -71,12 +75,10 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
 
     const days = [];
     
-    // Add empty cells for days before month starts
     for (let i = 0; i < startingDayOfWeek; i++) {
       days.push(null);
     }
     
-    // Add actual days
     for (let day = 1; day <= daysInMonth; day++) {
       days.push(new Date(year, month, day));
     }
@@ -88,10 +90,8 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
-    // Can't book past dates
     if (date < today) return false;
     
-    // Can't book more than 3 months ahead
     const maxDate = new Date();
     maxDate.setMonth(maxDate.getMonth() + 3);
     if (date > maxDate) return false;
@@ -102,47 +102,55 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
   const handleDateClick = (date: Date) => {
     if (!isDateAvailable(date)) return;
     setSelectedDate(date);
-    setSelectedSlots([]);
-  };
-
-  const handleSlotClick = (slot: TimeSlot) => {
-    if (!slot.available) return;
-    
-    const isSelected = selectedSlots.includes(slot.time);
-    
-    if (isSelected) {
-      // Deselect
-      setSelectedSlots(selectedSlots.filter(t => t !== slot.time));
-    } else {
-      // Select (add to array)
-      setSelectedSlots([...selectedSlots, slot.time].sort());
-    }
-  };
-
-  const handleConfirm = () => {
-    if (!selectedDate || selectedSlots.length === 0) return;
-    const dateStr = selectedDate.toISOString().split('T')[0];
-    onSelectSlots(dateStr, selectedSlots);
   };
 
   const prevMonth = () => {
     setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1));
     setSelectedDate(null);
-    setSelectedSlots([]);
   };
 
   const nextMonth = () => {
     setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1));
     setSelectedDate(null);
-    setSelectedSlots([]);
+  };
+
+  const formatTimeRange = (slot: string) => {
+    const hour = parseInt(slot.split(':')[0]);
+    const endHour = hour + 2;
+    
+    const formatHour = (h: number) => {
+      if (h === 12) return '12:00 PM';
+      if (h > 12) return `${h - 12}:00 PM`;
+      return `${h}:00 AM`;
+    };
+    
+    return `${formatHour(hour)} - ${formatHour(endHour)}`;
   };
 
   const days = getDaysInMonth(currentMonth);
   const monthName = currentMonth.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
-  const totalHours = selectedSlots.length * 2;
 
   return (
     <div className="w-full">
+      {/* Step indicator */}
+      <div className="mb-6 text-center">
+        <div className="flex items-center justify-center gap-2 text-sm">
+          <div className={`flex items-center gap-2 ${selectedDate ? 'text-white' : 'text-gray-400'}`}>
+            <span className={`w-6 h-6 rounded-full flex items-center justify-center ${selectedDate ? 'bg-white text-black' : 'bg-white/20'}`}>
+              1
+            </span>
+            <span>Pick a date</span>
+          </div>
+          <span className="text-gray-600">→</span>
+          <div className={`flex items-center gap-2 ${selectedSlot ? 'text-white' : 'text-gray-400'}`}>
+            <span className={`w-6 h-6 rounded-full flex items-center justify-center ${selectedSlot ? 'bg-white text-black' : 'bg-white/20'}`}>
+              2
+            </span>
+            <span>Pick a time</span>
+          </div>
+        </div>
+      </div>
+
       {/* Calendar Header */}
       <div className="flex justify-between items-center mb-6">
         <button 
@@ -164,14 +172,12 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
 
       {/* Calendar Grid */}
       <div className="grid grid-cols-7 gap-2 mb-8">
-        {/* Day headers */}
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
           <div key={day} className="text-center text-sm font-semibold text-gray-400 pb-2">
             {day}
           </div>
         ))}
         
-        {/* Day cells */}
         {days.map((date, index) => {
           if (!date) {
             return <div key={`empty-${index}`} className="aspect-square" />;
@@ -187,9 +193,9 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
               onClick={() => handleDateClick(date)}
               disabled={!available}
               className={`
-                aspect-square flex items-center justify-center border transition
+                aspect-square flex items-center justify-center border transition text-sm
                 ${available ? 'hover:bg-white hover:text-black cursor-pointer' : 'opacity-30 cursor-not-allowed'}
-                ${isSelected ? 'bg-white text-black font-bold' : 'border-white/20'}
+                ${isSelected ? 'bg-white text-black font-bold border-white' : 'border-white/20'}
               `}
             >
               {date.getDate()}
@@ -198,74 +204,78 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
         })}
       </div>
 
-      {/* Time Slots */}
+      {/* Available Time Slots */}
       {selectedDate && (
         <div className="mt-8 pt-8 border-t border-white/20">
           <h4 className="text-xl font-bold mb-4">
-            Select Time Slots - {selectedDate.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}
+            Available times on {selectedDate.toLocaleDateString('en-GB', { 
+              weekday: 'long', 
+              day: 'numeric', 
+              month: 'long' 
+            })}
           </h4>
           
           {loading ? (
-            <p className="text-gray-400">Loading available slots...</p>
+            <div className="text-center py-8">
+              <p className="text-gray-400">Checking availability...</p>
+            </div>
+          ) : availableSlots.length === 0 ? (
+            <div className="text-center py-8 bg-white/5 border border-white/10 rounded">
+              <p className="text-gray-400 mb-2">No availability on this date</p>
+              <p className="text-sm text-gray-500">Please choose a different day</p>
+            </div>
           ) : (
             <>
-              {availableSlots.filter(slot => slot.available).length === 0 ? (
-                <div className="text-center py-8">
-                  <p className="text-gray-400">No available time slots on this date.</p>
-                  <p className="text-sm text-gray-500 mt-2">Please choose a different day.</p>
-                </div>
-              ) : (
-                <>
-                  <div className="grid grid-cols-3 md:grid-cols-6 gap-3 mb-6">
-                    {availableSlots
-                      .filter(slot => slot.available) // Only show available slots
-                      .map((slot) => {
-                        const isSelected = selectedSlots.includes(slot.time);
-                        
-                        return (
-                          <button
-                            type="button"
-                            key={slot.time}
-                            onClick={() => handleSlotClick(slot)}
-                            className={`
-                              py-3 px-4 border transition font-semibold
-                              ${isSelected
-                                ? 'bg-white text-black border-white'
-                                : 'border-white/40 hover:bg-white hover:text-black cursor-pointer'
-                              }
-                            `}
-                          >
-                            {slot.time}
-                          </button>
-                        );
-                      })}
-                  </div>
-                </>
-              )}
-              
-              {selectedSlots.length > 0 && (
-                <div className="bg-white/5 border border-white/20 p-4 mb-4">
-                  <p className="text-sm text-gray-400 mb-2">Selected slots:</p>
-                  <p className="font-bold text-lg">
-                    {selectedSlots.join(', ')} ({totalHours} hours total)
+              <div className="space-y-3 mb-6">
+                {availableSlots.map((slot) => {
+                  const isSelected = selectedSlot === slot;
+                  
+                  return (
+                    <button
+                      key={slot}
+                      type="button"
+                      onClick={() => handleSlotSelect(slot)}
+                      className={`
+                        w-full p-4 text-left border transition
+                        ${isSelected 
+                          ? 'bg-white text-black border-white font-semibold' 
+                          : 'bg-white/5 border-white/20 hover:bg-white/10 hover:border-white/40'
+                        }
+                      `}
+                    >
+                      <div className="flex justify-between items-center">
+                        <span className="text-lg">{formatTimeRange(slot)}</span>
+                        <span className="text-sm opacity-70">2 hours</span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {selectedSlot && (
+                <div className="bg-white/10 border border-white/20 p-6">
+                  <p className="text-sm text-gray-400 mb-2">Your selection:</p>
+                  <p className="text-xl font-bold mb-1">
+                    {selectedDate.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}
                   </p>
+                  <p className="text-lg text-gray-300 mb-4">
+                    {formatTimeRange(selectedSlot)} (2 hours • £70)
+                  </p>
+                  
+                  <button
+                    type="button"
+                    onClick={handleConfirm}
+                    className="w-full py-3 bg-white text-black hover:bg-gray-200 transition font-semibold"
+                  >
+                    Confirm Booking
+                  </button>
                 </div>
               )}
-              
-              {selectedSlots.length > 0 && (
-                <button
-                  type="button"
-                  onClick={handleConfirm}
-                  className="w-full py-3 font-bold transition bg-white text-black hover:bg-gray-200 cursor-pointer"
-                >
-                  Confirm {totalHours} Hour Session
-                </button>
-              )}
-              
-              <p className="text-sm text-gray-400 mt-4">
-                * Each slot is a 2-hour block. Select multiple for longer sessions.
+
+              <p className="text-sm text-gray-400 mt-6">
+                * All times shown are available for booking
                 <br />
-                * Only available times are shown (works around existing calendar commitments).
+                * Times automatically account for your schedule + 1-hour travel buffer
               </p>
             </>
           )}

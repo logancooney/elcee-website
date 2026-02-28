@@ -34,7 +34,19 @@ export default function BookingFlow() {
 
   const selectedService = services.find(s => s.name === formData.service);
   const isProjectWork = selectedService?.type === 'project';
-  const hours = formData.times.length * 2; // Each slot is 2 hours
+  const hours = formData.times.length * 0.5; // Each slot is 30 minutes (4 slots = 2 hours)
+
+  // Format time range from array of 30-min slots
+  const getTimeRange = (times: string[]): string => {
+    if (times.length === 0) return '';
+    const start = times[0];
+    const lastSlot = times[times.length - 1];
+    const [hour, min] = lastSlot.split(':').map(Number);
+    const endHour = min === 30 ? hour + 1 : hour;
+    const endMin = min === 30 ? '00' : '30';
+    const end = `${endHour.toString().padStart(2, '0')}:${endMin}`;
+    return `${start} - ${end}`;
+  };
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,7 +70,9 @@ export default function BookingFlow() {
             <p><strong>Date:</strong> {new Date(formData.date).toLocaleDateString('en-GB', { 
               weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
             })}</p>
-            {!isProjectWork && <p><strong>Time:</strong> {formData.times.join(', ')}</p>}
+            {!isProjectWork && formData.times.length > 0 && (
+              <p><strong>Time:</strong> {getTimeRange(formData.times)} ({hours} hour{hours !== 1 ? 's' : ''})</p>
+            )}
           </div>
         </div>
 
@@ -150,7 +164,10 @@ export default function BookingFlow() {
                       })}
                     </p>
                     <p className="text-lg mt-2">
-                      {formData.times.join(', ')} ({hours} hours)
+                      {getTimeRange(formData.times)}
+                    </p>
+                    <p className="text-sm text-gray-400 mt-1">
+                      {hours} hour{hours !== 1 ? 's' : ''}
                     </p>
                   </div>
                 ) : (
