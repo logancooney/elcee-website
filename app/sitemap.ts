@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next'
-
+ 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://elceethealchemist.com'
   
@@ -13,38 +13,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: `${baseUrl}/studio`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
+      changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/recording-studio-manchester`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.95,
-    },
-    {
-      url: `${baseUrl}/epk`,
+      url: `${baseUrl}/shop`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/blog`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
     },
     {
       url: `${baseUrl}/contact`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.7,
+      priority: 0.6,
     },
     {
-      url: `${baseUrl}/shop`,
+      url: `${baseUrl}/epk`,
       lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
+      changeFrequency: 'monthly',
+      priority: 0.5,
     },
   ]
 }
