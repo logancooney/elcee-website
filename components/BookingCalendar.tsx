@@ -13,22 +13,41 @@ interface BookingCalendarProps {
 
 export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [availableSlots, setAvailableSlots] = useState<TimeSlot[]>([]);
-  const [selectedSlots, setSelectedSlots] = useState<string[]>([]);
+  const [bookedSlots, setBookedSlots] = useState<string[]>([]);
+  const [startTime, setStartTime] = useState<string>("");
+  const [duration, setDuration] = useState<number>(1); // Duration in hours
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [loading, setLoading] = useState(false);
 
-  // Studio hours: 10am - 11pm, hourly slots
+  // Studio hours: 10am - 11pm, 30-minute increments
   const generateTimeSlots = (): string[] => {
     const slots = [];
     for (let hour = 10; hour <= 23; hour++) {
-      const timeStr = `${hour.toString().padStart(2, '0')}:00`;
-      slots.push(timeStr);
+      slots.push(`${hour.toString().padStart(2, '0')}:00`);
+      if (hour < 23) { // Don't add :30 for last hour
+        slots.push(`${hour.toString().padStart(2, '0')}:30`);
+      }
     }
     return slots;
   };
 
-  // Fetch available slots for selected date
+  const allTimeSlots = generateTimeSlots();
+
+  // Duration options in hours
+  const durationOptions = [
+    { value: 0.5, label: '30 minutes' },
+    { value: 1, label: '1 hour' },
+    { value: 1.5, label: '1 hour 30 minutes' },
+    { value: 2, label: '2 hours' },
+    { value: 2.5, label: '2 hours 30 minutes' },
+    { value: 3, label: '3 hours' },
+    { value: 3.5, label: '3 hours 30 minutes' },
+    { value: 4, label: '4 hours' },
+    { value: 5, label: '5 hours' },
+    { value: 6, label: '6 hours' },
+  ];
+
+  // Fetch booked slots for selected date
   useEffect(() => {
     if (!selectedDate) return;
 
@@ -39,26 +58,72 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
         const response = await fetch(`/api/availability?date=${dateStr}`);
         const data = await response.json();
         
-        const allSlots = generateTimeSlots();
-        const slots: TimeSlot[] = allSlots.map(time => ({
-          time,
-          available: !data.bookedSlots?.includes(time)
-        }));
-        
-        setAvailableSlots(slots);
+        setBookedSlots(data.bookedSlots || []);
       } catch (error) {
         console.error('Failed to fetch availability:', error);
-        // Default: all slots available
-        const allSlots = generateTimeSlots();
-        setAvailableSlots(allSlots.map(time => ({ time, available: true })));
+        setBookedSlots([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchAvailability();
-    setSelectedSlots([]); // Reset selection when date changes
+    setStartTime(""); // Reset selection when date changes
   }, [selectedDate]);
+
+  // Calculate end time based on start time + duration
+  const calculateEndTime = (start: string, durationHours: number): string => {
+    const [hours, minutes] = start.split(':').map(Number);
+    const totalMinutes = hours * 60 + minutes + durationHours * 60;
+    const endHours = Math.floor(totalMinutes / 60);
+    const endMinutes = totalMinutes % 60;
+    return `${endHours.toString().padStart(2, '0')}:${endMinutes.toString().padStart(2, '0')}`;
+  };
+
+  // Check if a time range is available
+  const isTimeRangeAvailable = (start: string, durationHours: number): boolean => {
+    if (!start) return false;
+
+    const [startHour, startMinute] = start.split(':').map(Number);
+    const startTotalMinutes = startHour * 60 + startMinute;
+    const endTotalMinutes = startTotalMinutes + durationHours * 60;
+
+    // Check if end time goes past 11:30pm (23:30)
+    if (endTotalMinutes > 23 * 60 + 30) return false;
+
+    // Get all 30-minute slots in the requested range
+    const slotsNeeded: string[] = [];
+    for (let minutes = startTotalMinutes; minutes < endTotalMinutes; minutes += 30) {
+      const h = Math.floor(minutes / 60);
+      const m = minutes % 60;
+      slotsNeeded.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
+    }
+
+    // Check if any needed slot is booked
+    return !slotsNeeded.some(slot => bookedSlots.includes(slot));
+  };
+
+  const availableStartTimes = allTimeSlots.filter(time => {
+    // Filter out times where the selected duration wouldn't fit
+    return isTimeRangeAvailable(time, duration);
+  });
+
+  // Generate array of time slots for the selected range
+  const getSelectedTimeSlots = (): string[] => {
+    if (!startTime || !duration) return [];
+
+    const [startHour, startMinute] = startTime.split(':').map(Number);
+    const startTotalMinutes = startHour * 60 + startMinute;
+    const endTotalMinutes = startTotalMinutes + duration * 60;
+
+    const slots: string[] = [];
+    for (let minutes = startTotalMinutes; minutes < endTotalMinutes; minutes += 30) {
+      const h = Math.floor(minutes / 60);
+      const m = minutes % 60;
+      slots.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
+    }
+    return slots;
+  };
 
   // Generate calendar days
   const getDaysInMonth = (date: Date) => {
@@ -102,44 +167,32 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
   const handleDateClick = (date: Date) => {
     if (!isDateAvailable(date)) return;
     setSelectedDate(date);
-    setSelectedSlots([]);
-  };
-
-  const handleSlotClick = (slot: TimeSlot) => {
-    if (!slot.available) return;
-    
-    const isSelected = selectedSlots.includes(slot.time);
-    
-    if (isSelected) {
-      // Deselect
-      setSelectedSlots(selectedSlots.filter(t => t !== slot.time));
-    } else {
-      // Select (add to array)
-      setSelectedSlots([...selectedSlots, slot.time].sort());
-    }
+    setStartTime("");
   };
 
   const handleConfirm = () => {
-    if (!selectedDate || selectedSlots.length === 0) return;
+    if (!selectedDate || !startTime || !duration) return;
     const dateStr = selectedDate.toISOString().split('T')[0];
-    onSelectSlots(dateStr, selectedSlots);
+    const slots = getSelectedTimeSlots();
+    onSelectSlots(dateStr, slots);
   };
 
   const prevMonth = () => {
     setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1));
     setSelectedDate(null);
-    setSelectedSlots([]);
+    setStartTime("");
   };
 
   const nextMonth = () => {
     setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1));
     setSelectedDate(null);
-    setSelectedSlots([]);
+    setStartTime("");
   };
 
   const days = getDaysInMonth(currentMonth);
   const monthName = currentMonth.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
-  const totalHours = selectedSlots.length;
+  const endTime = startTime ? calculateEndTime(startTime, duration) : "";
+  const isAvailable = startTime ? isTimeRangeAvailable(startTime, duration) : false;
 
   return (
     <div className="w-full">
@@ -198,76 +251,95 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
         })}
       </div>
 
-      {/* Time Slots */}
+      {/* Time Selection */}
       {selectedDate && (
         <div className="mt-8 pt-8 border-t border-white/20">
           <h4 className="text-xl font-bold mb-4">
-            Select Time Slots - {selectedDate.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}
+            Select Time - {selectedDate.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}
           </h4>
           
           {loading ? (
-            <p className="text-gray-400">Loading available slots...</p>
+            <p className="text-gray-400">Loading available times...</p>
           ) : (
-            <>
-              {availableSlots.filter(slot => slot.available).length === 0 ? (
-                <div className="text-center py-8">
-                  <p className="text-gray-400">No available time slots on this date.</p>
-                  <p className="text-sm text-gray-500 mt-2">Please choose a different day.</p>
-                </div>
-              ) : (
-                <>
-                  <div className="grid grid-cols-3 md:grid-cols-6 gap-3 mb-6">
-                    {availableSlots
-                      .filter(slot => slot.available) // Only show available slots
-                      .map((slot) => {
-                        const isSelected = selectedSlots.includes(slot.time);
-                        
-                        return (
-                          <button
-                            type="button"
-                            key={slot.time}
-                            onClick={() => handleSlotClick(slot)}
-                            className={`
-                              py-3 px-4 border transition font-semibold
-                              ${isSelected
-                                ? 'bg-white text-black border-white'
-                                : 'border-white/40 hover:bg-white hover:text-black cursor-pointer'
-                              }
-                            `}
-                          >
-                            {slot.time}
-                          </button>
-                        );
-                      })}
+            <div className="space-y-6">
+              {/* Duration Selector */}
+              <div>
+                <label className="block text-sm font-medium mb-2">Session Duration</label>
+                <select
+                  value={duration}
+                  onChange={(e) => {
+                    setDuration(Number(e.target.value));
+                    setStartTime(""); // Reset start time when duration changes
+                  }}
+                  className="w-full bg-white/5 border border-white/20 px-4 py-3 focus:outline-none focus:border-white text-white"
+                >
+                  {durationOptions.map(opt => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Start Time Selector */}
+              <div>
+                <label className="block text-sm font-medium mb-2">Start Time</label>
+                {availableStartTimes.length === 0 ? (
+                  <div className="text-center py-8 bg-white/5 border border-white/20 rounded">
+                    <p className="text-gray-400">No available time slots for this duration on this date.</p>
+                    <p className="text-sm text-gray-500 mt-2">Try a shorter duration or choose a different day.</p>
                   </div>
-                </>
-              )}
-              
-              {selectedSlots.length > 0 && (
-                <div className="bg-white/5 border border-white/20 p-4 mb-4">
-                  <p className="text-sm text-gray-400 mb-2">Selected slots:</p>
+                ) : (
+                  <select
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
+                    className="w-full bg-white/5 border border-white/20 px-4 py-3 focus:outline-none focus:border-white text-white"
+                  >
+                    <option value="">Select start time</option>
+                    {availableStartTimes.map(time => (
+                      <option key={time} value={time}>
+                        {time}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+
+              {/* Preview */}
+              {startTime && endTime && (
+                <div className="bg-white/5 border border-white/20 p-4">
+                  <p className="text-sm text-gray-400 mb-2">Selected session:</p>
                   <p className="font-bold text-lg">
-                    {selectedSlots.join(', ')} ({totalHours} hours total)
+                    {startTime} - {endTime}
                   </p>
+                  <p className="text-sm text-gray-400 mt-1">
+                    {duration >= 1 ? `${duration} hour${duration !== 1 ? 's' : ''}` : `${duration * 60} minutes`}
+                  </p>
+                  {!isAvailable && (
+                    <p className="text-red-400 text-sm mt-2">
+                      ⚠️ This time slot conflicts with existing bookings
+                    </p>
+                  )}
                 </div>
               )}
-              
-              {selectedSlots.length > 0 && (
+
+              {/* Confirm Button */}
+              {startTime && isAvailable && (
                 <button
                   type="button"
                   onClick={handleConfirm}
-                  className="w-full py-3 font-bold transition bg-white text-black hover:bg-gray-200 cursor-pointer"
+                  className="w-full py-3 font-bold transition bg-white text-black hover:bg-gray-200"
                 >
-                  Confirm {totalHours} Hour Session
+                  Confirm {duration >= 1 ? `${duration} Hour` : `${duration * 60} Minute`} Session
                 </button>
               )}
-              
-              <p className="text-sm text-gray-400 mt-4">
-                * Each slot is 1 hour. Select multiple consecutive slots for longer sessions.
+
+              <p className="text-sm text-gray-400">
+                * Available times work around your existing calendar commitments.
                 <br />
-                * Only available times are shown (works around existing calendar commitments).
+                * Sessions available from 10:00 AM to 11:30 PM in 30-minute increments.
               </p>
-            </>
+            </div>
           )}
         </div>
       )}
