@@ -34,18 +34,7 @@ export default function BookingFlow() {
 
   const selectedService = services.find(s => s.name === formData.service);
   const isProjectWork = selectedService?.type === 'project';
-  const hours = formData.times.length * 0.5; // Each slot is 30 minutes
-
-  // Calculate actual end time (last slot + 30 minutes)
-  const getEndTime = (times: string[]): string => {
-    if (times.length === 0) return '';
-    const lastSlot = times[times.length - 1];
-    const [hours, minutes] = lastSlot.split(':').map(Number);
-    const totalMinutes = hours * 60 + minutes + 30;
-    const endHours = Math.floor(totalMinutes / 60);
-    const endMinutes = totalMinutes % 60;
-    return `${endHours.toString().padStart(2, '0')}:${endMinutes.toString().padStart(2, '0')}`;
-  };
+  const hours = formData.times.length * 2; // Each slot is 2 hours
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,9 +58,7 @@ export default function BookingFlow() {
             <p><strong>Date:</strong> {new Date(formData.date).toLocaleDateString('en-GB', { 
               weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
             })}</p>
-            {!isProjectWork && formData.times.length > 0 && (
-              <p><strong>Time:</strong> {formData.times[0]} - {getEndTime(formData.times)} ({hours} hour{hours !== 1 ? 's' : ''})</p>
-            )}
+            {!isProjectWork && <p><strong>Time:</strong> {formData.times.join(', ')}</p>}
           </div>
         </div>
 
@@ -163,10 +150,7 @@ export default function BookingFlow() {
                       })}
                     </p>
                     <p className="text-lg mt-2">
-                      {formData.times[0]} - {getEndTime(formData.times)}
-                    </p>
-                    <p className="text-sm text-gray-400 mt-1">
-                      {hours} hour{hours !== 1 ? 's' : ''}
+                      {formData.times.join(', ')} ({hours} hours)
                     </p>
                   </div>
                 ) : (

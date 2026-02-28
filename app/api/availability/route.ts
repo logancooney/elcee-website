@@ -22,6 +22,7 @@ export async function GET(request: Request) {
 
   try {
     // Check multiple calendars via Maton API (works 24/7 from Vercel servers)
+    // Using calendar IDs instead of names
     const calendars = [
       '4bde58e7465993008e9a664f9d7f9b94f8e165edca1d334c512b948b29264c8e@group.calendar.google.com', // Daily
       'cae911eaa575f5813787c590c16bc2def04f291478bce19273ba6236ab055b47@group.calendar.google.com', // Keane Futures
@@ -71,13 +72,13 @@ export async function GET(request: Request) {
     // Combine all events from all calendars
     const events = results.flat();
 
-    // Extract booked time slots in 30-minute increments
+    // Extract booked time slots (2-hour blocks starting on even hours: 10, 12, 14, 16, 18, 20)
     const bookedSlots = new Set<string>();
 
     events.forEach((event: any) => {
-      // Skip all-day events (they don't block booking times)
+      // Skip all-day events (they don't block studio time)
       if (event.start?.date && !event.start?.dateTime) {
-        return; // All-day event, skip it
+        return;
       }
 
       const startDateTime = event.start?.dateTime;
@@ -88,32 +89,27 @@ export async function GET(request: Request) {
       const startTime = new Date(startDateTime);
       const endTime = new Date(endDateTime);
       
-      // Get minutes since midnight for start and end
-      const startMinutes = startTime.getHours() * 60 + startTime.getMinutes();
-      const endMinutes = endTime.getHours() * 60 + endTime.getMinutes();
+      const startHour = startTime.getHours();
+      const endHour = endTime.getHours() + (endTime.getMinutes() > 0 ? 1 : 0); // Round up if there are minutes
       
-      // Studio hours: 10am (600 min) to 11pm (1380 min)
-      const studioStart = 10 * 60; // 600 minutes
-      const studioEnd = 23 * 60;   // 1380 minutes
+      // Add 1-hour buffer after event ends (time to travel to studio)
+      const bufferEndHour = endHour + 1;
       
-      // Mark all 30-minute slots that overlap with this event
-      for (let slotStart = studioStart; slotStart < studioEnd; slotStart += 30) {
-        const slotEnd = slotStart + 30;
+      // Studio hours: 10am-10pm in 2-hour blocks (10, 12, 14, 16, 18, 20)
+      for (let blockStart = 10; blockStart <= 20; blockStart += 2) {
+        const blockEnd = blockStart + 2;
         
-        // Check if event overlaps with this 30-min slot
-        // Overlap if: event starts before slot ends AND event ends after slot starts
-        if (startMinutes < slotEnd && endMinutes > slotStart) {
-          const hours = Math.floor(slotStart / 60);
-          const minutes = slotStart % 60;
-          const timeStr = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-          bookedSlots.add(timeStr);
+        // Check if event overlaps with this 2-hour block (including 1-hour buffer)
+        // Event overlaps if: event starts before block ends AND (event end + buffer) is after block starts
+        if (startHour < blockEnd && bufferEndHour > blockStart) {
+          bookedSlots.add(`${blockStart.toString().padStart(2, '0')}:00`);
         }
       }
     });
 
     return NextResponse.json({
       date,
-      bookedSlots: Array.from(bookedSlots).sort(),
+      bookedSlots: Array.from(bookedSlots),
       totalBooked: bookedSlots.size,
     });
 
