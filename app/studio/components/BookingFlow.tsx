@@ -34,7 +34,7 @@ export default function BookingFlow() {
 
   const selectedService = services.find(s => s.name === formData.service);
   const isProjectWork = selectedService?.type === 'project';
-  const hours = formData.times.length * 2; // Each slot is 2 hours
+  const hours = formData.times.length; // Each slot is 1 hour
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();

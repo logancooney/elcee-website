@@ -18,10 +18,10 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [loading, setLoading] = useState(false);
 
-  // Studio hours: 10am - 10pm, 2-hour blocks
+  // Studio hours: 10am - 11pm, hourly slots
   const generateTimeSlots = (): string[] => {
     const slots = [];
-    for (let hour = 10; hour <= 20; hour += 2) {
+    for (let hour = 10; hour <= 23; hour++) {
       const timeStr = `${hour.toString().padStart(2, '0')}:00`;
       slots.push(timeStr);
     }
@@ -139,7 +139,7 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
 
   const days = getDaysInMonth(currentMonth);
   const monthName = currentMonth.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
-  const totalHours = selectedSlots.length * 2;
+  const totalHours = selectedSlots.length;
 
   return (
     <div className="w-full">
@@ -263,7 +263,7 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
               )}
               
               <p className="text-sm text-gray-400 mt-4">
-                * Each slot is a 2-hour block. Select multiple for longer sessions.
+                * Each slot is 1 hour. Select multiple consecutive slots for longer sessions.
                 <br />
                 * Only available times are shown (works around existing calendar commitments).
               </p>
