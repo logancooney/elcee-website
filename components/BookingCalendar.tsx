@@ -15,7 +15,7 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [bookedSlots, setBookedSlots] = useState<string[]>([]);
   const [startTime, setStartTime] = useState<string>("");
-  const [duration, setDuration] = useState<number>(1); // Duration in hours
+  const [duration, setDuration] = useState<number>(2); // Duration in hours (minimum 2)
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [loading, setLoading] = useState(false);
 
@@ -33,18 +33,15 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
 
   const allTimeSlots = generateTimeSlots();
 
-  // Duration options in hours
+  // Duration options in hours (minimum 2 hours)
   const durationOptions = [
-    { value: 0.5, label: '30 minutes' },
-    { value: 1, label: '1 hour' },
-    { value: 1.5, label: '1 hour 30 minutes' },
     { value: 2, label: '2 hours' },
-    { value: 2.5, label: '2 hours 30 minutes' },
     { value: 3, label: '3 hours' },
-    { value: 3.5, label: '3 hours 30 minutes' },
     { value: 4, label: '4 hours' },
     { value: 5, label: '5 hours' },
     { value: 6, label: '6 hours' },
+    { value: 7, label: '7 hours' },
+    { value: 8, label: '8 hours' },
   ];
 
   // Fetch booked slots for selected date
@@ -88,8 +85,8 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
     const startTotalMinutes = startHour * 60 + startMinute;
     const endTotalMinutes = startTotalMinutes + durationHours * 60;
 
-    // Check if end time goes past 11:30pm (23:30)
-    if (endTotalMinutes > 23 * 60 + 30) return false;
+    // Check if end time goes past 11:00pm (last valid end time)
+    if (endTotalMinutes > 23 * 60) return false;
 
     // Get all 30-minute slots in the requested range
     const slotsNeeded: string[] = [];
@@ -99,8 +96,11 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
       slotsNeeded.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
     }
 
-    // Check if any needed slot is booked
-    return !slotsNeeded.some(slot => bookedSlots.includes(slot));
+    // Check if any needed slot conflicts with booked slots
+    // bookedSlots contains 30-minute increments from calendar events
+    const hasConflict = slotsNeeded.some(slot => bookedSlots.includes(slot));
+    
+    return !hasConflict;
   };
 
   const availableStartTimes = allTimeSlots.filter(time => {
@@ -313,7 +313,7 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
                     {startTime} - {endTime}
                   </p>
                   <p className="text-sm text-gray-400 mt-1">
-                    {duration >= 1 ? `${duration} hour${duration !== 1 ? 's' : ''}` : `${duration * 60} minutes`}
+                    {duration} hour{duration !== 1 ? 's' : ''}
                   </p>
                   {!isAvailable && (
                     <p className="text-red-400 text-sm mt-2">
@@ -330,14 +330,14 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
                   onClick={handleConfirm}
                   className="w-full py-3 font-bold transition bg-white text-black hover:bg-gray-200"
                 >
-                  Confirm {duration >= 1 ? `${duration} Hour` : `${duration * 60} Minute`} Session
+                  Confirm {duration} Hour Session
                 </button>
               )}
 
               <p className="text-sm text-gray-400">
                 * Available times work around your existing calendar commitments.
                 <br />
-                * Sessions available from 10:00 AM to 11:30 PM in 30-minute increments.
+                * Minimum booking: 2 hours. Sessions available from 10:00 AM to 11:00 PM.
               </p>
             </div>
           )}
