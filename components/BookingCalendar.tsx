@@ -2,11 +2,6 @@
 
 import { useState, useEffect } from "react";
 
-interface TimeSlot {
-  time: string;
-  available: boolean;
-}
-
 interface BookingCalendarProps {
   onSelectSlots: (date: string, times: string[]) => void;
 }
@@ -15,34 +10,20 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [bookedSlots, setBookedSlots] = useState<string[]>([]);
   const [startTime, setStartTime] = useState<string>("");
-  const [duration, setDuration] = useState<number>(2); // Duration in hours (minimum 2)
+  const [endTime, setEndTime] = useState<string>("");
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [loading, setLoading] = useState(false);
 
-  // Studio hours: 10am - 11pm, 30-minute increments
-  const generateTimeSlots = (): string[] => {
+  // Generate all time slots (10am - 11pm in 1-hour increments for display)
+  const generateDisplaySlots = (): string[] => {
     const slots = [];
     for (let hour = 10; hour <= 23; hour++) {
       slots.push(`${hour.toString().padStart(2, '0')}:00`);
-      if (hour < 23) { // Don't add :30 for last hour
-        slots.push(`${hour.toString().padStart(2, '0')}:30`);
-      }
     }
     return slots;
   };
 
-  const allTimeSlots = generateTimeSlots();
-
-  // Duration options in hours (minimum 2 hours)
-  const durationOptions = [
-    { value: 2, label: '2 hours' },
-    { value: 3, label: '3 hours' },
-    { value: 4, label: '4 hours' },
-    { value: 5, label: '5 hours' },
-    { value: 6, label: '6 hours' },
-    { value: 7, label: '7 hours' },
-    { value: 8, label: '8 hours' },
-  ];
+  const displaySlots = generateDisplaySlots();
 
   // Fetch booked slots for selected date
   useEffect(() => {
@@ -65,64 +46,121 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
     };
 
     fetchAvailability();
-    setStartTime(""); // Reset selection when date changes
+    setStartTime("");
+    setEndTime("");
   }, [selectedDate]);
 
-  // Calculate end time based on start time + duration
-  const calculateEndTime = (start: string, durationHours: number): string => {
-    const [hours, minutes] = start.split(':').map(Number);
-    const totalMinutes = hours * 60 + minutes + durationHours * 60;
-    const endHours = Math.floor(totalMinutes / 60);
-    const endMinutes = totalMinutes % 60;
-    return `${endHours.toString().padStart(2, '0')}:${endMinutes.toString().padStart(2, '0')}`;
+  // Check if a specific hour slot is booked (checks all 30-min slots within that hour)
+  const isSlotBooked = (hourSlot: string): boolean => {
+    const hour = parseInt(hourSlot.split(':')[0]);
+    const slot1 = `${hour.toString().padStart(2, '0')}:00`;
+    const slot2 = `${hour.toString().padStart(2, '0')}:30`;
+    return bookedSlots.includes(slot1) || bookedSlots.includes(slot2);
   };
 
-  // Check if a time range is available
-  const isTimeRangeAvailable = (start: string, durationHours: number): boolean => {
-    if (!start) return false;
+  // Check if a time range is available (2 hour minimum)
+  const isRangeAvailable = (start: string, end: string): boolean => {
+    if (!start || !end) return false;
 
-    const [startHour, startMinute] = start.split(':').map(Number);
-    const startTotalMinutes = startHour * 60 + startMinute;
-    const endTotalMinutes = startTotalMinutes + durationHours * 60;
-
-    // Check if end time goes past 11:00pm (last valid end time)
-    if (endTotalMinutes > 23 * 60) return false;
-
-    // Get all 30-minute slots in the requested range
-    const slotsNeeded: string[] = [];
-    for (let minutes = startTotalMinutes; minutes < endTotalMinutes; minutes += 30) {
-      const h = Math.floor(minutes / 60);
-      const m = minutes % 60;
-      slotsNeeded.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
-    }
-
-    // Check if any needed slot conflicts with booked slots
-    // bookedSlots contains 30-minute increments from calendar events
-    const hasConflict = slotsNeeded.some(slot => bookedSlots.includes(slot));
+    const startHour = parseInt(start.split(':')[0]);
+    const endHour = parseInt(end.split(':')[0]);
     
-    return !hasConflict;
+    // Must be at least 2 hours
+    if (endHour - startHour < 2) return false;
+
+    // Check all 30-min slots in the range
+    for (let hour = startHour; hour < endHour; hour++) {
+      const slot1 = `${hour.toString().padStart(2, '0')}:00`;
+      const slot2 = `${hour.toString().padStart(2, '0')}:30`;
+      if (bookedSlots.includes(slot1) || bookedSlots.includes(slot2)) {
+        return false;
+      }
+    }
+
+    return true;
   };
 
-  const availableStartTimes = allTimeSlots.filter(time => {
-    // Filter out times where the selected duration wouldn't fit
-    return isTimeRangeAvailable(time, duration);
-  });
+  // Get valid end times for selected start time
+  const getValidEndTimes = (start: string): string[] => {
+    if (!start) return [];
+    
+    const startHour = parseInt(start.split(':')[0]);
+    const validEnds: string[] = [];
 
-  // Generate array of time slots for the selected range
-  const getSelectedTimeSlots = (): string[] => {
-    if (!startTime || !duration) return [];
-
-    const [startHour, startMinute] = startTime.split(':').map(Number);
-    const startTotalMinutes = startHour * 60 + startMinute;
-    const endTotalMinutes = startTotalMinutes + duration * 60;
-
-    const slots: string[] = [];
-    for (let minutes = startTotalMinutes; minutes < endTotalMinutes; minutes += 30) {
-      const h = Math.floor(minutes / 60);
-      const m = minutes % 60;
-      slots.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
+    // Check each possible end time (minimum 2 hours after start)
+    for (let endHour = startHour + 2; endHour <= 23; endHour++) {
+      const endSlot = `${endHour.toString().padStart(2, '0')}:00`;
+      if (isRangeAvailable(start, endSlot)) {
+        validEnds.push(endSlot);
+      } else {
+        // If this slot is blocked, no point checking further
+        break;
+      }
     }
-    return slots;
+
+    return validEnds;
+  };
+
+  const handleSlotClick = (slot: string) => {
+    if (isSlotBooked(slot)) return; // Can't click booked slots
+
+    if (!startTime) {
+      // First click: set start time
+      setStartTime(slot);
+      setEndTime("");
+    } else if (startTime && !endTime) {
+      // Second click: set end time
+      const slotHour = parseInt(slot.split(':')[0]);
+      const startHour = parseInt(startTime.split(':')[0]);
+
+      // Check if it's a valid end time
+      if (slotHour > startHour && isRangeAvailable(startTime, slot)) {
+        setEndTime(slot);
+      } else {
+        // Invalid selection, reset and set as new start
+        setStartTime(slot);
+        setEndTime("");
+      }
+    } else {
+      // Third click: reset and start over
+      setStartTime(slot);
+      setEndTime("");
+    }
+  };
+
+  const handleConfirm = () => {
+    if (!selectedDate || !startTime || !endTime) return;
+
+    const dateStr = selectedDate.toISOString().split('T')[0];
+    
+    // Generate all 30-min slots in the range
+    const slots: string[] = [];
+    const startHour = parseInt(startTime.split(':')[0]);
+    const endHour = parseInt(endTime.split(':')[0]);
+    
+    for (let hour = startHour; hour < endHour; hour++) {
+      slots.push(`${hour.toString().padStart(2, '0')}:00`);
+      slots.push(`${hour.toString().padStart(2, '0')}:30`);
+    }
+
+    onSelectSlots(dateStr, slots);
+  };
+
+  const clearSelection = () => {
+    setStartTime("");
+    setEndTime("");
+  };
+
+  // Calculate duration and price
+  const getDuration = (): number => {
+    if (!startTime || !endTime) return 0;
+    const startHour = parseInt(startTime.split(':')[0]);
+    const endHour = parseInt(endTime.split(':')[0]);
+    return endHour - startHour;
+  };
+
+  const getPrice = (): number => {
+    return getDuration() * 35; // £35/hour
   };
 
   // Generate calendar days
@@ -136,12 +174,10 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
 
     const days = [];
     
-    // Add empty cells for days before month starts
     for (let i = 0; i < startingDayOfWeek; i++) {
       days.push(null);
     }
     
-    // Add actual days
     for (let day = 1; day <= daysInMonth; day++) {
       days.push(new Date(year, month, day));
     }
@@ -153,10 +189,8 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
-    // Can't book past dates
     if (date < today) return false;
     
-    // Can't book more than 3 months ahead
     const maxDate = new Date();
     maxDate.setMonth(maxDate.getMonth() + 3);
     if (date > maxDate) return false;
@@ -167,32 +201,21 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
   const handleDateClick = (date: Date) => {
     if (!isDateAvailable(date)) return;
     setSelectedDate(date);
-    setStartTime("");
-  };
-
-  const handleConfirm = () => {
-    if (!selectedDate || !startTime || !duration) return;
-    const dateStr = selectedDate.toISOString().split('T')[0];
-    const slots = getSelectedTimeSlots();
-    onSelectSlots(dateStr, slots);
   };
 
   const prevMonth = () => {
     setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1));
     setSelectedDate(null);
-    setStartTime("");
   };
 
   const nextMonth = () => {
     setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1));
     setSelectedDate(null);
-    setStartTime("");
   };
 
   const days = getDaysInMonth(currentMonth);
   const monthName = currentMonth.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
-  const endTime = startTime ? calculateEndTime(startTime, duration) : "";
-  const isAvailable = startTime ? isTimeRangeAvailable(startTime, duration) : false;
+  const validEndTimes = startTime ? getValidEndTimes(startTime) : [];
 
   return (
     <div className="w-full">
@@ -217,14 +240,12 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
 
       {/* Calendar Grid */}
       <div className="grid grid-cols-7 gap-2 mb-8">
-        {/* Day headers */}
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
           <div key={day} className="text-center text-sm font-semibold text-gray-400 pb-2">
             {day}
           </div>
         ))}
         
-        {/* Day cells */}
         {days.map((date, index) => {
           if (!date) {
             return <div key={`empty-${index}`} className="aspect-square" />;
@@ -251,95 +272,200 @@ export default function BookingCalendar({ onSelectSlots }: BookingCalendarProps)
         })}
       </div>
 
-      {/* Time Selection */}
+      {/* Timeline Selection */}
       {selectedDate && (
         <div className="mt-8 pt-8 border-t border-white/20">
-          <h4 className="text-xl font-bold mb-4">
-            Select Time - {selectedDate.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}
+          <h4 className="text-xl font-bold mb-2">
+            {selectedDate.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}
           </h4>
           
+          {!startTime && (
+            <p className="text-gray-400 mb-6 text-sm">
+              Click a start time (green = available, red = booked)
+            </p>
+          )}
+          
+          {startTime && !endTime && (
+            <p className="text-gray-400 mb-6 text-sm">
+              Now click an end time (minimum 2 hours from {startTime})
+            </p>
+          )}
+
           {loading ? (
-            <p className="text-gray-400">Loading available times...</p>
+            <p className="text-gray-400">Loading availability...</p>
           ) : (
-            <div className="space-y-6">
-              {/* Duration Selector */}
-              <div>
-                <label className="block text-sm font-medium mb-2">Session Duration</label>
-                <select
-                  value={duration}
-                  onChange={(e) => {
-                    setDuration(Number(e.target.value));
-                    setStartTime(""); // Reset start time when duration changes
-                  }}
-                  className="w-full bg-white/5 border border-white/20 px-4 py-3 focus:outline-none focus:border-white text-white"
-                >
-                  {durationOptions.map(opt => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
+            <>
+              {/* Desktop: Horizontal Timeline */}
+              <div className="hidden md:block mb-6">
+                <div className="flex gap-1 overflow-x-auto pb-2">
+                  {displaySlots.map((slot) => {
+                    const isBooked = isSlotBooked(slot);
+                    const isStart = slot === startTime;
+                    const isEnd = slot === endTime;
+                    const slotHour = parseInt(slot.split(':')[0]);
+                    const startHour = startTime ? parseInt(startTime.split(':')[0]) : 0;
+                    const endHour = endTime ? parseInt(endTime.split(':')[0]) : 0;
+                    const isInRange = startTime && endTime && slotHour > startHour && slotHour < endHour;
+                    const isValidEnd = startTime && !endTime && validEndTimes.includes(slot);
+                    
+                    let bgColor = 'bg-red-500/30'; // Booked (default)
+                    let hoverColor = '';
+                    let cursor = 'cursor-not-allowed';
+                    let border = 'border border-white/10';
+                    
+                    if (!isBooked) {
+                      if (isStart || isEnd) {
+                        bgColor = 'bg-blue-500';
+                        border = 'border-2 border-white';
+                      } else if (isInRange) {
+                        bgColor = 'bg-blue-400';
+                      } else if (isValidEnd) {
+                        bgColor = 'bg-blue-300';
+                        hoverColor = 'hover:bg-blue-400';
+                        cursor = 'cursor-pointer';
+                      } else if (!startTime) {
+                        bgColor = 'bg-green-500';
+                        hoverColor = 'hover:bg-green-600';
+                        cursor = 'cursor-pointer';
+                      } else {
+                        bgColor = 'bg-gray-600';
+                      }
+                    }
+                    
+                    return (
+                      <button
+                        key={slot}
+                        type="button"
+                        onClick={() => handleSlotClick(slot)}
+                        disabled={isBooked}
+                        className={`
+                          flex-shrink-0 w-16 h-20 flex flex-col items-center justify-center
+                          ${bgColor} ${hoverColor} ${cursor} ${border}
+                          transition-all text-sm font-medium
+                        `}
+                      >
+                        <div className="text-xs opacity-70">
+                          {slot.split(':')[0] >= 12 ? 'PM' : 'AM'}
+                        </div>
+                        <div className="font-bold">
+                          {parseInt(slot.split(':')[0]) > 12 
+                            ? (parseInt(slot.split(':')[0]) - 12).toString() 
+                            : slot.split(':')[0]}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
-              {/* Start Time Selector */}
-              <div>
-                <label className="block text-sm font-medium mb-2">Start Time</label>
-                {availableStartTimes.length === 0 ? (
-                  <div className="text-center py-8 bg-white/5 border border-white/20 rounded">
-                    <p className="text-gray-400">No available time slots for this duration on this date.</p>
-                    <p className="text-sm text-gray-500 mt-2">Try a shorter duration or choose a different day.</p>
-                  </div>
-                ) : (
-                  <select
-                    value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
-                    className="w-full bg-white/5 border border-white/20 px-4 py-3 focus:outline-none focus:border-white text-white"
-                  >
-                    <option value="">Select start time</option>
-                    {availableStartTimes.map(time => (
-                      <option key={time} value={time}>
-                        {time}
-                      </option>
-                    ))}
-                  </select>
-                )}
+              {/* Mobile: Vertical List */}
+              <div className="md:hidden space-y-2 mb-6">
+                {displaySlots.map((slot) => {
+                  const isBooked = isSlotBooked(slot);
+                  const isStart = slot === startTime;
+                  const isEnd = slot === endTime;
+                  const slotHour = parseInt(slot.split(':')[0]);
+                  const startHour = startTime ? parseInt(startTime.split(':')[0]) : 0;
+                  const endHour = endTime ? parseInt(endTime.split(':')[0]) : 0;
+                  const isInRange = startTime && endTime && slotHour > startHour && slotHour < endHour;
+                  const isValidEnd = startTime && !endTime && validEndTimes.includes(slot);
+                  
+                  let bgColor = 'bg-red-500/30';
+                  let textColor = 'text-white/50';
+                  let status = 'Booked';
+                  let cursor = 'cursor-not-allowed';
+                  
+                  if (!isBooked) {
+                    if (isStart) {
+                      bgColor = 'bg-blue-500';
+                      textColor = 'text-white';
+                      status = 'START';
+                    } else if (isEnd) {
+                      bgColor = 'bg-blue-500';
+                      textColor = 'text-white';
+                      status = 'END';
+                    } else if (isInRange) {
+                      bgColor = 'bg-blue-400';
+                      textColor = 'text-white';
+                      status = 'Selected';
+                    } else if (isValidEnd) {
+                      bgColor = 'bg-blue-300 hover:bg-blue-400';
+                      textColor = 'text-white';
+                      status = 'Tap to select end';
+                      cursor = 'cursor-pointer';
+                    } else if (!startTime) {
+                      bgColor = 'bg-green-500 hover:bg-green-600';
+                      textColor = 'text-white';
+                      status = 'Available';
+                      cursor = 'cursor-pointer';
+                    } else {
+                      bgColor = 'bg-gray-600';
+                      textColor = 'text-white/50';
+                      status = 'Not selectable';
+                    }
+                  }
+                  
+                  const displayTime = parseInt(slot.split(':')[0]) > 12 
+                    ? `${parseInt(slot.split(':')[0]) - 12}:00 PM`
+                    : `${slot} ${parseInt(slot.split(':')[0]) >= 12 ? 'PM' : 'AM'}`;
+                  
+                  return (
+                    <button
+                      key={slot}
+                      type="button"
+                      onClick={() => handleSlotClick(slot)}
+                      disabled={isBooked && !isStart && !isEnd}
+                      className={`
+                        w-full flex justify-between items-center p-4
+                        ${bgColor} ${cursor} border border-white/10
+                        transition-all
+                      `}
+                    >
+                      <span className="font-bold">{displayTime}</span>
+                      <span className={`text-sm ${textColor}`}>{status}</span>
+                    </button>
+                  );
+                })}
               </div>
 
-              {/* Preview */}
+              {/* Selection Preview */}
               {startTime && endTime && (
-                <div className="bg-white/5 border border-white/20 p-4">
-                  <p className="text-sm text-gray-400 mb-2">Selected session:</p>
-                  <p className="font-bold text-lg">
+                <div className="bg-white/10 border border-white/20 p-6 mb-4">
+                  <p className="text-sm text-gray-400 mb-2">Your selection:</p>
+                  <p className="text-2xl font-bold mb-1">
                     {startTime} - {endTime}
                   </p>
-                  <p className="text-sm text-gray-400 mt-1">
-                    {duration} hour{duration !== 1 ? 's' : ''}
+                  <p className="text-lg text-gray-300 mb-3">
+                    {getDuration()} hours • £{getPrice()}
                   </p>
-                  {!isAvailable && (
-                    <p className="text-red-400 text-sm mt-2">
-                      ⚠️ This time slot conflicts with existing bookings
-                    </p>
-                  )}
+                  
+                  <div className="flex gap-3">
+                    <button
+                      type="button"
+                      onClick={clearSelection}
+                      className="flex-1 px-4 py-2 bg-white/10 hover:bg-white/20 transition font-semibold"
+                    >
+                      Change Selection
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleConfirm}
+                      className="flex-1 px-4 py-2 bg-white text-black hover:bg-gray-200 transition font-semibold"
+                    >
+                      Confirm Booking
+                    </button>
+                  </div>
                 </div>
               )}
 
-              {/* Confirm Button */}
-              {startTime && isAvailable && (
-                <button
-                  type="button"
-                  onClick={handleConfirm}
-                  className="w-full py-3 font-bold transition bg-white text-black hover:bg-gray-200"
-                >
-                  Confirm {duration} Hour Session
-                </button>
-              )}
-
-              <p className="text-sm text-gray-400">
-                * Available times work around your existing calendar commitments.
+              <p className="text-sm text-gray-400 mt-4">
+                * Minimum booking: 2 hours
                 <br />
-                * Minimum booking: 2 hours. Sessions available from 10:00 AM to 11:00 PM.
+                * Available times shown in green, booked times in red
+                <br />
+                * Click start time, then click end time
               </p>
-            </div>
+            </>
           )}
         </div>
       )}
