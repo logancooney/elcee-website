@@ -1,8 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import BookingFlow from "./components/BookingFlow";
 import StructuredData from "./components/StructuredData";
 import FAQ from "./components/FAQ";
 import Testimonials from "./components/Testimonials";
@@ -12,6 +12,16 @@ import Process from "./components/Process";
 import Navigation from "../components/Navigation";
 
 export default function StudioPage() {
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://assets.calendly.com/assets/external/widget.js";
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-black text-white">
       <StructuredData />
@@ -126,7 +136,11 @@ export default function StudioPage() {
             Professional recording, mixing, and mastering in Manchester.
           </p>
         </div>
-        <BookingFlow />
+        <div
+          className="calendly-inline-widget rounded-lg overflow-hidden mx-auto"
+          data-url="https://calendly.com/elcee-mgmt/studio-session"
+          style={{ minWidth: "320px", height: "700px", maxWidth: "900px" }}
+        />
         <div className="text-center mt-8">
           <p className="text-gray-400">
             Questions? <Link href="/contact" className="underline hover:text-white transition-colors">Get in touch →</Link>
