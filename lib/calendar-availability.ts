@@ -19,7 +19,7 @@ export async function checkAvailability(date: string, time: string, durationHour
     endDateTime.setHours(startDateTime.getHours() + durationHours);
 
     // Query Google Calendar via Maton for conflicts (check Daily calendar)
-    const calendarId = encodeURIComponent('Daily');
+    const calendarId = encodeURIComponent('4bde58e7465993008e9a664f9d7f9b94f8e165edca1d334c512b948b29264c8e@group.calendar.google.com');
     const response = await fetch(
       `https://gateway.maton.ai/google-calendar/calendar/v3/calendars/${calendarId}/events?` +
       `timeMin=${startDateTime.toISOString()}&` +
@@ -113,7 +113,7 @@ export async function createCalendarEvent(
       }
     };
 
-    const calendarId = encodeURIComponent('Daily');
+    const calendarId = encodeURIComponent('4bde58e7465993008e9a664f9d7f9b94f8e165edca1d334c512b948b29264c8e@group.calendar.google.com');
     const response = await fetch(
       `https://gateway.maton.ai/google-calendar/calendar/v3/calendars/${calendarId}/events`,
       {
