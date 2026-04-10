@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Navigation from "../components/Navigation";
+import { track } from "@vercel/analytics";
 
 const MAGNETS = [
   {
@@ -51,6 +52,7 @@ function DownloadCard({
         body: JSON.stringify({ email, name, magnet: id }),
       });
       if (!res.ok) throw new Error();
+      track("pdf_download", { magnet: id });
       setState("done");
     } catch {
       setState("error");
@@ -107,6 +109,11 @@ export default function FreePage() {
     script.src = "https://assets.calendly.com/assets/external/widget.js";
     script.async = true;
     document.body.appendChild(script);
+
+    if (document.referrer.includes("reddit.com")) {
+      track("visit_from_reddit");
+    }
+
     return () => {
       document.body.removeChild(script);
     };

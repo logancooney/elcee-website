@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ChatWidget from "./components/ChatWidget";
 import StructuredDataPerson from "./components/StructuredDataPerson";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: "Elcee the Alchemist - Official Website | Manchester Rap Artist & Recording Studio",
@@ -80,6 +81,7 @@ export default function RootLayout({
       <body className="antialiased">
         {children}
         <ChatWidget />
+        <Analytics />
       </body>
     </html>
   );
