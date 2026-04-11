@@ -15,11 +15,11 @@ const faqs: FAQItem[] = [
   },
   {
     question: "What equipment do I need?",
-    answer: "For online sessions — a computer, headphones, and your DAW. For in-studio, just show up. Everything's here. No DAW yet? We'll sort that on the call."
+    answer: "For online sessions you need a computer, headphones, and your DAW. For in-studio, just show up. Everything's here. No DAW yet? We'll sort that on the call."
   },
   {
     question: "Which DAW do you teach?",
-    answer: "I teach production in Ableton Live. For mixing I can work with you in any DAW — Logic, FL Studio, Pro Tools, whatever you're on."
+    answer: "I teach production in Ableton Live. For mixing I can work with you in any DAW. Logic, FL Studio, Pro Tools, whatever you're on."
   },
   {
     question: "Can I learn online?",

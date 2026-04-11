@@ -54,13 +54,13 @@ export default function TutoringPage() {
       <section className="py-16 md:py-24 px-6 bg-white text-black">
         <div className="max-w-3xl mx-auto">
           <p className="text-xl md:text-2xl leading-relaxed mb-6">
-            I&apos;m Elcee — a recording artist, mixing engineer, and studio owner based in Manchester.
+            I&apos;m Elcee. A recording artist, mixing engineer, and studio owner based in Manchester.
           </p>
           <p className="text-lg text-gray-700 leading-relaxed mb-6">
             I&apos;ve recorded at Abbey Road. I&apos;ve been flown to Amsterdam by JBL to record in Lady Gaga&apos;s studio and break down unreleased Justin Bieber tracks. I made my Boiler Room debut to 100,000 views in a week. I hold a First Class degree in Electronic Music Production.
           </p>
           <p className="text-lg text-gray-700 leading-relaxed">
-            I still make music. I&apos;m still in the room. That&apos;s what makes these sessions different — you&apos;re not learning from someone who used to do this. You&apos;re learning from someone who does.
+            I still make music. I&apos;m still in the room. That&apos;s what makes these sessions different. You&apos;re not learning from someone who used to do this. You&apos;re learning from someone who does.
           </p>
         </div>
       </section>
@@ -79,7 +79,7 @@ export default function TutoringPage() {
               },
               {
                 title: 'Mixing',
-                description: "Any DAW. I teach my philosophy, not just numbers. I'll show you the rules — then teach you how to break them.",
+                description: "Any DAW. I teach my philosophy, not just numbers. I'll show you the rules. Then teach you how to break them.",
               },
               {
                 title: 'Recording & Engineering',
@@ -107,7 +107,7 @@ export default function TutoringPage() {
           </h2>
           <div className="grid md:grid-cols-3 gap-8 md:gap-12">
             {[
-              { step: '01', text: 'Book your free first session — a 20-minute call to figure out where you are and where you want to go.' },
+              { step: '01', text: 'Book your free first session. A 20-minute call to figure out where you are and where you want to go.' },
               { step: '02', text: 'Every session is built around you. No wasted time on things you don\'t need yet.' },
               { step: '03', text: 'Make music you\'re proud of. At your pace. Online or in the studio in Manchester.' },
             ].map((item) => (
@@ -146,8 +146,8 @@ export default function TutoringPage() {
             </div>
           </div>
 
-          <p className="text-gray-400 text-sm md:text-base mb-2">Packages available — bulk session discounts on request.</p>
-          <p className="text-gray-500 text-sm">First session is free — a 20-minute introductory call. No commitment.</p>
+          <p className="text-gray-400 text-sm md:text-base mb-2">Packages available. Bulk session discounts on request.</p>
+          <p className="text-gray-500 text-sm">First session is free. A 20-minute introductory call. No commitment.</p>
         </div>
       </section>
 

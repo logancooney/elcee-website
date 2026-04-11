@@ -10,17 +10,17 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    quote: "PLACEHOLDER — replace with real student quote before launch.",
+    quote: "PLACEHOLDER. Replace with real student quote before launch.",
     author: "Student Name",
     location: "Manchester"
   },
   {
-    quote: "PLACEHOLDER — replace with real student quote before launch.",
+    quote: "PLACEHOLDER. Replace with real student quote before launch.",
     author: "Student Name",
     location: "Online"
   },
   {
-    quote: "PLACEHOLDER — replace with real student quote before launch.",
+    quote: "PLACEHOLDER. Replace with real student quote before launch.",
     author: "Student Name",
     location: "Manchester"
   }
