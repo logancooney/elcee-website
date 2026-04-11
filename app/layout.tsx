@@ -77,6 +77,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <StructuredDataPerson />
+        <link rel="stylesheet" href="https://use.typekit.net/nmf5wle.css" />
       </head>
       <body className="antialiased">
         {children}
