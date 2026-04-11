@@ -25,10 +25,10 @@ export default function TutoringPage() {
       <section className="pt-28 pb-10 px-6">
         <div className="max-w-5xl mx-auto text-center">
           <h1 className="text-4xl md:text-7xl font-bold mb-5 leading-tight">
-            One-to-one music lessons. In a real studio. With a real recording artist.
+            1-1 music lessons. In a real studio. With a real recording artist.
           </h1>
           <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-8 leading-relaxed">
-            You don&apos;t need theory to start. You don&apos;t need expensive gear. You just need someone to show you what actually works — and that&apos;s what these sessions are for. Online or in-studio in Manchester.
+            You don&apos;t need theory to start. You don&apos;t need expensive gear. You need someone to show you what actually works to make great music. Online or in-studio in Manchester.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <a
