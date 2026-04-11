@@ -35,7 +35,7 @@ export default function TutoringPage() {
               href="#booking"
               className="w-full sm:w-auto bg-white text-black px-10 py-4 font-bold text-lg rounded-full hover:bg-gray-200 transition-all duration-300 text-center"
             >
-              Book a Free Call
+              Book Your Free Session
             </a>
             <a
               href="#what-you-learn"
@@ -104,7 +104,7 @@ export default function TutoringPage() {
           </h2>
           <div className="grid md:grid-cols-3 gap-8 md:gap-12">
             {[
-              { step: '01', text: 'Book a free 20-minute call — we figure out where you are and where you want to go.' },
+              { step: '01', text: 'Book your free first session — a 20-minute call to figure out where you are and where you want to go.' },
               { step: '02', text: 'Every session is built around you. No wasted time on things you don\'t need yet.' },
               { step: '03', text: 'Make music you\'re proud of. At your pace. Online or in the studio in Manchester.' },
             ].map((item) => (
@@ -144,7 +144,7 @@ export default function TutoringPage() {
           </div>
 
           <p className="text-gray-400 text-sm md:text-base mb-2">Packages available — bulk session discounts on request.</p>
-          <p className="text-gray-500 text-sm">First call is free. No commitment.</p>
+          <p className="text-gray-500 text-sm">First session is free — a 20-minute introductory call. No commitment.</p>
         </div>
       </section>
 
@@ -152,7 +152,7 @@ export default function TutoringPage() {
       <section id="booking" className="py-16 md:py-24 px-4 md:px-6 bg-black text-white">
         <div className="max-w-5xl mx-auto text-center mb-10 md:mb-12">
           <h2 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6">
-            Book a Free Call
+            Book Your Free Session
           </h2>
           <p className="text-lg md:text-xl text-gray-400">
             20 minutes. No pressure. We&apos;ll figure out if we&apos;re a good fit.

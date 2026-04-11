@@ -27,11 +27,11 @@ const faqs: FAQItem[] = [
   },
   {
     question: "How long are sessions?",
-    answer: "Standard sessions are 1 hour. If you want longer, that can be arranged — just mention it on your free call."
+    answer: "Standard sessions are 1 hour. If you want longer, that can be arranged. Just mention it on your free session."
   },
   {
     question: "How do I pay?",
-    answer: "Payment is taken before each session. Bank transfer or card both accepted. Packages are available if you want to block book and save — ask about this on your free call."
+    answer: "Payment is taken before each session. Bank transfer or card both accepted. Packages are available if you want to block book and save. Ask about this on your free session."
   }
 ];
 
