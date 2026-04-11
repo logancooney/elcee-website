@@ -14,14 +14,21 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+}
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'nimbus-sans', Helvetica, Arial, sans-serif;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: -0.03em;
-    line-height: 0.9;
-  }
+/* ─── HOMEPAGE HEADING STYLES ─── */
+/* Scoped to .home-page wrapper — does not affect studio, tutoring, or other pages */
+.home-page h1,
+.home-page h2,
+.home-page h3,
+.home-page h4,
+.home-page h5,
+.home-page h6 {
+  font-family: 'nimbus-sans', Helvetica, Arial, sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 0.9;
 }
 
 /* ─── SECTION LABEL (small caps utility) ─── */
