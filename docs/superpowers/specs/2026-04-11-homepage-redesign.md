@@ -134,6 +134,39 @@ Or via Tailwind `@layer`:
 
 ---
 
+## Mobile Optimisation
+
+The site is expected to receive the majority of traffic on mobile (confirmed from tutoring page context — 90%+ mobile). Every section must be designed mobile-first.
+
+### Breakpoints
+- Mobile: `< 768px` (default, designed first)
+- Desktop: `≥ 768px` (enhanced via `md:` Tailwind prefix)
+
+### Section-by-section mobile behaviour
+
+| Section | Mobile behaviour |
+|---|---|
+| Navigation | Hamburger menu. Full-screen dropdown. Logo scales down. |
+| Hero | Font scales via `clamp()` — minimum 56px on small screens. Single CTA. Background image covers full viewport, no parallax on mobile (parallax disabled on touch — prevents jank). |
+| Music | Single column. Full-width embeds. |
+| Video | Single column. 16:9 embeds, full width. |
+| About | Stacked: photo on top, text below. Photo fixed height (`50vh`). |
+| Platforms & Socials | 2-column grid for DSPs. Socials in a wrapping row. |
+| Footer | Stacked vertically, centred. |
+
+### Performance on mobile
+- Hero background image: served at appropriate resolution via Next.js `<Image>` with `sizes` prop
+- YouTube embeds: lazy-loaded (`loading="lazy"` on iframes)
+- Texture overlay: disabled or reduced opacity on mobile if it causes performance issues
+- Lenis smooth scroll: disabled on touch devices (Lenis can conflict with native iOS momentum scroll). Native scroll used on mobile — it already feels smooth.
+- No fixed `background-attachment` on mobile (CSS `background-attachment: fixed` is not supported on iOS Safari — parallax handled via JS only on desktop)
+
+### Touch targets
+- All links and buttons minimum `44px` tall
+- Adequate spacing between tap targets — no clustered links
+
+---
+
 ## Asset Checklist (Logan to provide)
 - [ ] `/public/assets/hero-bg.jpg` — hero background image
 - [ ] `/public/assets/texture-overlay.png` — full-page grain/texture overlay (PNG with alpha)
