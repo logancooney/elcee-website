@@ -1,73 +1,143 @@
-'use client';
-
-import { useEffect } from 'react';
-import Navigation from './components/Navigation';
-import Hero from './components/home/Hero';
-import Music from './components/home/Music';
-import VideoGrid from './components/home/VideoGrid';
-import About from './components/home/About';
-import Platforms from './components/home/Platforms';
-import Image from 'next/image';
-import Link from 'next/link';
+import Image from "next/image";
+import Link from "next/link";
+import { FeaturedRelease, MediaGrid } from "./components/MediaEmbeds";
+import Achievements from "./components/Achievements";
+import Navigation from "./components/Navigation";
 
 export default function Home() {
-  // Scroll reveal: add .in-view to .reveal elements as they enter viewport
-  useEffect(() => {
-    const els = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) e.target.classList.add('in-view');
-        });
-      },
-      { threshold: 0.1 }
-    );
-    els.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <div className="home-page bg-black text-white min-h-screen">
-      <Navigation transparent />
+    <div className="min-h-screen bg-black text-white">
+      {/* Navigation */}
+      <Navigation />
 
-      <Hero />
+      {/* Hero Section */}
+      <section className="pt-32 pb-20 px-6">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+          <div className="order-2 md:order-1">
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+              ELCEE THE ALCHEMIST
+            </h1>
+            <p className="text-xl text-gray-400 mb-8 leading-relaxed">
+              Alternative rap artist from Manchester pushing boundaries with raw lyricism and alchemical soundscapes.
+            </p>
+            <div className="flex gap-4">
+              <a 
+                href="https://open.spotify.com/artist/6E8xwOloHnzGWVlNV9K8n7" 
+                className="bg-white text-black px-10 py-4 font-bold rounded-full hover:bg-gray-200 transition-all duration-300"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Listen Now
+              </a>
+              <Link 
+                href="/studio" 
+                className="border-2 border-white px-10 py-4 font-bold rounded-full hover:bg-white hover:text-black transition-all duration-300"
+              >
+                Book Studio
+              </Link>
+            </div>
+          </div>
+          <div className="order-1 md:order-2">
+            <Image 
+              src="/photos/press-shot-bw.jpg" 
+              alt="Elcee the Alchemist" 
+              width={600} 
+              height={800}
+              className="w-full h-auto grayscale"
+              priority
+            />
+          </div>
+        </div>
+      </section>
 
-      <div className="reveal">
-        <Music />
+      {/* Latest Releases - MOVED UP before About */}
+      <MediaGrid />
+
+      {/* Avatar Overlay Container - spans multiple sections */}
+      <div className="relative bg-white">
+        {/* Avatar - floats over right side of multiple sections */}
+        <div className="hidden md:block absolute right-0 top-0 bottom-0 w-1/2 pointer-events-none z-10">
+          <div className="sticky top-16 h-screen flex items-start justify-end pr-6 pt-12">
+            <Image 
+              src="/elcee-avatar.png" 
+              alt="Elcee the Alchemist" 
+              width={700} 
+              height={900}
+              className="w-auto max-h-[85vh] object-contain"
+              priority
+            />
+          </div>
+        </div>
+
+        {/* Bio Section - centered text with strategic line breaks */}
+        <section className="py-20 px-6 text-black relative">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-4xl font-bold mb-8">About</h2>
+            <div className="space-y-6">
+              <p className="text-lg leading-relaxed">
+                Elcee the Alchemist is redefining UK Alternative Rap. Winner of the JBL Martin Garrix Music Academy 
+                and named an adidas Rising Star, he's recorded at Abbey Road Studios and hit 100K views on his 
+                debut Boiler Room performance in just one week.
+              </p>
+              <p className="text-lg leading-relaxed">
+                Rooted in London's Grime scene, he moved to Manchester to study Electronic Music Production, <br className="hidden md:block" />
+                where he's been shaping the next-gen sound of the North ever since. Operating completely solo — 
+                no team, no label, just pure vision.
+              </p>
+              <p className="text-lg leading-relaxed">
+                Elcee weaves raw energy with deep introspection, alchemizing sound into a force for 
+                empowerment and transcendence.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Achievements - unchanged, avatar floats over it */}
+        <Achievements />
       </div>
 
-      <div className="reveal">
-        <VideoGrid />
-      </div>
+      {/* All Platforms Links */}
+      <section className="py-12 px-6 bg-black text-white">
+        <div className="max-w-5xl mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-8">Stream on all platforms</h2>
+          <div className="flex justify-center gap-6 flex-wrap text-lg">
+            <a href="https://open.spotify.com/artist/6E8xwOloHnzGWVlNV9K8n7" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">Spotify</a>
+            <a href="https://music.apple.com/gb/artist/elcee-the-alchemist/1479992060" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">Apple Music</a>
+            <a href="https://music.amazon.com/artists/B07V4F5QK4/elcee-the-alchemist" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">Amazon Music</a>
+            <a href="https://youtube.com/@elceethealchemist" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">YouTube</a>
+            <a href="https://www.deezer.com/artist/67198962" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">Deezer</a>
+            <a href="https://tidal.com/browse/artist/13513078" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">Tidal</a>
+            <a href="https://soundcloud.com/elceethealchemist" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">SoundCloud</a>
+            <a href="https://elceethealchemist.bandcamp.com" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">Bandcamp</a>
+          </div>
+        </div>
+      </section>
 
-      <div className="reveal">
-        <About />
-      </div>
-
-      <div className="reveal">
-        <Platforms />
-      </div>
+      {/* Social Links */}
+      <section className="py-12 px-6 bg-white text-black">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl font-bold mb-8">Connect</h2>
+          <div className="flex justify-center gap-8 flex-wrap">
+            <a href="https://instagram.com/elceethealchemist" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://tiktok.com/@elceethealchemist" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">TikTok</a>
+            <a href="https://twitter.com/elceejpg" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">Twitter</a>
+            <a href="https://youtube.com/@elceethealchemist" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">YouTube</a>
+            <a href="https://facebook.com/elceethealchemist" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">Facebook</a>
+          </div>
+        </div>
+      </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 px-6 md:px-10 py-10">
-        <div className="flex items-center justify-between">
-          <Image
-            src="/logos/ankh-white.png"
-            alt="Ankh"
-            width={36}
-            height={36}
-            className="opacity-40"
+      <footer className="py-16 px-6 border-t border-white/10">
+        <div className="max-w-7xl mx-auto text-center">
+          <Image 
+            src="/logos/ankh-white.png" 
+            alt="Ankh" 
+            width={50} 
+            height={50}
+            className="mx-auto mb-6"
           />
-          <p className="label" style={{ color: '#222' }}>
-            © 2026 Elcee the Alchemist
-          </p>
-          <Link
-            href="/contact"
-            className="link-line label hover:text-white transition-colors"
-            style={{ color: '#333' }}
-          >
-            Contact →
-          </Link>
+          <p className="text-sm text-gray-500">© 2026 Elcee the Alchemist. All rights reserved.</p>
         </div>
       </footer>
     </div>
