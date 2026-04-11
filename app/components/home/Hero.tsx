@@ -14,7 +14,7 @@ export default function Hero() {
     if (!section) return;
 
     const onScroll = () => {
-      const offset = window.scrollY * 0.35;
+      const offset = window.scrollY * 0.25;
       section.style.backgroundPositionY = `calc(50% + ${offset}px)`;
     };
 
@@ -42,7 +42,7 @@ export default function Hero() {
 
       {/* Location label — top left */}
       <span
-        className="label absolute top-24 left-6 md:left-10"
+        className="label absolute top-24 left-6 md:left-10 z-10"
         style={{ color: '#555' }}
       >
         Manchester, UK
