@@ -25,10 +25,10 @@ export default function TutoringPage() {
       <section className="pt-28 pb-10 px-6">
         <div className="max-w-5xl mx-auto text-center">
           <h1 className="text-4xl md:text-7xl font-bold mb-5 leading-tight">
-            Learn Music Production in Manchester
+            One-to-one music lessons. In a real studio. With a real recording artist.
           </h1>
           <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-8 leading-relaxed">
-            One-to-one sessions with a working artist and engineer. All levels welcome — online or in-studio in Manchester.
+            You don&apos;t need theory to start. You don&apos;t need expensive gear. You just need someone to show you what actually works — and that&apos;s what these sessions are for. Online or in-studio in Manchester.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <a
@@ -47,6 +47,21 @@ export default function TutoringPage() {
         </div>
       </section>
 
+      {/* Who Am I */}
+      <section className="py-16 md:py-24 px-6 bg-white text-black">
+        <div className="max-w-3xl mx-auto">
+          <p className="text-xl md:text-2xl leading-relaxed mb-6">
+            I&apos;m Elcee — a recording artist, mixing engineer, and studio owner based in Manchester.
+          </p>
+          <p className="text-lg text-gray-700 leading-relaxed mb-6">
+            I&apos;ve recorded at Abbey Road. I&apos;ve been flown to Amsterdam by JBL to record in Lady Gaga&apos;s studio and break down unreleased Justin Bieber tracks. I made my Boiler Room debut to 100,000 views in a week. I hold a First Class degree in Electronic Music Production.
+          </p>
+          <p className="text-lg text-gray-700 leading-relaxed">
+            I still make music. I&apos;m still in the room. That&apos;s what makes these sessions different — you&apos;re not learning from someone who used to do this. You&apos;re learning from someone who does.
+          </p>
+        </div>
+      </section>
+
       {/* What You'll Learn */}
       <section id="what-you-learn" className="py-16 md:py-24 px-6 bg-white text-black">
         <div className="max-w-5xl mx-auto">
@@ -57,19 +72,19 @@ export default function TutoringPage() {
             {[
               {
                 title: 'Music Production',
-                description: 'Ableton Live, beat-making, arrangement, sound design. Build tracks from scratch.',
+                description: "Ableton Live from scratch. We'll make something you actually like on day one.",
               },
               {
                 title: 'Mixing',
-                description: 'Any DAW. Balance, EQ, compression, and getting a professional sound.',
+                description: "Any DAW. I teach my philosophy, not just numbers. I'll show you the rules — then teach you how to break them.",
               },
               {
                 title: 'Recording & Engineering',
-                description: 'Studio technique, signal chain, mic placement, getting the best takes.',
+                description: "What actually makes the difference in a session. Spoiler: it's not the gear.",
               },
               {
                 title: 'Songwriting & Lyricism',
-                description: 'Structure, flow, pen game, finding your voice and building your craft.',
+                description: "Structure, flow, finding your voice. From someone who's been doing it professionally for years.",
               },
             ].map((item) => (
               <div key={item.title} className="border border-black p-5 md:p-8">
@@ -89,9 +104,9 @@ export default function TutoringPage() {
           </h2>
           <div className="grid md:grid-cols-3 gap-8 md:gap-12">
             {[
-              { step: '01', text: 'Book a free 15-minute call — no commitment, no pressure.' },
-              { step: '02', text: 'We build a session plan around your goals and your level.' },
-              { step: '03', text: 'Learn one-to-one at your own pace, online or in the studio.' },
+              { step: '01', text: 'Book a free 20-minute call — we figure out where you are and where you want to go.' },
+              { step: '02', text: 'Every session is built around you. No wasted time on things you don\'t need yet.' },
+              { step: '03', text: 'Make music you\'re proud of. At your pace. Online or in the studio in Manchester.' },
             ].map((item) => (
               <div key={item.step}>
                 <p className="text-5xl md:text-6xl font-bold text-gray-700 mb-3 md:mb-4">{item.step}</p>
@@ -140,7 +155,7 @@ export default function TutoringPage() {
             Book a Free Call
           </h2>
           <p className="text-lg md:text-xl text-gray-400">
-            15 minutes. No pressure. We&apos;ll figure out if we&apos;re a good fit.
+            20 minutes. No pressure. We&apos;ll figure out if we&apos;re a good fit.
           </p>
         </div>
 

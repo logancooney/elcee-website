@@ -11,19 +11,19 @@ interface FAQItem {
 const faqs: FAQItem[] = [
   {
     question: "Do I need any experience?",
-    answer: "No. I work with complete beginners through to experienced producers. Sessions are tailored entirely to where you are right now and where you want to get to."
+    answer: "None. I've worked with people who've never opened a DAW before and people with years of experience who just felt stuck. Sessions start wherever you are."
   },
   {
     question: "What equipment do I need?",
-    answer: "For online sessions, just a computer, headphones, and your DAW. For in-studio sessions, just show up — everything is here. If you don't have a DAW yet, we can figure that out on your free call."
+    answer: "For online sessions — a computer, headphones, and your DAW. For in-studio, just show up. Everything's here. No DAW yet? We'll sort that on the call."
   },
   {
     question: "Which DAW do you teach?",
-    answer: "I specialise in Ableton Live for production. For mixing, I can teach you in any DAW — Logic, FL Studio, Pro Tools, Ableton, whatever you're working in."
+    answer: "I teach production in Ableton Live. For mixing I can work with you in any DAW — Logic, FL Studio, Pro Tools, whatever you're on."
   },
   {
     question: "Can I learn online?",
-    answer: "Yes. Online sessions run at £40/hour via video call. You share your screen, I guide you through everything in real time. Works just as well as in person."
+    answer: "Yes. £40/hour via video call. You share your screen, I walk you through everything live. Works just as well as being here in person."
   },
   {
     question: "How long are sessions?",
