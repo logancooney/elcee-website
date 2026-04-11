@@ -27,6 +27,9 @@ export default function TutoringPage() {
           <h1 className="text-4xl md:text-7xl font-bold mb-5 leading-tight">
             1-1 music lessons. In a real studio. With a real recording artist.
           </h1>
+          <p className="text-xl md:text-2xl font-semibold max-w-3xl mx-auto mb-4">
+            Want to turn your passion for music into something real?
+          </p>
           <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-8 leading-relaxed">
             You don&apos;t need theory to start. You don&apos;t need expensive gear. You need someone to show you what actually works to make great music. Online or in-studio in Manchester.
           </p>
