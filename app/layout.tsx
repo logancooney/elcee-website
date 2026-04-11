@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ChatWidget from "./components/ChatWidget";
 import StructuredDataPerson from "./components/StructuredDataPerson";
+import SmoothScroll from "./components/SmoothScroll";
 import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
@@ -80,6 +81,7 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://use.typekit.net/nmf5wle.css" />
       </head>
       <body className="antialiased">
+        <SmoothScroll />
         {children}
         <ChatWidget />
         <Analytics />
