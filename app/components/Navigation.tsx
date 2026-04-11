@@ -20,6 +20,15 @@ export default function Navigation({ transparent = false, theme = 'dark' }: Navi
     return () => window.removeEventListener('scroll', onScroll);
   }, [transparent]);
 
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileMenuOpen(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [mobileMenuOpen]);
+
   const isDark = theme === 'dark';
   const isTransparentNow = transparent && !scrolled;
 
@@ -44,7 +53,7 @@ export default function Navigation({ transparent = false, theme = 'dark' }: Navi
             alt="Elcee the Alchemist"
             width={400}
             height={100}
-            className="h-14 md:h-18 w-auto"
+            className="h-14 md:h-20 w-auto"
             priority
           />
         </Link>
@@ -63,6 +72,7 @@ export default function Navigation({ transparent = false, theme = 'dark' }: Navi
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className={`md:hidden p-2 ${textClass}`}
           aria-label="Toggle menu"
+          aria-expanded={mobileMenuOpen}
         >
           {mobileMenuOpen ? (
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
