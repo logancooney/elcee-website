@@ -50,17 +50,38 @@ export default function TutoringPage() {
         </div>
       </section>
 
-      {/* Who Am I */}
+      {/* The Problem — Client as Hero */}
+      <section className="py-16 md:py-24 px-6 bg-black text-white">
+        <div className="max-w-3xl mx-auto">
+          <p className="text-xl md:text-2xl font-semibold leading-relaxed mb-6">
+            You&apos;ve got music in you. You know it.
+          </p>
+          <p className="text-lg text-gray-300 leading-relaxed mb-6">
+            Maybe you&apos;ve got half-finished tracks and no idea what&apos;s missing. Maybe you&apos;ve never opened a DAW but music is what you want to do with your life. Maybe you&apos;ve spent months watching tutorials and still feel like you&apos;re going nowhere.
+          </p>
+          <p className="text-lg text-gray-300 leading-relaxed mb-6">
+            The problem isn&apos;t talent. It&apos;s having nobody in your corner who actually knows what they&apos;re doing. Who can look at what you&apos;re making, tell you exactly what it needs, and show you how to get there.
+          </p>
+          <p className="text-xl md:text-2xl font-semibold leading-relaxed">
+            These sessions change that.
+          </p>
+        </div>
+      </section>
+
+      {/* The Guide — Who Am I */}
       <section className="py-16 md:py-24 px-6 bg-white text-black">
         <div className="max-w-3xl mx-auto">
           <p className="text-xl md:text-2xl leading-relaxed mb-6">
             I&apos;m Elcee. A recording artist, mixing engineer, and studio owner based in Manchester.
           </p>
           <p className="text-lg text-gray-700 leading-relaxed mb-6">
-            I&apos;ve recorded at Abbey Road. I&apos;ve been flown to Amsterdam by JBL to record in Lady Gaga&apos;s studio and break down unreleased Justin Bieber tracks. I made my Boiler Room debut to 100,000 views in a week. I hold a First Class degree in Electronic Music Production.
+            I&apos;m still in the room. Still making music. Which means everything I teach is tested, current, and real.
+          </p>
+          <p className="text-lg text-gray-700 leading-relaxed mb-6">
+            I&apos;ve recorded at Abbey Road. I&apos;ve been flown to Amsterdam by JBL to work in Lady Gaga&apos;s studio and break down unreleased Justin Bieber tracks. I made my Boiler Room debut to 100,000 views in a week. I hold a First Class degree in Electronic Music Production.
           </p>
           <p className="text-lg text-gray-700 leading-relaxed">
-            I still make music. I&apos;m still in the room. That&apos;s what makes these sessions different. You&apos;re not learning from someone who used to do this. You&apos;re learning from someone who does.
+            I&apos;m not a teacher who used to make music. I&apos;m an artist who also teaches. That&apos;s a different thing entirely.
           </p>
         </div>
       </section>
