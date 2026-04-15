@@ -3,6 +3,7 @@ import "./globals.css";
 import ChatWidget from "./components/ChatWidget";
 import StructuredDataPerson from "./components/StructuredDataPerson";
 import { Analytics } from "@vercel/analytics/next";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "Elcee the Alchemist - Official Website | Manchester Rap Artist & Recording Studio",
@@ -78,6 +79,7 @@ export default function RootLayout({
       <head>
         <StructuredDataPerson />
         <link rel="stylesheet" href="https://use.typekit.net/nmf5wle.css" />
+        <Script defer src="https://cloud.umami.is/script.js" data-website-id="d528386e-ad51-44a8-9c40-923eb17a0eca" />
       </head>
       <body className="antialiased">
         {children}
