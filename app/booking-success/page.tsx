@@ -1,13 +1,6 @@
-'use client';
-
-import { Suspense } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 
-function SuccessContent() {
-  const searchParams = useSearchParams();
-  const paymentIntent = searchParams.get('payment_intent');
-
+export default function BookingSuccessPage() {
   return (
     <div className="min-h-screen bg-black text-white flex items-center justify-center px-6">
       <div className="max-w-2xl text-center">
@@ -17,69 +10,43 @@ function SuccessContent() {
           </svg>
         </div>
 
-        <h1 className="text-4xl md:text-6xl font-bold mb-6">
-          Payment Successful! ✅
-        </h1>
+        <h1 className="text-4xl md:text-6xl font-bold mb-6">You&apos;re booked.</h1>
 
         <p className="text-xl text-gray-400 mb-8">
-          Your booking has been confirmed. We've sent a confirmation email with all the details.
+          Confirmation details are on their way to your inbox. I&apos;ll be in touch before the session.
         </p>
 
-        {paymentIntent && (
-          <p className="text-sm text-gray-500 mb-8">
-            Payment ID: {paymentIntent}
-          </p>
-        )}
-
-        <div className="space-y-4">
-          <p className="text-gray-300">
-            <strong>What's next?</strong>
-          </p>
-          <ul className="text-left max-w-md mx-auto space-y-2 text-gray-400">
-            <li>• Check your email for confirmation and session details</li>
-            <li>• We'll send a reminder 24 hours before your session</li>
-            <li>• Bring your reference tracks and ideas</li>
-            <li>• Get ready to create something special!</li>
+        <div className="mb-12 text-left max-w-md mx-auto">
+          <p className="text-gray-300 font-semibold mb-3">What&apos;s next:</p>
+          <ul className="space-y-2 text-gray-400">
+            <li>· Check your email for the confirmation</li>
+            <li>· You&apos;ll get a reminder 24 hours before</li>
+            <li>· Any questions — reply to the confirmation email</li>
           </ul>
         </div>
 
-        <div className="mt-12 space-x-4">
-          <Link 
-            href="/studio" 
+        <div className="space-x-4">
+          <Link
+            href="/studio"
             className="inline-block bg-white text-black px-8 py-3 font-bold hover:bg-gray-200 transition"
           >
-            Book Another Session
+            Back to Studio
           </Link>
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="inline-block bg-white/10 text-white px-8 py-3 font-bold hover:bg-white/20 transition"
           >
-            Back to Home
+            Home
           </Link>
         </div>
 
         <p className="mt-12 text-sm text-gray-500">
-          Questions? Email us at{' '}
+          Questions?{' '}
           <a href="mailto:elcee.mgmt@gmail.com" className="text-white hover:underline">
             elcee.mgmt@gmail.com
           </a>
         </p>
       </div>
     </div>
-  );
-}
-
-export default function BookingSuccessPage() {
-  return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-          <p>Loading confirmation...</p>
-        </div>
-      </div>
-    }>
-      <SuccessContent />
-    </Suspense>
   );
 }
