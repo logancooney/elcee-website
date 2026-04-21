@@ -118,7 +118,7 @@ Replace the existing custom booking form with a fully Calendly-native booking sy
 
 **Update:**
 - Calendly embed — currently pointing at wrong URL (`studio-session`), update to show: Online Tutoring, In-Person Tutoring, and Free Track Review
-- Add bundle payment link buttons below the embed (5, 8, 10 session packages, online and in-person)
+- Add a "Bulk Sessions" section below the embed with payment link buttons for all 6 bundles (online 5/8/10, in-person 5/8/10), each showing the price and saving
 - Copy and aesthetic cleanup throughout
 
 **"Book a Lesson" CTA** scrolls down to the embed.
@@ -176,7 +176,7 @@ A shared `CalendlyEmbed` component is created to avoid duplicating the Calendly 
 - **What:** Subtle sticky bar or toast at the bottom: "Not sure yet? Book a free call — no commitment." Links to `/booking?service=free`
 
 ### Trigger 3 — Returning Visitor
-- **When:** User has visited the site before (tracked via localStorage) but has no completed booking
+- **When:** User has visited the site before (tracked via localStorage — we cannot detect whether they completed a Calendly booking, so this fires for all return visitors)
 - **What:** Exit intent pop-up shown on arrival rather than on exit — catches them earlier
 
 ### Trigger 4 — Abandoned Calendly Booking
