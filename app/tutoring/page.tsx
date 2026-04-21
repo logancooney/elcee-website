@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Navigation from '../components/Navigation';
+import BookingPrompt from '../components/BookingPrompt';
 import Testimonials from './components/Testimonials';
 import FAQ from './components/FAQ';
 import CalendlyEmbed from '../../components/CalendlyEmbed';
@@ -240,6 +241,7 @@ export default function TutoringPage() {
       </section>
 
       {/* FAQ */}
+      <BookingPrompt />
       <FAQ />
 
       {/* Footer */}

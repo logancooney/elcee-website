@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import ChatWidget from "./components/ChatWidget";
+import ExitIntentPopup from "./components/ExitIntentPopup";
 import StructuredDataPerson from "./components/StructuredDataPerson";
 import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
@@ -83,6 +84,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         {children}
+        <ExitIntentPopup />
         <ChatWidget />
         <Analytics />
       </body>

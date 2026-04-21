@@ -7,6 +7,7 @@ import Services from "./components/Services";
 import Pricing from "./components/Pricing";
 import Process from "./components/Process";
 import Navigation from "../components/Navigation";
+import BookingPrompt from "../components/BookingPrompt";
 import CalendlyEmbed from "../../components/CalendlyEmbed";
 import {
   CALENDLY_EVENT_URLS,
@@ -161,6 +162,7 @@ export default function StudioPage() {
         </p>
       </section>
 
+      <BookingPrompt />
       <FAQ />
 
       <footer className="py-16 px-6 border-t border-white/10">
