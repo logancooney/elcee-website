@@ -1,5 +1,7 @@
-// app/api/discount-email/route.ts
 import { NextResponse } from 'next/server';
+import { Resend } from 'resend';
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function getSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -10,11 +12,14 @@ function getSupabase() {
 
 export async function POST(request: Request) {
   try {
-    const { email, name } = await request.json();
+    const body = await request.json();
+    const { email, name: rawName } = body;
 
-    if (!email || typeof email !== 'string') {
-      return NextResponse.json({ error: 'Email required' }, { status: 400 });
+    if (!email || typeof email !== 'string' || !EMAIL_RE.test(email)) {
+      return NextResponse.json({ error: 'Valid email required' }, { status: 400 });
     }
+
+    const safeName = typeof rawName === 'string' ? rawName.trim().slice(0, 100) : null;
 
     const db = getSupabase();
     if (db) {
@@ -28,7 +33,7 @@ export async function POST(request: Request) {
         },
         body: JSON.stringify({
           email,
-          name: name || null,
+          name: safeName,
           source: 'free-page-discount',
           service: 'discount-capture',
           status: 'new',
@@ -38,14 +43,13 @@ export async function POST(request: Request) {
     }
 
     if (process.env.RESEND_API_KEY) {
-      const { Resend } = require('resend');
       const resend = new Resend(process.env.RESEND_API_KEY);
       await resend.emails.send({
         from: 'Elcee <noreply@elceethealchemist.com>',
         to: email,
         subject: 'Your 10% discount code',
         text: [
-          `Hey${name ? ' ' + name : ''},`,
+          `Hey${safeName ? ' ' + safeName : ''},`,
           '',
           "Here's your 10% off code for your first booking:",
           '',
@@ -54,7 +58,7 @@ export async function POST(request: Request) {
           'Use it when booking any studio session, mix, master, or tutoring:',
           'https://elceethealchemist.com/booking',
           '',
-          "No expiry. Works on everything.",
+          'No expiry. Works on everything.',
           '',
           '~ Elcee x',
         ].join('\n'),
