@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Navigation from "../components/Navigation";
 import { track } from "@vercel/analytics";
+import CalendlyEmbed from "../../components/CalendlyEmbed";
 
 const MAGNETS = [
   {
@@ -103,20 +104,71 @@ function DownloadCard({
   );
 }
 
+function DiscountCaptureForm() {
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [state, setState] = useState<'idle' | 'loading' | 'done' | 'error'>('idle');
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setState('loading');
+    try {
+      const res = await fetch('/api/discount-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, name }),
+      });
+      if (!res.ok) throw new Error();
+      setState('done');
+    } catch {
+      setState('error');
+    }
+  }
+
+  if (state === 'done') {
+    return (
+      <p className="text-green-400 font-medium">
+        ✓ On its way — check your inbox.
+      </p>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-3">
+      <input
+        type="text"
+        placeholder="Your name (optional)"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        className="w-full bg-black border border-white/20 rounded px-4 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/40"
+      />
+      <input
+        type="email"
+        required
+        placeholder="Your email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="w-full bg-black border border-white/20 rounded px-4 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/40"
+      />
+      {state === 'error' && (
+        <p className="text-red-400 text-xs">Something went wrong. Try again.</p>
+      )}
+      <button
+        type="submit"
+        disabled={state === 'loading'}
+        className="w-full bg-white text-black font-semibold py-2 rounded text-sm hover:bg-gray-200 transition disabled:opacity-50"
+      >
+        {state === 'loading' ? 'Sending...' : 'Send me the code'}
+      </button>
+    </form>
+  );
+}
+
 export default function FreePage() {
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://assets.calendly.com/assets/external/widget.js";
-    script.async = true;
-    document.body.appendChild(script);
-
     if (document.referrer.includes("reddit.com")) {
       track("visit_from_reddit");
     }
-
-    return () => {
-      document.body.removeChild(script);
-    };
   }, []);
 
   return (
@@ -148,11 +200,18 @@ export default function FreePage() {
               a working engineer.
             </p>
           </div>
-          <div
-            className="calendly-inline-widget rounded-lg overflow-hidden"
-            data-url="https://calendly.com/elcee-mgmt/free-mix-review-track-feedback"
-            style={{ minWidth: "320px", height: "700px" }}
-          />
+          <CalendlyEmbed key="https://calendly.com/elcee-mgmt/free-mix-review-track-feedback" url="https://calendly.com/elcee-mgmt/free-mix-review-track-feedback" height={700} />
+        </div>
+      </section>
+
+      {/* Discount Code Capture */}
+      <section className="py-16 px-6 border-t border-white/10">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Get 10% off your first booking</h2>
+          <p className="text-lg text-gray-400 mb-8">
+            Drop your email and I&apos;ll send the discount code straight over. Works on any session, mix, master, or tutoring.
+          </p>
+          <DiscountCaptureForm />
         </div>
       </section>
 
