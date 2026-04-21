@@ -1,22 +1,11 @@
-"use client";
-
-import { useEffect } from 'react';
 import Link from 'next/link';
 import Navigation from '../components/Navigation';
 import Testimonials from './components/Testimonials';
 import FAQ from './components/FAQ';
+import CalendlyEmbed from '../../components/CalendlyEmbed';
+import { CALENDLY_EVENT_URLS, CALENDLY_BUNDLE_LINKS } from '../../lib/calendly-config';
 
 export default function TutoringPage() {
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://assets.calendly.com/assets/external/widget.js';
-    script.async = true;
-    document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
   return (
     <div className="min-h-screen bg-black text-white">
       <Navigation />
@@ -156,18 +145,18 @@ export default function TutoringPage() {
             <div className="border border-white/20 p-6 md:p-10 rounded-2xl">
               <h3 className="text-xl md:text-2xl font-bold mb-2">Online</h3>
               <p className="text-gray-400 text-sm md:text-base mb-4 md:mb-6">Via video call</p>
-              <p className="text-4xl md:text-5xl font-bold mb-1">£40</p>
+              <p className="text-4xl md:text-5xl font-bold mb-1">£50</p>
               <p className="text-gray-400 text-sm">per hour</p>
             </div>
             <div className="border border-white p-6 md:p-10 rounded-2xl">
               <h3 className="text-xl md:text-2xl font-bold mb-2">In-Studio</h3>
               <p className="text-gray-400 text-sm md:text-base mb-4 md:mb-6">Manchester</p>
-              <p className="text-4xl md:text-5xl font-bold mb-1">£45</p>
+              <p className="text-4xl md:text-5xl font-bold mb-1">£60</p>
               <p className="text-gray-400 text-sm">per hour</p>
             </div>
           </div>
 
-          <p className="text-gray-400 text-sm md:text-base mb-2">Packages available. Bulk session discounts on request.</p>
+          <p className="text-gray-400 text-sm md:text-base mb-2">Bulk session packages available — save up to £120.</p>
           <p className="text-gray-500 text-sm">First session is free. A 20-minute introductory call. No commitment.</p>
         </div>
       </section>
@@ -176,20 +165,14 @@ export default function TutoringPage() {
       <section id="booking" className="py-16 md:py-24 px-4 md:px-6 bg-black text-white">
         <div className="max-w-5xl mx-auto text-center mb-10 md:mb-12">
           <h2 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6">
-            Book Your Free Session
+            Book a Session
           </h2>
           <p className="text-lg md:text-xl text-gray-400">
-            20 minutes. No pressure. We&apos;ll figure out if we&apos;re a good fit.
+            First session is free — 20 minutes, no pressure. Or jump straight in and book a paid lesson.
           </p>
         </div>
 
-        {/* PLACEHOLDER: Replace the href below with your tutoring Calendly URL once set up */}
-        {/* e.g. data-url="https://calendly.com/YOUR-NEW-ACCOUNT/tutoring-call" */}
-        <div
-          className="calendly-inline-widget rounded-lg overflow-hidden mx-auto"
-          data-url="https://calendly.com/elcee-mgmt/studio-session"
-          style={{ minWidth: '320px', height: '700px', maxWidth: '900px' }}
-        />
+        <CalendlyEmbed key={CALENDLY_EVENT_URLS.schedulingPage} url={CALENDLY_EVENT_URLS.schedulingPage} height={700} />
 
         <div className="text-center mt-8">
           <p className="text-gray-400">
@@ -197,6 +180,61 @@ export default function TutoringPage() {
             <Link href="/contact" className="underline hover:text-white transition-colors">
               Get in touch →
             </Link>
+          </p>
+        </div>
+      </section>
+
+      {/* Bulk Sessions */}
+      <section className="py-16 md:py-24 px-4 md:px-6 border-t border-white/10">
+        <div className="max-w-4xl mx-auto text-center mb-10">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Bulk Sessions</h2>
+          <p className="text-gray-400 text-lg">
+            Commit to more sessions and pay less per hour. Pay upfront, book at your own pace.
+          </p>
+        </div>
+        <div className="max-w-4xl mx-auto">
+          <h3 className="text-lg font-semibold mb-4 text-gray-300">Online</h3>
+          <div className="grid sm:grid-cols-3 gap-4 mb-10">
+            {[
+              { label: '5 Sessions', price: '£225', saving: 'Save £25', url: CALENDLY_BUNDLE_LINKS.online5 },
+              { label: '8 Sessions', price: '£390', saving: 'Save £10', url: CALENDLY_BUNDLE_LINKS.online8 },
+              { label: '10 Sessions', price: '£400', saving: 'Save £100', url: CALENDLY_BUNDLE_LINKS.online10, highlight: true },
+            ].map((pkg) => (
+              <a
+                key={pkg.label}
+                href={pkg.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`border px-6 py-6 hover:border-white transition group ${pkg.highlight ? 'border-white' : 'border-white/20'}`}
+              >
+                <p className="font-semibold text-lg mb-1">{pkg.label}</p>
+                <p className="text-3xl font-bold mb-2">{pkg.price}</p>
+                <p className="text-sm text-gray-400">{pkg.saving}</p>
+              </a>
+            ))}
+          </div>
+          <h3 className="text-lg font-semibold mb-4 text-gray-300">In-Person</h3>
+          <div className="grid sm:grid-cols-3 gap-4">
+            {[
+              { label: '5 Sessions', price: '£270', saving: 'Save £30', url: CALENDLY_BUNDLE_LINKS.inPerson5 },
+              { label: '8 Sessions', price: '£470', saving: 'Save £10', url: CALENDLY_BUNDLE_LINKS.inPerson8 },
+              { label: '10 Sessions', price: '£480', saving: 'Save £120', url: CALENDLY_BUNDLE_LINKS.inPerson10, highlight: true },
+            ].map((pkg) => (
+              <a
+                key={pkg.label}
+                href={pkg.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`border px-6 py-6 hover:border-white transition group ${pkg.highlight ? 'border-white' : 'border-white/20'}`}
+              >
+                <p className="font-semibold text-lg mb-1">{pkg.label}</p>
+                <p className="text-3xl font-bold mb-2">{pkg.price}</p>
+                <p className="text-sm text-gray-400">{pkg.saving}</p>
+              </a>
+            ))}
+          </div>
+          <p className="text-center text-gray-500 text-sm mt-8">
+            Use code <span className="text-white font-semibold">WELCOME10</span> for 10% off your first booking.
           </p>
         </div>
       </section>
