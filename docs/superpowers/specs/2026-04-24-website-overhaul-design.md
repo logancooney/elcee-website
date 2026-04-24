@@ -30,6 +30,10 @@ This spec consolidates the work into a phased plan that:
 - **Automated nurture.** Every touchpoint (booking, free download, enquiry) triggers an appropriate Resend email sequence without manual intervention.
 - **Hardened security.** Full audit of secrets, Supabase RLS, API routes, and dependencies, with findings fixed before ship.
 
+## 2.1 Priority order
+
+**Function and design first. Copy is fine-tuned later.** Every rebuilt page carries over existing copy verbatim from the current version; no copy rewrites block a phase. A follow-up copy pass happens after this overhaul ships.
+
 ## 3. Non-Goals
 
 - EPK, contact, recording-studio-manchester, and blog page restyles (deferred to a later phase — not in this week's scope).
