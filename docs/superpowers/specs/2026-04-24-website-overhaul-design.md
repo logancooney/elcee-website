@@ -211,21 +211,31 @@ Three parallel tracks. All three produce reference documents that every subseque
 
 ---
 
-## 9. Phase 4 — Free page rebuild
+## 9. Phase 4 — Free page: shell + infra (waitlist mode)
 
-**Problem:** Doesn't match new homepage. Lead capture underperforming. Free resource is unclear. No follow-up sequence.
+**Context:** The free resources themselves are being built in a separate project. This phase builds the page and the full lead-capture/email infrastructure so that when the resources drop, only the email content needs swapping in — no new engineering.
+
+**Problem:** Current page doesn't match homepage. Once free resources exist, we need the page and the backend ready to receive, store, and email leads.
 
 **Changes:**
-- Full rebuild to Design DNA.
-- **Clear value prop.** The hero states plainly what the free resource is, who it's for, and what they'll get out of it. Confirm exact resource with Logan — probably the Free Venues Guide (given `app/free-venues-guide/` exists) or a tutoring/recording starter guide.
-- **Lead capture block.** Single email input, single primary CTA. No name field unless justified. No "choose your type" field. One action.
-- **Success state.** Post-submit, page transitions to a success view: "Check your inbox — guide is on its way." Include a soft secondary CTA (follow on Instagram, book a session).
-- **Backend wiring.** Form submits to an API route that: (a) writes contact to Supabase `contacts` table with `source='free-guide'`; (b) triggers Resend — send the guide attachment/link immediately, enrol contact in the free-guide nurture sequence (Phase 6).
+- Full visual rebuild to Design DNA.
+- **Waitlist framing.** Hero copy: "Free guides coming soon — get early access." Plain value prop (one sentence). Soft language, no false urgency.
+- **Lead capture block.** Single email input, single primary CTA ("Get early access"). No name field. One action.
+- **Success state.** Post-submit: "You're on the list. We'll email you the moment the first guide drops." Secondary CTA (follow on Instagram, book a session).
+- **Backend wiring (full).** Form submits to `/api/lead-capture`-style route that: (a) upserts contact in Supabase `contacts` with `source='free-guide-waitlist'`; (b) triggers Resend to send a simple acknowledgement email ("You're on the list").
+- **Nurture sequence scaffold.** Set up the Resend sequence structure but with minimal content — an acknowledgement email only. When the free resource is ready, swap in the real delivery email + multi-step nurture without changing the form, route, or Supabase schema.
+
+**Explicitly deferred (until free resource exists in other project):**
+- The actual guide delivery email with attachment/link.
+- The value-email + soft-CTA nurture steps (T+2, T+5 days).
+- The "guide delivered" success state copy.
 
 **Acceptance:**
 - Page visually indistinguishable from homepage in styling quality.
-- Submitting the form writes to Supabase and triggers the welcome email within 10 seconds.
-- Duplicate submissions (same email) update `last_seen_at` but don't re-send the welcome email.
+- Submitting the form writes to Supabase `contacts` with `source='free-guide-waitlist'` within 5 seconds.
+- Resend acknowledgement email sends on submission.
+- Duplicate submissions (same email) update `last_seen_at` without re-sending the acknowledgement.
+- Swapping the acknowledgement template for a full delivery email requires zero code changes — only Resend template edits.
 
 ---
 
@@ -293,10 +303,9 @@ Three parallel tracks. All three produce reference documents that every subseque
    - T-24h before session: Reminder.
    - T+24h after session: Thank-you + soft "book next" CTA.
 
-2. **Free-guide nurture.** Triggered by `/free` submission.
-   - T+0: Guide delivery.
-   - T+2 days: Value email (short tip/story relevant to guide topic).
-   - T+5 days: Soft service CTA (tutoring or studio, depending on guide topic).
+2. **Free-guide waitlist (Phase 4 scope).** Triggered by `/free` submission.
+   - T+0: Acknowledgement ("You're on the list — we'll email the moment the first guide drops").
+   - Full nurture sequence (guide delivery + T+2 value + T+5 soft CTA) is deferred until the free resource exists in the other project. The scaffold is built so swapping this in later requires no engineering changes.
 
 3. **Contact-form enquiry.** Triggered by `/contact` submission.
    - T+0: Acknowledgement ("got it, I'll reply within 24h").
@@ -364,7 +373,8 @@ Merge to main. Vercel auto-deploys. Verify production URL renders each page corr
 - **Design DNA doc is incomplete.** Mitigation: Phases 2–5 each start with a 10-minute DNA-compliance check; if the doc is missing a pattern the page needs, update the doc first, not the page.
 - **Calendly webhook reliability.** Mitigation: idempotent upserts, log every webhook payload for 7 days, dead-letter queue for failed writes.
 - **Scope creep on interior pages.** Mitigation: strict "one page per phase", no unrelated refactors, no "while I'm here" fixes. Each phase has a gate.
-- **1-week timeline slips.** Mitigation: Phase 6 admin-view is a stretch; Phase 4 and 5 can be trimmed to MVP lead capture + Linktree-parity if Day 5 is crunched.
+- **1-week timeline slips.** Mitigation: Phase 6 admin-view is a stretch; Phase 4 and 5 can be trimmed to MVP waitlist capture + Linktree-parity if Day 5 is crunched.
+- **Free-resource project timing.** The actual free guides are being built in a separate project. Mitigation: Phase 4 ships waitlist mode only. When the free resource is ready, the delivery email + nurture content plug into the existing sequence without touching the page or route.
 
 ## 14. Out of scope for this overhaul
 
