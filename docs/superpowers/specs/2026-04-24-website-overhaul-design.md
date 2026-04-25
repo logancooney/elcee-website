@@ -141,30 +141,37 @@ Three parallel tracks. All three produce reference documents that every subseque
 - Desktop renders identically to current homepage.
 - Lighthouse mobile performance score ≥ current.
 
-### 6.2 New `/book` service picker page
+### 6.2 Restyled `/booking` service picker (rebuilt in place)
 
-**Problem:** Users don't know which service to pick; current flow requires navigating per-page to find a Calendly.
+**Problem:** Users who land on the booking hub don't know which service to pick. Per-page bookings on tutoring and studio work fine, but the central hub adds friction with mixed CTAs and visual mismatch with the new homepage.
 
 **Design:**
-- Single page at `/book` following Design DNA.
+- Rebuild the existing `/booking` route in place — do **not** create a parallel `/book` route. Existing links from socials, emails, and old shares stay intact.
+- Page follows Design DNA archetypes (cinematic hero scaled, then split-row cards on light/dark).
 - Hero: "Book a session" + one-sentence intro.
-- Three cards in a row (stack on mobile): **Tutoring £40 · Studio £45 · Mixing £POA**. Each card has icon/visual, short description, and a "Select" CTA.
-- Selecting a card reveals the Calendly embed inline below (no page navigation). The selected card highlights; the other two fade.
-- URL reflects selection: `/book?service=tutoring` deep-links straight to that embed.
-- Light-section interrupt below the embed with trust signals (short testimonial block, equipment/credentials, WELCOME10 hint if applicable).
+- Three cards in a row (stack on mobile):
+  - **Tutoring** — `from £45/hr` (online) · `£60/hr` (in-person) — bulk discounts on 5/8/10 session bundles.
+  - **Studio** — `£45/hr` — Manchester only.
+  - **Mix & Master** — `POA` — discovery call to scope.
+- Selecting a card reveals the Calendly embed inline below (no page nav). Selected card highlights; others fade.
+- For tutoring: a sub-toggle inside the revealed area picks Online vs In-Person, switching the Calendly URL between `tutoringOnline` and `tutoringInPerson`.
+- URL reflects selection: `/booking?service=tutoring` (and `&mode=online|in-person` for tutoring) deep-links straight to that embed.
+- Light-section interrupt below the embed with trust signals (short testimonial / equipment / WELCOME10 hint if applicable).
 
 **Nav changes:**
-- Main nav "Book" button → `/book`.
-- Tutoring and studio page primary CTAs change from inline Calendly to "Book a session" → `/book?service=tutoring` (or studio).
+- Main nav adds a "Book" CTA pill on the right → `/booking`.
+- Existing nav items (`Music · Studio · Shop · Contact`) all stay. Shop is non-negotiable per Logan.
 
-**Per-page Calendly embeds:**
-- Remove inline Calendly from tutoring and studio pages. The pages become information/sell; booking happens at `/book`.
-- Retain `CalendlyEmbed` component — it's now only used on `/book`.
+**Per-page Calendly embeds — explicitly KEPT:**
+- `/tutoring` and `/studio` pages keep their inline Calendly embeds. Direct booking from those pages remains frictionless — a user who already chose tutoring shouldn't have to re-pick the service.
+- The cleanup work on those pages (Phases 2 + 3) tightens the embed presentation to match Design DNA, but does **not** remove the embed itself.
+- The `/booking` hub serves users who land via nav, ads, or general intent — i.e. those who haven't already chosen.
 
 **Acceptance:**
-- A user landing on the homepage can reach a service-specific Calendly in ≤2 clicks.
-- `/book?service=tutoring`, `/book?service=studio`, `/book?service=mixing` each render the correct embed on page load.
-- Service cards match Design DNA exactly.
+- A user landing on the homepage can reach a service-specific Calendly in ≤2 clicks (homepage → tutoring/studio page → embed, OR homepage → /booking → card → embed).
+- `/booking?service=tutoring&mode=online`, `/booking?service=tutoring&mode=in-person`, `/booking?service=studio`, `/booking?service=mixing` each render the correct embed on page load.
+- `/tutoring` and `/studio` retain their inline embeds, restyled to Design DNA.
+- Service cards on `/booking` match Design DNA exactly.
 
 ---
 

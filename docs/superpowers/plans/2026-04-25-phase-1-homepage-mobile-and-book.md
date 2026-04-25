@@ -1,15 +1,16 @@
-# Phase 1 — Homepage mobile + `/book` service picker: Implementation Plan
+# Phase 1 — Homepage mobile + `/booking` service picker: Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** (1) Optimise the homepage for mobile by adding a condensed hero variant + sticky jump nav + tightened section spacing. (2) Replace the booking flow with a single `/book` service-picker page (3 cards → inline Calendly). (3) Strip redundant per-page Calendly embeds from `/tutoring` and `/studio`.
+**Goal:** (1) Optimise the homepage for mobile by adding a sticky mobile jump nav + tightened section spacing + a desktop "Book" CTA in the nav. (2) Rebuild the existing `/booking` page in place as a service-picker (3 cards → inline Calendly with deep-link support). (3) `/tutoring` and `/studio` keep their inline Calendly embeds for direct frictionless booking — they are tightened in later phases, not stripped here.
 
-**Architecture:** Mobile-only changes are gated by responsive utilities (`md:` breakpoint at 768px) — desktop is untouched. The new `/book` page lives alongside the existing `/booking` route, with a 301 redirect from old to new. Service config is centralised in a single new module so the page stays declarative.
+**Architecture:** Mobile-only changes gated by `md:` breakpoint (768px) — desktop is untouched. `/booking` is rebuilt in place (no new route, no redirects) so existing external links keep working. Service config lives in a single new module so the page stays declarative. Tutoring's online/in-person price split is reflected via a sub-toggle inside the picker once the user chooses tutoring.
 
 **Tech Stack:** Next.js 16 App Router, TypeScript, Tailwind 4, framer-motion 12, existing `CalendlyEmbed` component at `components/CalendlyEmbed.tsx`.
 
 **Parent spec:** `docs/superpowers/specs/2026-04-24-website-overhaul-design.md` §6
 **Design DNA reference:** `docs/design-dna.md` (Phase 0 output — read this before touching any styling)
+**Pricing reference:** `~/.claude/projects/-Users-logancooney-Projects-elcee-website/memory/project_pricing_structure.md` (tutoring £45 online / £60 in-person, studio £45/hr, mix POA, bulk discounts)
 
 ---
 
@@ -17,72 +18,100 @@
 
 | File | Action | Responsibility |
 |---|---|---|
-| `lib/book-services.ts` | Create | Service-card config: id, label, price, blurb, Calendly URL |
-| `app/book/page.tsx` | Create | Server component shell, metadata, suspense boundary |
-| `app/book/BookContent.tsx` | Create | Client component: hero, 3 cards, inline Calendly, `?service=` param routing |
+| `lib/book-services.ts` | Create | Service-card config: id, label, price (with online/in-person split for tutoring), blurb, Calendly URL(s) |
+| `app/booking/page.tsx` | Modify | Keep as-is (already a Suspense shell); update metadata copy if needed |
+| `app/booking/BookingContent.tsx` | Replace | Rebuilt to Design DNA: hero, 3 cards, inline Calendly, `?service=` and `&mode=` param routing |
 | `app/components/MobileJumpNav.tsx` | Create | Sticky chip bar shown only ≤768px, anchors to homepage sections |
-| `app/page.tsx` | Modify | Add condensed mobile hero variant; add MobileJumpNav; wire `id` anchors; add "Book" nav link; tighten mobile horizontal padding |
-| `app/booking/page.tsx` | Modify (or delete) | Replace with redirect to `/book` (preserve external links) |
-| `app/booking/BookingContent.tsx` | Delete | Superseded by `app/book/BookContent.tsx` |
-| `app/tutoring/page.tsx` | Modify | Remove inline `CalendlyEmbed`, replace with CTA → `/book?service=tutoring` |
-| `app/studio/page.tsx` | Modify | Remove inline `CalendlyEmbed`, replace with CTA → `/book?service=studio` |
-| `app/globals.css` | Modify | Add mobile horizontal-padding override for section/row paddings (was a known DNA gap) |
+| `app/page.tsx` | Modify | Add MobileJumpNav; verify section anchor IDs; add "Book" nav CTA pill |
+| `app/globals.css` | Modify | Add `.grid-three-col` rule for 3-up cards stacking on mobile; tighten `grid-two-col` cell horizontal padding on mobile |
 
-The existing `components/CalendlyEmbed.tsx` is unchanged and reused on `/book`.
+**Explicitly NOT touched in Phase 1:**
+- `app/tutoring/page.tsx`, `app/studio/page.tsx` — Calendly embeds stay. These pages get their full DNA restyle in Phases 2 and 3.
+- `components/CalendlyEmbed.tsx` — unchanged; reused on `/booking`, `/tutoring`, `/studio`, `/free`.
+- The desktop nav link set — keeps `Music · Studio · Shop · Contact`. The Book CTA is added as a separate pill, not a swap.
 
 ---
 
-## Section 1 — Booking restructure
+## Section 1 — Booking page rebuild (in place)
 
-The booking page is the highest-friction surface today (per the spec §1 and the user's `Confusion between services + Too many steps` answer). Build `/book` first so the homepage and per-page changes can route to it.
+The existing `/booking` page is the highest-friction surface today. Rebuild it in place to Design DNA — same route (`/booking`), same shell (`app/booking/page.tsx`'s `Suspense` wrapper), but a brand-new picker UI replacing the current `BookingContent.tsx`.
 
 ### Task 1: Create the service config module
 
 **Files:**
 - Create: `lib/book-services.ts`
 
+The tutoring service has two pricing modes (online £45/hr, in-person £60/hr) and two corresponding Calendly URLs. The data shape captures this with an optional `modes` array — services that don't have variants leave it undefined.
+
 - [ ] **Step 1: Create `lib/book-services.ts`**
 
 ```ts
-// Single source of truth for the /book service-picker page.
-// Calendly URLs are pulled from lib/calendly-config.ts so this stays the only place
+// Single source of truth for the /booking service-picker page.
+// Calendly URLs come from lib/calendly-config.ts so this is the only place
 // that defines the service-card UI shape.
 
 import { CALENDLY_EVENT_URLS } from './calendly-config';
 
 export type BookServiceId = 'tutoring' | 'studio' | 'mixing';
+export type BookMode = 'online' | 'in-person';
+
+export interface BookServiceMode {
+  id: BookMode;
+  label: string;
+  price: string;
+  priceQualifier: string;
+  calendlyUrl: string;
+}
 
 export interface BookService {
   id: BookServiceId;
   label: string;
-  price: string;
-  priceQualifier: string;
+  /** Headline price shown on the card. e.g. "from £45/hr" or "POA". */
+  priceLabel: string;
   blurb: string;
-  calendlyUrl: string;
+  /** Used when the service has no online/in-person split. */
+  calendlyUrl?: string;
+  /** Used when the service has a sub-toggle (e.g. tutoring). */
+  modes?: BookServiceMode[];
+  /** Optional small note shown below the price. */
+  note?: string;
 }
 
 export const BOOK_SERVICES: BookService[] = [
   {
     id: 'tutoring',
     label: 'Tutoring',
-    price: '£40',
-    priceQualifier: '/hr',
-    blurb: 'Production, mixing, and home-studio mentorship — online or in-person in Manchester.',
-    calendlyUrl: CALENDLY_EVENT_URLS.tutoringOnline,
+    priceLabel: 'from £45/hr',
+    blurb: 'Production, mixing, and home-studio mentorship. Online (£45/hr) or in-person in Manchester (£60/hr).',
+    note: 'Bulk discounts available on 5/8/10 session bundles.',
+    modes: [
+      {
+        id: 'online',
+        label: 'Online',
+        price: '£45',
+        priceQualifier: '/hr',
+        calendlyUrl: CALENDLY_EVENT_URLS.tutoringOnline,
+      },
+      {
+        id: 'in-person',
+        label: 'In-Person',
+        price: '£60',
+        priceQualifier: '/hr',
+        calendlyUrl: CALENDLY_EVENT_URLS.tutoringInPerson,
+      },
+    ],
   },
   {
     id: 'studio',
     label: 'Studio',
-    price: '£45',
-    priceQualifier: '/hr',
+    priceLabel: '£45/hr',
     blurb: 'Recording, mixing, and mastering at The Alchemist Studio in Manchester.',
     calendlyUrl: CALENDLY_EVENT_URLS.studio1hr,
   },
   {
     id: 'mixing',
     label: 'Mix & Master',
-    price: 'POA',
-    priceQualifier: '',
+    priceLabel: 'POA',
     blurb: 'Vocal mixes, full mix + master, mastering only. Discovery call to scope the project.',
     calendlyUrl: CALENDLY_EVENT_URLS.schedulingPage,
   },
@@ -92,64 +121,106 @@ export function getBookService(id: string | null): BookService | undefined {
   if (!id) return undefined;
   return BOOK_SERVICES.find(s => s.id === id);
 }
+
+export function getServiceMode(service: BookService, modeId: string | null): BookServiceMode | undefined {
+  if (!service.modes || !modeId) return undefined;
+  return service.modes.find(m => m.id === modeId);
+}
+
+/** Resolve which Calendly URL to load given a service + optional mode. */
+export function resolveCalendlyUrl(service: BookService, modeId: string | null): string | null {
+  if (service.modes && service.modes.length > 0) {
+    // Service has variants — must pick one before we can resolve.
+    const mode = getServiceMode(service, modeId);
+    return mode?.calendlyUrl ?? null;
+  }
+  return service.calendlyUrl ?? null;
+}
 ```
 
 - [ ] **Step 2: Commit**
 
 ```bash
 git add lib/book-services.ts
-git commit -m "feat(book): add service config module for /book page"
+git commit -m "feat(booking): add service config module with online/in-person modes"
 ```
 
-### Task 2: Create the `/book` page shell
+### Task 2: Verify the existing `/booking` shell
 
 **Files:**
-- Create: `app/book/page.tsx`
+- Read only: `app/booking/page.tsx`
 
-- [ ] **Step 1: Create `app/book/page.tsx`**
+The existing shell is already correct — it has a `Suspense` boundary and a `Navigation` import. We don't replace it.
+
+- [ ] **Step 1: Read `app/booking/page.tsx` and confirm**
+
+Run: `Read app/booking/page.tsx`
+Expected shape (already verified during plan generation):
 
 ```tsx
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
-import BookContent from './BookContent';
+import Navigation from '../components/Navigation';
+import BookingContent from './BookingContent';
+// ... metadata, default export with <Suspense> wrapping <BookingContent />
+```
 
-export const metadata: Metadata = {
-  title: 'Book a Session — Elcee The Alchemist',
-  description: 'Book studio time, tutoring, or mixing. Pick your service and choose a time.',
-};
+- [ ] **Step 2: If the shell uses a Tailwind-based wrapper (`bg-black text-white`) instead of inline style, update the wrapper to inline-style for Design DNA parity**
 
-export default function BookPage() {
-  return (
-    <div style={{ background: '#080808', color: '#fafafa', minHeight: '100vh' }}>
-      <Suspense fallback={<div style={{ minHeight: '60vh' }} />}>
-        <BookContent />
-      </Suspense>
+Replace the wrapper div in `app/booking/page.tsx` with:
+
+```tsx
+<div style={{ background: '#080808', color: '#fafafa', minHeight: '100vh' }}>
+  <Navigation />
+  <Suspense fallback={
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+      <div style={{
+        width: 32, height: 32,
+        border: '2px solid rgba(255,255,255,0.2)',
+        borderTopColor: '#fafafa',
+        borderRadius: '50%',
+        animation: 'spin 0.8s linear infinite',
+      }} />
     </div>
-  );
+  }>
+    <BookingContent />
+  </Suspense>
+</div>
+```
+
+If `@keyframes spin` is not defined in `app/globals.css`, add:
+
+```css
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 ```
 
-- [ ] **Step 2: Commit (after Task 3 to keep page render-able — skip commit here)**
+- [ ] **Step 3: Commit (deferred — bundle with Task 3)**
 
-### Task 3: Create `BookContent` client component (hero + cards)
+### Task 3: Replace `BookingContent` with picker UI (hero + cards)
 
 **Files:**
-- Create: `app/book/BookContent.tsx`
+- Modify (full rewrite): `app/booking/BookingContent.tsx`
 
-This is the largest file in Phase 1. Build it in two passes — first the hero + cards (this task), then the Calendly reveal (Task 4).
+This is the largest file in Phase 1. Build it in two passes — first the hero + cards (this task), then the Calendly reveal with mode-toggle (Task 4).
 
-- [ ] **Step 1: Create `app/book/BookContent.tsx` with hero + cards (no embed yet)**
+- [ ] **Step 1: Replace `app/booking/BookingContent.tsx` with hero + cards (no embed yet)**
 
-The hero uses Design DNA archetype A (cinematic hero) at a smaller scale (no `100vh`, just enough for a clear opener). Cards use the split-row info-cell pattern (archetype D, info side only) styled as 3-up on desktop, stacked on mobile.
+The hero uses Design DNA archetype A (cinematic hero) at a smaller scale (no `100vh`, just enough for a clear opener). Cards use the split-row info-cell pattern (archetype D, info side only) styled as 3-up on desktop, stacked on mobile. Note the import path for `book-services` is `../../lib/book-services` (from `app/booking/` two levels up to repo root, then into `lib/`).
 
 ```tsx
 'use client';
 
 import { useState, useEffect } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { BOOK_SERVICES, getBookService, type BookServiceId } from '../../lib/book-services';
+import {
+  BOOK_SERVICES,
+  getBookService,
+  type BookServiceId,
+  type BookMode,
+} from '../../lib/book-services';
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -158,23 +229,32 @@ const fadeUp = {
   viewport: { once: true, margin: '-80px' },
 };
 
-export default function BookContent() {
+export default function BookingContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  const initial = getBookService(searchParams.get('service'))?.id ?? null;
-  const [selected, setSelected] = useState<BookServiceId | null>(initial);
 
-  // Keep URL in sync when user clicks a card
+  const initialService = getBookService(searchParams.get('service'))?.id ?? null;
+  const initialMode = searchParams.get('mode') as BookMode | null;
+
+  const [selected, setSelected] = useState<BookServiceId | null>(initialService);
+  const [mode, setMode] = useState<BookMode | null>(
+    initialMode === 'online' || initialMode === 'in-person' ? initialMode : null,
+  );
+
+  // Keep URL in sync as the user picks
   useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (selected) {
-      params.set('service', selected);
-    } else {
-      params.delete('service');
-    }
+    const params = new URLSearchParams();
+    if (selected) params.set('service', selected);
+    if (selected === 'tutoring' && mode) params.set('mode', mode);
     const next = params.toString() ? `${pathname}?${params.toString()}` : pathname;
     router.replace(next, { scroll: false });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected, mode]);
+
+  // When the user switches to a non-tutoring service, clear mode
+  useEffect(() => {
+    if (selected !== 'tutoring' && mode !== null) setMode(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
@@ -226,18 +306,18 @@ export default function BookContent() {
               {...fadeUp}
               onClick={() => setSelected(service.id)}
               style={{
-                appearance: 'none', background: 'transparent', cursor: 'pointer',
+                appearance: 'none', cursor: 'pointer',
                 textAlign: 'left',
                 padding: '64px 48px',
                 color: '#fafafa',
                 borderLeft: i === 0 ? 'none' : '1px solid #1a1a1a',
                 borderTop: 'none', borderRight: 'none', borderBottom: 'none',
                 opacity: isAnotherSelected ? 0.4 : 1,
-                transition: 'opacity 0.3s ease, background 0.3s ease',
                 background: isSelected ? '#111111' : 'transparent',
+                transition: 'opacity 0.3s ease, background 0.3s ease',
                 position: 'relative',
                 display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-                minHeight: 280,
+                minHeight: 320,
               }}
             >
               <div>
@@ -256,19 +336,25 @@ export default function BookContent() {
                   color: '#fafafa',
                   marginBottom: 12,
                 }}>
-                  {service.price}
-                  <span style={{
-                    fontSize: 14, fontWeight: 400, letterSpacing: '0', textTransform: 'lowercase',
-                    color: 'rgba(255,255,255,0.45)', marginLeft: 4,
-                  }}>{service.priceQualifier}</span>
+                  {service.priceLabel}
                 </div>
                 <p style={{
                   fontSize: 13, lineHeight: 1.8,
                   color: 'rgba(255,255,255,0.55)',
-                  marginBottom: 28,
+                  marginBottom: service.note ? 12 : 28,
                 }}>
                   {service.blurb}
                 </p>
+                {service.note && (
+                  <p style={{
+                    fontSize: 11, lineHeight: 1.6,
+                    color: 'rgba(255,255,255,0.35)',
+                    marginBottom: 28,
+                    fontStyle: 'italic',
+                  }}>
+                    {service.note}
+                  </p>
+                )}
               </div>
               <span style={{
                 display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
@@ -295,7 +381,7 @@ export default function BookContent() {
 - [ ] **Step 2: Add the `.grid-three-col` rule to `app/globals.css`**
 
 ```css
-/* 3-up desktop, stack mobile — used by /book service picker */
+/* 3-up desktop, stack mobile — used by /booking service picker */
 .grid-three-col {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -317,44 +403,115 @@ export default function BookContent() {
 - [ ] **Step 3: Verify the page renders by running the dev server**
 
 Run: `npm run dev`
-Open: `http://localhost:3000/book`
-Expected: Hero ("BOOK A SESSION") renders. Three service cards render: Tutoring £40/hr, Studio £45/hr, Mix & Master POA. Clicking a card visually selects it (white "Selected" pill, dimmed neighbours, slight bg shift).
+Open: `http://localhost:3000/booking`
+Expected: Hero ("BOOK A SESSION") renders. Three service cards render: Tutoring `from £45/hr` (with bulk-discount note), Studio `£45/hr`, Mix & Master `POA`. Clicking a card visually selects it (white "Selected" pill, dimmed neighbours, slight bg shift on the selected card).
 
-If the page errors with "module not found", check the import path in `BookContent.tsx` for `book-services` (relative path is `../../lib/book-services`, since `app/book/` is two levels above `lib/`).
+If the page errors with "module not found", check the import path in `BookingContent.tsx` for `book-services` (must be `../../lib/book-services` from `app/booking/`).
 
 - [ ] **Step 4: Commit**
 
 ```bash
-git add app/book/page.tsx app/book/BookContent.tsx app/globals.css
-git commit -m "feat(book): add /book page with service-picker hero and cards"
+git add app/booking/page.tsx app/booking/BookingContent.tsx app/globals.css
+git commit -m "feat(booking): rebuild /booking with Design-DNA service picker (no embed yet)"
 ```
 
-### Task 4: Add inline Calendly reveal below cards
+### Task 4: Add inline Calendly reveal + tutoring mode-toggle
 
 **Files:**
-- Modify: `app/book/BookContent.tsx`
+- Modify: `app/booking/BookingContent.tsx`
 
-- [ ] **Step 1: Import the existing CalendlyEmbed component**
+The reveal handles two cases:
+1. **Studio / Mixing** — direct embed (single Calendly URL).
+2. **Tutoring** — first show a sub-toggle (Online £45/hr / In-Person £60/hr), then the embed for the chosen mode. Pre-selecting a mode via `?mode=` skips the toggle prompt.
 
-At the top of `app/book/BookContent.tsx`, after the existing imports:
+- [ ] **Step 1: Import `CalendlyEmbed` and the resolver helper**
+
+At the top of `app/booking/BookingContent.tsx`, update imports:
 
 ```tsx
-import CalendlyEmbed from '../../../components/CalendlyEmbed';
+import CalendlyEmbed from '../../components/CalendlyEmbed';
+import {
+  BOOK_SERVICES,
+  getBookService,
+  resolveCalendlyUrl,
+  type BookServiceId,
+  type BookMode,
+} from '../../lib/book-services';
 ```
 
-(Note the path: `app/book/BookContent.tsx` → up three to repo root → into `components/`. The pattern matches the other consumers: `app/tutoring/page.tsx:10` uses `../../components/CalendlyEmbed`. From `app/book/` we need `../../../`.)
+Note the path: from `app/booking/` it's `../../components/CalendlyEmbed` (matches the existing consumer pattern at `app/tutoring/page.tsx:10`).
 
-- [ ] **Step 2: Add the Calendly section after the cards section**
+- [ ] **Step 2: Add the reveal section after the cards section**
 
-Append this section inside `BookContent`'s returned fragment, after the closing `</section>` of the service cards:
+Append inside `BookingContent`'s returned fragment, after the closing `</section>` of the service cards:
 
 ```tsx
-      {/* CALENDLY EMBED — reveals when a service is selected */}
-      {selected && (() => {
-        const service = BOOK_SERVICES.find(s => s.id === selected)!;
+      {/* MODE TOGGLE — only when tutoring is selected and no mode is chosen yet */}
+      {selected === 'tutoring' && !mode && (() => {
+        const service = BOOK_SERVICES.find(s => s.id === 'tutoring')!;
         return (
           <motion.section
-            key={selected}
+            key="tutoring-mode-toggle"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+            style={{
+              padding: '80px 48px',
+              borderBottom: '1px solid #1a1a1a',
+              textAlign: 'center',
+            }}
+          >
+            <div style={{
+              fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase',
+              color: 'rgba(255,255,255,0.3)', marginBottom: 14,
+            }}>
+              Tutoring — Pick a mode
+            </div>
+            <div style={{
+              display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap',
+            }}>
+              {service.modes!.map(m => (
+                <button
+                  key={m.id}
+                  onClick={() => setMode(m.id)}
+                  style={{
+                    appearance: 'none', cursor: 'pointer',
+                    padding: '14px 28px',
+                    fontWeight: 900, fontSize: 11, letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    background: 'transparent', color: '#fafafa',
+                    border: '1.5px solid rgba(255,255,255,0.4)',
+                    transition: 'background 0.2s, color 0.2s, border-color 0.2s',
+                  }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLButtonElement).style.background = '#fafafa';
+                    (e.currentTarget as HTMLButtonElement).style.color = '#080808';
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLButtonElement).style.background = 'transparent';
+                    (e.currentTarget as HTMLButtonElement).style.color = '#fafafa';
+                  }}
+                >
+                  {m.label} — {m.price}{m.priceQualifier} →
+                </button>
+              ))}
+            </div>
+          </motion.section>
+        );
+      })()}
+
+      {/* CALENDLY EMBED — when service is fully resolved (studio / mixing direct, tutoring + mode) */}
+      {selected && (() => {
+        const service = BOOK_SERVICES.find(s => s.id === selected)!;
+        const url = resolveCalendlyUrl(service, mode);
+        if (!url) return null;
+        const subtitle =
+          service.id === 'tutoring' && mode
+            ? `Tutoring · ${mode === 'online' ? 'Online' : 'In-Person'}`
+            : service.label;
+        return (
+          <motion.section
+            key={`embed-${selected}-${mode ?? ''}`}
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
@@ -365,9 +522,26 @@ Append this section inside `BookContent`'s returned fragment, after the closing 
               color: 'rgba(255,255,255,0.3)', marginBottom: 10,
               textAlign: 'center',
             }}>
-              Schedule &mdash; {service.label}
+              Schedule &mdash; {subtitle}
             </div>
-            <CalendlyEmbed url={service.calendlyUrl} height={780} />
+            {service.id === 'tutoring' && mode && (
+              <div style={{
+                textAlign: 'center', marginBottom: 24,
+              }}>
+                <button
+                  onClick={() => setMode(null)}
+                  style={{
+                    appearance: 'none', cursor: 'pointer',
+                    background: 'transparent', border: 'none',
+                    fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase',
+                    color: 'rgba(255,255,255,0.5)',
+                  }}
+                >
+                  ← Switch mode
+                </button>
+              </div>
+            )}
+            <CalendlyEmbed url={url} height={780} />
           </motion.section>
         );
       })()}
@@ -389,57 +563,28 @@ Append this section inside `BookContent`'s returned fragment, after the closing 
       )}
 ```
 
-- [ ] **Step 3: Verify the embed shows when a card is clicked**
+- [ ] **Step 3: Verify the flows in the browser**
 
 Run: `npm run dev` (already running)
-Open: `http://localhost:3000/book`
-Click "Tutoring" card. Expected: Calendly embed loads below within 1–2 seconds. URL changes to `/book?service=tutoring` (no full page reload — `router.replace` with `scroll: false`).
-Click "Studio". Expected: Calendly swaps to studio URL. The `key={selected}` on the motion.section forces a remount + the fade-up transition replays.
-Open `http://localhost:3000/book?service=studio` directly. Expected: Studio card is pre-selected; embed loads immediately.
+
+**Studio flow:** Open `http://localhost:3000/booking`. Click "Studio". Expected: Calendly embed loads below within 1–2 seconds. URL becomes `/booking?service=studio`.
+
+**Tutoring flow:** Click "Tutoring". Expected: mode-toggle section appears with two buttons (`Online — £45/hr →`, `In-Person — £60/hr →`). Click "Online". Expected: toggle disappears, Calendly embed for online tutoring loads. URL becomes `/booking?service=tutoring&mode=online`. A small "← Switch mode" link sits above the embed.
+
+**Mix & Master flow:** Click "Mix & Master". Expected: Calendly scheduling-page embed loads. URL becomes `/booking?service=mixing`.
+
+**Deep links:** Open `http://localhost:3000/booking?service=tutoring&mode=in-person` directly. Expected: tutoring card pre-selected, mode toggle skipped, in-person Calendly embeds.
 
 - [ ] **Step 4: Commit**
 
 ```bash
-git add app/book/BookContent.tsx
-git commit -m "feat(book): inline Calendly embed reveals on service select"
+git add app/booking/BookingContent.tsx
+git commit -m "feat(booking): inline Calendly reveal with tutoring mode-toggle"
 ```
 
-### Task 5: Redirect old `/booking` → `/book`
+### (Task 5 removed — no redirect needed)
 
-**Files:**
-- Modify: `app/booking/page.tsx`
-- Delete: `app/booking/BookingContent.tsx`
-
-The simplest redirect is server-side using `redirect()` so external links (Instagram bio, old emails) don't 404.
-
-- [ ] **Step 1: Replace `app/booking/page.tsx` with a redirect**
-
-```tsx
-import { redirect } from 'next/navigation';
-
-export default function BookingRedirect() {
-  redirect('/book');
-}
-```
-
-- [ ] **Step 2: Delete the now-orphaned `BookingContent.tsx`**
-
-```bash
-git rm app/booking/BookingContent.tsx
-```
-
-- [ ] **Step 3: Verify**
-
-Run: `npm run dev`
-Open: `http://localhost:3000/booking`
-Expected: Browser ends up at `/book` (server redirect; URL bar shows `/book`).
-
-- [ ] **Step 4: Commit**
-
-```bash
-git add app/booking/page.tsx
-git commit -m "feat(book): redirect /booking to /book and remove old BookingContent"
-```
+The earlier draft of this plan created a new `/book` route and redirected `/booking` to it. That's been dropped per Logan's feedback ("redo the current one"). Tasks 2–4 above rebuild `/booking` in place; no redirect work is needed.
 
 ---
 
@@ -500,7 +645,7 @@ const JUMP_ITEMS: JumpItem[] = [
   { label: 'Studio', href: '#studio' },
   { label: 'Music', href: '#releases' },
   { label: 'About', href: '#about' },
-  { label: 'Book', href: '/book' },
+  { label: 'Book', href: '/booking' },
 ];
 
 export default function MobileJumpNav() {
@@ -600,9 +745,9 @@ Verify each in `app/page.tsx`:
 
 If any are missing, add them. As of commit `745173c` they all exist; this step is verification only.
 
-- [ ] **Step 4: Add the "Book" link to the desktop nav**
+- [ ] **Step 4: Add the "Book" CTA to the nav**
 
-The homepage's existing `NAV_LINKS` array (lines 100–105 of `app/page.tsx`) currently is:
+The homepage's existing `NAV_LINKS` array (lines 100–105 of `app/page.tsx`) stays intact:
 
 ```tsx
 const NAV_LINKS = [
@@ -613,20 +758,13 @@ const NAV_LINKS = [
 ];
 ```
 
-Replace it with:
+Below the array, add a separate constant for the CTA:
 
 ```tsx
-const NAV_LINKS = [
-  { label: 'Music', href: '#releases' },
-  { label: 'Studio', href: '/studio' },
-  { label: 'Tutoring', href: '/tutoring' },
-  { label: 'Contact', href: '/contact' },
-];
-
-const NAV_CTA = { label: 'Book', href: '/book' };
+const NAV_CTA = { label: 'Book', href: '/booking' };
 ```
 
-(`Shop` is rarely used and pushes the nav wide; `Tutoring` belongs in primary nav given the business priority. Confirm with Logan before ship if scope-sensitive.)
+The CTA is a separate visual element (white pill) — it sits to the right of the link list, not as part of it.
 
 - [ ] **Step 5: Render the Book CTA button in the desktop nav**
 
@@ -677,8 +815,8 @@ The mobile menu currently maps over `NAV_LINKS` (lines 219–231). After the exi
 
 Run: `npm run dev` (already running)
 Open: `http://localhost:3000/`
-- Desktop: nav shows `Music · Studio · Tutoring · Contact` plus a white "Book →" pill on the right.
-- Mobile (DevTools, iPhone 14 viewport): nav has hamburger only at top. Scroll down past the hero. Jump nav appears at top with `Studio · Music · About · Book` chips. Tap any chip — page scrolls to the matching section (`#studio`, `#releases`, `#about`) or navigates to `/book`. Tap the hamburger — fullscreen menu appears with `Music · Studio · Tutoring · Contact` plus a separate `BOOK →` pill at the bottom.
+- Desktop: nav shows `Music · Studio · Shop · Contact` plus a white "Book →" pill on the right.
+- Mobile (DevTools, iPhone 14 viewport): nav has hamburger only at top. Scroll down past the hero. Jump nav appears at top with `Studio · Music · About · Book` chips. Tap any chip — page scrolls to the matching section (`#studio`, `#releases`, `#about`) or navigates to `/booking`. Tap the hamburger — fullscreen menu appears with `Music · Studio · Shop · Contact` plus a separate `BOOK →` pill at the bottom.
 
 - [ ] **Step 8: Commit**
 
@@ -735,173 +873,13 @@ git commit -m "feat(homepage): tighten mobile horizontal padding in grid-two-col
 
 ---
 
-## Section 3 — Strip per-page Calendly embeds
+## Section 3 — `/tutoring` and `/studio` embeds stay
 
-The spec §6.2 calls for removing inline Calendly embeds from `/tutoring` and `/studio` and replacing them with primary CTAs that route to `/book?service=...`. This eliminates the duplication and concentrates the booking flow on one page.
+Per Logan's feedback ("users should still be able to book directly, frictionless on tutoring and studio"), Phase 1 does **not** strip the inline Calendly embeds from `/tutoring` or `/studio`. A user already on those pages has chosen the service — making them re-pick at `/booking` is friction.
 
-### Task 10: Remove tutoring page Calendly, replace with CTA
+The full visual restyle of `/tutoring` (Phase 2) and `/studio` (Phase 3) — including the embed presentation matching Design DNA — happens in their dedicated phases. **No tasks in Phase 1 touch these pages.**
 
-**Files:**
-- Modify: `app/tutoring/page.tsx`
-
-- [ ] **Step 1: Locate the inline `CalendlyEmbed` in `app/tutoring/page.tsx`**
-
-The embed sits at line 221 (per the audit grep earlier):
-
-```tsx
-<CalendlyEmbed key={CALENDLY_EVENT_URLS.schedulingPage} url={CALENDLY_EVENT_URLS.schedulingPage} height={700} />
-```
-
-It is wrapped in some surrounding markup. **Read the file before editing** to understand the surrounding context.
-
-Run: `Read app/tutoring/page.tsx` and locate the section containing the embed.
-
-- [ ] **Step 2: Replace the embed (and any "Pick a time" header that wraps it) with a CTA block**
-
-Replace the `<CalendlyEmbed ... />` element and its containing wrapper (the section that frames it) with a CTA block matching Design DNA's primary-CTA pattern:
-
-```tsx
-<section style={{
-  padding: '96px 48px',
-  textAlign: 'center',
-  borderTop: '1px solid #1a1a1a',
-  borderBottom: '1px solid #1a1a1a',
-}}>
-  <div style={{
-    fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase',
-    color: 'rgba(255,255,255,0.3)', marginBottom: 14,
-  }}>
-    Ready to start?
-  </div>
-  <div style={{
-    fontWeight: 900,
-    fontSize: 'clamp(38px, 5vw, 72px)',
-    letterSpacing: '-0.03em',
-    textTransform: 'uppercase',
-    lineHeight: 0.88,
-    color: '#fafafa',
-    marginBottom: 28,
-  }}>
-    Book a<br />Tutoring Session
-  </div>
-  <Link
-    href="/book?service=tutoring"
-    style={{
-      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-      padding: '13px 28px',
-      fontWeight: 900, fontSize: 10, letterSpacing: '0.18em',
-      textTransform: 'uppercase', textDecoration: 'none',
-      background: '#fafafa', color: '#080808',
-      border: 'none', cursor: 'pointer',
-      transition: 'background 0.2s',
-    }}
-  >
-    Choose a Time →
-  </Link>
-</section>
-```
-
-- [ ] **Step 3: Remove the now-unused imports**
-
-Top of `app/tutoring/page.tsx` currently imports:
-```tsx
-import CalendlyEmbed from '../../components/CalendlyEmbed';
-import { CALENDLY_EVENT_URLS, CALENDLY_BUNDLE_LINKS } from '../../lib/calendly-config';
-```
-
-After removing the embed, `CalendlyEmbed` and (likely) `CALENDLY_EVENT_URLS` may become unused. Remove unused imports — ESLint will flag them on build.
-
-`CALENDLY_BUNDLE_LINKS` is likely still used elsewhere on the page for tutoring bundles — leave it.
-
-Ensure `Link` from `next/link` is imported. If it isn't, add it:
-```tsx
-import Link from 'next/link';
-```
-
-- [ ] **Step 4: Verify**
-
-Run: `npm run dev`
-Open: `http://localhost:3000/tutoring`
-Scroll to where the Calendly used to be. Expected: a clean dark CTA section with "BOOK A TUTORING SESSION" headline + white "Choose a Time →" pill. Click the button. Expected: navigates to `/book?service=tutoring`, lands on the picker with Tutoring card pre-selected, embed loads.
-
-- [ ] **Step 5: Commit**
-
-```bash
-git add app/tutoring/page.tsx
-git commit -m "feat(tutoring): replace inline Calendly with CTA to /book"
-```
-
-### Task 11: Remove studio page Calendly, replace with CTA
-
-**Files:**
-- Modify: `app/studio/page.tsx`
-
-Mirror Task 10 for `/studio`. The embed is at line 170 (per earlier audit grep).
-
-- [ ] **Step 1: Read `app/studio/page.tsx` to find the embed and its wrapper section**
-
-Run: `Read app/studio/page.tsx` and locate the section containing `<CalendlyEmbed ... />`.
-
-- [ ] **Step 2: Replace with a CTA block**
-
-Use the same pattern as Task 10 Step 2, but with the studio service name. The replacement section:
-
-```tsx
-<section style={{
-  padding: '96px 48px',
-  textAlign: 'center',
-  borderTop: '1px solid #1a1a1a',
-  borderBottom: '1px solid #1a1a1a',
-}}>
-  <div style={{
-    fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase',
-    color: 'rgba(255,255,255,0.3)', marginBottom: 14,
-  }}>
-    Ready to record?
-  </div>
-  <div style={{
-    fontWeight: 900,
-    fontSize: 'clamp(38px, 5vw, 72px)',
-    letterSpacing: '-0.03em',
-    textTransform: 'uppercase',
-    lineHeight: 0.88,
-    color: '#fafafa',
-    marginBottom: 28,
-  }}>
-    Book a<br />Studio Session
-  </div>
-  <Link
-    href="/book?service=studio"
-    style={{
-      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-      padding: '13px 28px',
-      fontWeight: 900, fontSize: 10, letterSpacing: '0.18em',
-      textTransform: 'uppercase', textDecoration: 'none',
-      background: '#fafafa', color: '#080808',
-      border: 'none', cursor: 'pointer',
-      transition: 'background 0.2s',
-    }}
-  >
-    Choose a Time →
-  </Link>
-</section>
-```
-
-- [ ] **Step 3: Remove unused imports**
-
-Same pattern as Task 10 Step 3 — drop `CalendlyEmbed` import if no other embed remains. Leave `CALENDLY_EVENT_URLS` if other code still references it. Ensure `Link` from `next/link` is imported.
-
-- [ ] **Step 4: Verify**
-
-Open: `http://localhost:3000/studio`
-Scroll to where the Calendly used to be. Expected: CTA block. Click "Choose a Time →". Expected: lands on `/book?service=studio` with Studio card pre-selected.
-
-- [ ] **Step 5: Commit**
-
-```bash
-git add app/studio/page.tsx
-git commit -m "feat(studio): replace inline Calendly with CTA to /book"
-```
+The `/booking` hub serves a different audience: users who land via nav, ads, or the homepage's Book CTA — i.e., users who haven't already chosen.
 
 ---
 
@@ -909,33 +887,33 @@ git commit -m "feat(studio): replace inline Calendly with CTA to /book"
 
 ### Task 12: Cross-device QA + final verification
 
-- [ ] **Step 1: Run the full dev server build to surface compile errors**
+- [ ] **Step 1: Run the full build to surface compile errors**
 
 Run: `npm run build`
-Expected: build succeeds. Any TypeScript or ESLint errors must be resolved before continuing. Common issues:
-- Unused imports left over from Tasks 10 / 11.
-- The `BookContent.tsx` import path for `CalendlyEmbed` (must be `../../../components/CalendlyEmbed`, three levels up).
-- Missing `'use client'` directive on `BookContent.tsx` or `MobileJumpNav.tsx`.
+Expected: build succeeds. Common issues to watch:
+- The `BookingContent.tsx` import path for `CalendlyEmbed` (must be `../../components/CalendlyEmbed` from `app/booking/`).
+- Missing `'use client'` directive on `BookingContent.tsx` or `MobileJumpNav.tsx`.
+- Unused imports flagged by ESLint.
 
-- [ ] **Step 2: Manual QA matrix — desktop**
+- [ ] **Step 2: Manual QA matrix — desktop (1440px)**
 
 Run: `npm run dev`
-Test in DevTools at 1440px:
-- `/` — homepage. Hero, marquee, releases, about, studio, footer. Nav shows desktop links + Book pill. Hover states fire on nav links.
-- `/book` — picker hero, three cards, no embed shown until click. Click each card; embed loads, URL updates.
-- `/book?service=tutoring` — tutoring pre-selected.
-- `/book?service=studio` — studio pre-selected.
-- `/book?service=mixing` — mixing pre-selected.
-- `/booking` — redirects to `/book` (URL bar shows `/book`).
-- `/tutoring` — page renders, no Calendly embed, CTA → `/book?service=tutoring` works.
-- `/studio` — page renders, no Calendly embed, CTA → `/book?service=studio` works.
+- `/` — homepage. Nav shows `Music · Studio · Shop · Contact` + white "Book →" pill. Hover states fire on nav links.
+- `/booking` — picker hero, three cards, no embed until click. Studio click → embed loads. Mixing click → embed loads. Tutoring click → mode toggle appears (Online / In-Person), pick one → embed loads.
+- `/booking?service=studio` — studio pre-selected, embed loads immediately.
+- `/booking?service=mixing` — mixing pre-selected, embed loads immediately.
+- `/booking?service=tutoring` — tutoring pre-selected, mode toggle visible (no auto-pick).
+- `/booking?service=tutoring&mode=online` — mode pre-selected, online tutoring embed loads, "← Switch mode" link visible above the embed.
+- `/booking?service=tutoring&mode=in-person` — same as above for in-person.
+- `/tutoring` — unchanged from current state. Inline Calendly embed still present and functional. Phase 2 will restyle it.
+- `/studio` — unchanged from current state. Inline Calendly embed still present and functional. Phase 3 will restyle it.
 
 - [ ] **Step 3: Manual QA matrix — mobile (iPhone 14, 390 × 844)**
 
 In DevTools mobile mode:
-- `/` — hero scales down via clamp. Tap hamburger; mobile menu opens with `Music · Studio · Tutoring · Contact` + Book pill. Scroll down past hero — jump nav appears at top with chips. Tap each chip; page scrolls to anchor or navigates.
-- `/book` — cards stack vertically. Tap a card; embed loads below.
-- `/tutoring`, `/studio` — pages render at narrow width. Horizontal padding feels comfortable (24px not 48px). CTAs are tap-target-sized.
+- `/` — hero scales down via clamp. Tap hamburger; mobile menu opens with `Music · Studio · Shop · Contact` + Book pill at the bottom. Scroll down past hero — jump nav appears at top with `Studio · Music · About · Book` chips. Tap each chip; page scrolls to anchor or navigates to `/booking`.
+- `/booking` — cards stack vertically. Tap "Tutoring" → mode toggle appears below the cards. Tap a mode → embed loads. Embed has comfortable horizontal padding (not edge-touching).
+- Visual check on the homepage: grid-two-col info cells (about, studio sections) have visibly tighter horizontal padding (24px) vs desktop's 48px.
 
 - [ ] **Step 4: Verify the homepage Lighthouse mobile score has not regressed**
 
@@ -975,11 +953,13 @@ Edit `~/Claude/plans/2026-04-24-website-overhaul.md`. Change the Phase 1 row fro
 
 Phase 1 is complete when all of these pass:
 
-- [ ] `/book` page renders, three service cards select correctly, Calendly embed loads on selection, deep-links via `?service=` work.
-- [ ] `/booking` 301-redirects to `/book`.
-- [ ] Homepage on mobile (iPhone 14 viewport): jump nav appears past hero, anchors work, hamburger menu shows Book pill.
-- [ ] Homepage on desktop: nav shows new link set + white Book CTA pill on right.
-- [ ] `/tutoring` and `/studio` pages have no inline Calendly; CTAs route to `/book?service=...` with the correct card pre-selected.
+- [ ] `/booking` renders the new Design-DNA picker (hero + 3 cards). All three services select correctly.
+- [ ] Studio and Mixing cards reveal Calendly directly. Tutoring card reveals an Online/In-Person toggle, then the embed.
+- [ ] Deep-links work: `/booking?service=tutoring&mode=online`, `/booking?service=tutoring&mode=in-person`, `/booking?service=studio`, `/booking?service=mixing`.
+- [ ] Tutoring prices reflect the correct rates (£45 online, £60 in-person). Bulk-discount note visible on the tutoring card.
+- [ ] Homepage on mobile (iPhone 14 viewport): jump nav appears past hero with `Studio · Music · About · Book`, anchors work, hamburger menu shows Book pill.
+- [ ] Homepage on desktop: nav shows `Music · Studio · Shop · Contact` (Shop kept) plus a white "Book →" CTA pill on the right.
+- [ ] `/tutoring` and `/studio` are unchanged — their inline Calendly embeds still work for direct booking.
 - [ ] `npm run build` succeeds with no errors or warnings.
 - [ ] Mobile horizontal padding is visibly tightened (24px) on grid-two-col cells without breaking desktop.
 
