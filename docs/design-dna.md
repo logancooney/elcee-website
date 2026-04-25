@@ -309,11 +309,194 @@ All headline sizing is handled by `clamp(min, vw, max)` inside inline styles. No
 
 ## Spacing rhythm
 
-*To be filled in Task A3.*
+All spacing on the homepage is pixel-based in inline `style={...}`. No `py-*` / `px-*` Tailwind utilities are used.
+
+### Section vertical padding
+
+| Section | Padding | Notes |
+|---|---|---|
+| Hero | `height: 100vh; minHeight: 640; paddingBottom: 72` | Full viewport, content bottom-anchored with 72px breathing room |
+| Marquee | `padding: 11px 0` | Thin horizontal band |
+| Releases header row | `padding: 48px 48px 20px` | Top 48, sides 48, bottom 20 (tight to the rows below) |
+| Release info cell | `padding: 32px 40px` | Vertical 32, horizontal 40 |
+| About info cell | `padding: 64px 48px` | Larger vertical breathing room |
+| Studio info cell | `padding: 64px 48px` | Same as About |
+| Footer | `padding: 48px 48px 36px` | Top 48, sides 48, bottom 36 |
+| Nav (scrolled) | `padding: 14px 48px` | |
+| Nav (idle) | `padding: 20px 48px` | |
+
+> **Tension with CLAUDE.md:** CLAUDE.md says "Default to `py-24` or `py-32` for major sections, not `py-12`" (i.e. 96–128px). Homepage uses `64px` vertical on info cells. Sections feel tighter than CLAUDE.md prescribes. For interior-page rebuilds, match the homepage density (64px info-cell padding) over CLAUDE.md's generous `py-24` — the homepage is the source of truth for the current aesthetic.
+
+### Horizontal padding
+
+- Section / row outer horizontal padding: `48px` (desktop).
+- No explicit mobile override observed — the two-column grid collapses to one column via `.grid-two-col` media query at `max-width: 768px` but the `48px` horizontal padding remains (potential squeeze on mobile — flag for Phase 1 mobile work).
+
+### Max-widths
+
+| Context | Max-width | Source |
+|---|---|---|
+| Hero content | none (centred in full-viewport) | Hero `textAlign: center` |
+| Body paragraph on dark | `380px` | About paragraph |
+| Body paragraph on light | `340px` | Studio paragraph |
+| Hero content padding | `0 24px` | Inline on hero content wrapper |
+
+> **Tension with CLAUDE.md:** CLAUDE.md recommends `max-w-5xl` / `max-w-4xl` for content (≈ 1024/896px) and `max-w-3xl` / `max-w-2xl` for reading (≈ 768/672px). Homepage body copy is much narrower (`340–380px`). This narrower reading measure is an editorial / fashion-mag signal, not a blog signal. **Use the homepage `340–380px` for body copy.**
+
+### Gaps
+
+- Hero CTA row: `gap: 14` (between buttons).
+- Nav desktop links: `gap: 36`.
+- Mobile menu items: `gap: 40`.
+- Footer social links: `gap: 28`.
+
+### Two-column grid (`.grid-two-col`)
+
+Defined in `app/globals.css`:
+```css
+.grid-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+@media (max-width: 768px) {
+  .grid-two-col {
+    grid-template-columns: 1fr;
+  }
+  .marquee-hide-mobile {
+    display: none;
+  }
+}
+```
+
+Used by every split row on the homepage (Releases, About, Studio). Mobile collapses to single column at `≤ 768px`.
+
+---
 
 ## Motion patterns
 
-*To be filled in Task A3.*
+### Framer Motion — `fadeUp` variant (homepage lines 28–33)
+
+The single canonical scroll-reveal variant used across the homepage:
+
+```tsx
+const fadeUp = {
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 } as { opacity: number; y: number },
+  transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] },
+  viewport: { once: true, margin: '-80px' },
+};
+```
+
+Applied via spread:
+```tsx
+<motion.div {...fadeUp}>…</motion.div>
+<motion.section {...fadeUp}>…</motion.section>
+```
+
+**Load-bearing values — copy verbatim:**
+- `opacity: 0 → 1`
+- `y: 24 → 0` (24px upward translate)
+- `duration: 0.7` (NB: CLAUDE.md says 0.6; homepage is 0.7 — use 0.7 for parity)
+- `ease: [0.25, 0.1, 0.25, 1]` (ease-out cubic — identical to CLAUDE.md)
+- `viewport.once: true` (reveal only on first entry)
+- `viewport.margin: '-80px'` (fire when 80px before the element enters viewport)
+
+### Elements that use `fadeUp` on the homepage
+
+| Element | Line |
+|---|---|
+| Each `ReleaseRow` outer `motion.div` | 90 |
+| Releases section header `motion.div` | 369 |
+| About `motion.section` | 460 |
+| Studio `motion.section` | 501 |
+
+### Stagger
+
+No `staggerChildren` is used on the homepage. CLAUDE.md references `staggerChildren: 0.1` as a pattern — **derived from CLAUDE.md, no homepage example.** If interior pages introduce stagger, use:
+
+```tsx
+variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
+```
+
+### Smooth scroll — Lenis
+
+Wrapped at root in `app/layout.tsx` via `LenisProvider`:
+```tsx
+<LenisProvider>
+  {children}
+</LenisProvider>
+```
+
+`LenisProvider` implementation (`app/components/LenisProvider.tsx`):
+```tsx
+import { ReactLenis } from 'lenis/react';
+return <ReactLenis root>{children}</ReactLenis>;
+```
+
+No configuration options are passed — default Lenis easing applies globally.
+
+### Scroll-driven parallax (hero)
+
+Implemented **manually** via `useEffect` + refs in `app/page.tsx` lines 115–133 — not via Framer Motion scroll APIs:
+
+```tsx
+const handleScroll = () => {
+  const y = window.scrollY;
+  setNavScrolled(y > 60);
+  if (heroParallaxRef.current) {
+    heroParallaxRef.current.style.transform = `translateY(${y * 0.35}px)`;
+  }
+  if (heroImgRef.current && heroRef.current) {
+    const heroH = heroRef.current.offsetHeight;
+    const fade = Math.max(0, 0.45 - (y / (heroH * 0.55)) * 0.45);
+    heroImgRef.current.style.opacity = String(fade);
+  }
+  if (heroRef.current) {
+    setShowAvatar(y > heroRef.current.offsetHeight * 0.95);
+  }
+};
+window.addEventListener('scroll', handleScroll, { passive: true });
+```
+
+**Rules:**
+- Parallax multiplier `0.35` — photo translates 35% of scroll distance. (CLAUDE.md "parallax that moves more than 20px" — on a tall hero, 35% can exceed 20px at the lower scroll range; accept as-is since this is the current canonical aesthetic.)
+- Hero photo opacity fades from `0.45 → 0` over the lower 55% of hero height.
+- Nav state flips to scrolled at `scrollY > 60`.
+- Avatar watermark appears after scrolling past ~95% of hero height.
+
+### CSS keyframe animations (`app/globals.css`)
+
+```css
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50%       { opacity: 0.7; transform: scaleY(0.6); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+```
+
+- `marqueeScroll` — 18s linear infinite, applied to the marquee inner row (homepage line 347).
+- `scrollPulse` — 2s ease-in-out infinite, applied to the hero scroll-cue line (homepage line 334).
+- `fade-in` — 0.3s ease-out, utility class `.animate-fade-in` for widget mounts.
+
+### Hover transitions
+
+Every interactive element declares `transition` inline:
+- Nav links: `transition: 'color 0.2s'`
+- Outline buttons: `transition: 'border-color 0.2s'`
+- Primary button: `transition: 'background 0.2s'`
+- Studio CTA: `transition: 'opacity 0.2s'`
+- Release info cell bg image (via CSS): `transition: opacity 0.4s ease`
+
+Standard hover duration: **`0.2s`** for colour/background swaps, **`0.4s`** for image cross-fades.
 
 ## Section archetypes
 
