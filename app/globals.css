@@ -45,3 +45,86 @@ h1, h2, h3, h4, h5, h6 {
 .animate-fade-in {
   animation: fade-in 0.3s ease-out;
 }
+
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50%       { opacity: 0.7; transform: scaleY(0.6); }
+}
+
+.release-info-bg {
+  transition: opacity 0.4s ease;
+}
+.release-info-cell:hover .release-info-bg {
+  opacity: 0.04 !important;
+}
+
+.release-info-texture {
+  position: absolute;
+  inset: 0;
+  background-image: url(/grunge-texture.jpg);
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.release-info-cell:hover .release-info-texture {
+  opacity: 0.55;
+}
+
+.grid-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+@media (max-width: 768px) {
+  .grid-two-col {
+    grid-template-columns: 1fr;
+  }
+  .marquee-hide-mobile {
+    display: none;
+  }
+  .grid-two-col > div {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+}
+
+/* 3-up desktop, stack mobile — used by /booking service picker */
+.grid-three-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+@media (max-width: 768px) {
+  .grid-three-col {
+    grid-template-columns: 1fr;
+  }
+  .grid-three-col > button {
+    border-left: none !important;
+    border-top: 1px solid #1a1a1a;
+  }
+  .grid-three-col > button:first-child {
+    border-top: none;
+  }
+}
+
+/* Mobile padding override — opt-in via .section-pad */
+.section-pad {
+  padding-left: 48px;
+  padding-right: 48px;
+}
+@media (max-width: 768px) {
+  .section-pad {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
