@@ -1,16 +1,14 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { upsertContact, logEvent } from '@/lib/supabase-contacts';
+import { rateLimit, ipKey } from '@/lib/rate-limit';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function getSupabase() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) return null;
-  return { url, key };
-}
-
 export async function POST(request: Request) {
+  if (!rateLimit(ipKey(request), 5, 60_000)) {
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
+  }
   try {
     const body = await request.json();
     const { email, name: rawName } = body;
@@ -21,24 +19,18 @@ export async function POST(request: Request) {
 
     const safeName = typeof rawName === 'string' ? rawName.trim().slice(0, 100) : null;
 
-    const db = getSupabase();
-    if (db) {
-      await fetch(`${db.url}/rest/v1/studio_leads`, {
-        method: 'POST',
-        headers: {
-          apikey: db.key,
-          Authorization: `Bearer ${db.key}`,
-          'Content-Type': 'application/json',
-          Prefer: 'return=minimal',
-        },
-        body: JSON.stringify({
-          email,
-          name: safeName,
-          source: 'free-page-discount',
-          service: 'discount-capture',
-          status: 'new',
-          notes: 'Requested WELCOME10 discount code',
-        }),
+    const contactId = await upsertContact({
+      email,
+      name: safeName,
+      source: 'free-page-discount',
+      notes: 'Requested WELCOME10 discount code',
+    });
+
+    if (contactId) {
+      await logEvent({
+        contactId,
+        eventType: 'discount_requested',
+        metadata: { code: 'WELCOME10' },
       });
     }
 

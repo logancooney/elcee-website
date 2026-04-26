@@ -2,6 +2,12 @@ import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
+
+  const debugKey = process.env.DEBUG_SECRET;
+  if (!debugKey || searchParams.get('key') !== debugKey) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const date = searchParams.get('date') || '2026-02-28';
 
   const MATON_KEY = process.env.MATON_API_KEY;

@@ -1,11 +1,6 @@
 import { NextResponse } from 'next/server';
-
-function getSupabase() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) return null;
-  return { url, key };
-}
+import { upsertContact, logEvent } from '@/lib/supabase-contacts';
+import { rateLimit, ipKey } from '@/lib/rate-limit';
 
 function getResend() {
   if (!process.env.RESEND_API_KEY) return null;
@@ -13,26 +8,29 @@ function getResend() {
   return new Resend(process.env.RESEND_API_KEY);
 }
 
-const MAGNETS: Record<string, { label: string; service: string }> = {
+const MAGNETS: Record<string, { label: string; slug: string }> = {
   'release-checklist': {
     label: 'Music Release Checklist',
-    service: 'lead-magnet-release-checklist',
+    slug: 'release-checklist',
   },
   'stem-prep-guide': {
     label: 'Stem Prep Guide for Mix Engineers',
-    service: 'lead-magnet-stem-prep',
+    slug: 'stem-prep-guide',
   },
   'home-recording-guide': {
     label: 'Home Recording Guide for Rappers',
-    service: 'lead-magnet-home-recording',
+    slug: 'home-recording-guide',
   },
   'mix-ready-checklist': {
     label: 'Mix-Ready Track Checklist',
-    service: 'lead-magnet-mix-ready',
+    slug: 'mix-ready-checklist',
   },
 };
 
 export async function POST(request: Request) {
+  if (!rateLimit(ipKey(request), 10, 60_000)) {
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
+  }
   try {
     const { email, name, magnet } = await request.json();
 
@@ -40,31 +38,23 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
     }
 
-    const { label, service } = MAGNETS[magnet];
+    const { label, slug } = MAGNETS[magnet];
 
-    // 1. Log to Supabase studio_leads
-    const db = getSupabase();
-    if (db) {
-      await fetch(`${db.url}/rest/v1/studio_leads`, {
-        method: 'POST',
-        headers: {
-          apikey: db.key,
-          Authorization: `Bearer ${db.key}`,
-          'Content-Type': 'application/json',
-          Prefer: 'return=minimal',
-        },
-        body: JSON.stringify({
-          email,
-          name: name || null,
-          source: 'free-page',
-          service,
-          status: 'new',
-          notes: `Downloaded: ${label}`,
-        }),
+    const contactId = await upsertContact({
+      email,
+      name: name || null,
+      source: 'free-page',
+      notes: `Downloaded: ${label}`,
+    });
+
+    if (contactId) {
+      await logEvent({
+        contactId,
+        eventType: 'lead_magnet_download',
+        metadata: { magnet: slug, label },
       });
     }
 
-    // 2. Send confirmation email via Resend
     const resend = getResend();
     if (resend) {
       await resend.emails.send({
