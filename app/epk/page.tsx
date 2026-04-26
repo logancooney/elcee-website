@@ -1,268 +1,285 @@
-import Image from "next/image";
-import Link from "next/link";
-import Navigation from "../components/Navigation";
+import Image from 'next/image';
+import Link from 'next/link';
+import Navigation from '../components/Navigation';
+import SiteFooter from '../components/SiteFooter';
 
 export const metadata = {
-  title: "EPK - Electronic Press Kit | Elcee the Alchemist",
-  description: "Electronic Press Kit for Elcee the Alchemist - Manchester alternative rap artist. Press photos, bio, music, and booking information.",
+  title: 'EPK - Electronic Press Kit | Elcee the Alchemist',
+  description: 'Electronic Press Kit for Elcee the Alchemist - Manchester alternative rap artist. Press photos, bio, music, and booking information.',
 };
+
+const STREAM_LINKS = [
+  { label: 'Spotify', sub: 'Stream full discography', href: 'https://open.spotify.com/artist/6E8xwOloHnzGWVlNV9K8n7' },
+  { label: 'Apple Music', sub: 'Stream full discography', href: 'https://music.apple.com/gb/artist/elcee-the-alchemist/1479992060' },
+  { label: 'YouTube', sub: 'Music videos & visuals', href: 'https://youtube.com/@elceethealchemist' },
+  { label: 'Bandcamp', sub: 'Support directly', href: 'https://elceethealchemist.bandcamp.com' },
+];
+
+const SOCIAL_LINKS = [
+  { label: 'Instagram', handle: '@elceethealchemist', href: 'https://instagram.com/elceethealchemist' },
+  { label: 'TikTok', handle: '@elceethealchemist', href: 'https://tiktok.com/@elceethealchemist' },
+  { label: 'Twitter / X', handle: '@elceejpg', href: 'https://twitter.com/elceejpg' },
+  { label: 'YouTube', handle: '@elceethealchemist', href: 'https://youtube.com/@elceethealchemist' },
+  { label: 'Facebook', handle: '@elceethealchemist', href: 'https://facebook.com/elceethealchemist' },
+  { label: 'SoundCloud', handle: '@elceethealchemist', href: 'https://soundcloud.com/elceethealchemist' },
+];
+
+const BIO_PARAS = [
+  `Elcee the Alchemist is an independent alternative rap artist from Manchester, England, who has spent six years carving out a unique space in the UK music scene. Operating completely solo — without a team, manager, or label — Elcee embodies the DIY spirit, controlling every aspect of his artistic vision from production to performance.`,
+  `As both a skilled recording engineer and producer, Elcee not only creates his own music but also runs a professional recording studio, working with artists across Manchester and beyond. This dual role gives him a deep understanding of both the creative and technical sides of music production, reflected in the polished, experimental soundscapes that define his work.`,
+  `His music blends raw, introspective lyricism with alchemical production — transforming pain, ambition, and social commentary into tracks that push the boundaries of alternative rap. Influenced by both UK underground culture and global hip-hop, Elcee's sound is distinctly his own: gritty, atmospheric, and unapologetically authentic.`,
+  `In 2026, Elcee is committing to an aggressive release schedule: a minimum of 2 tracks per month, alongside multiple EPs. This relentless output is part of his evolution as an artist — building momentum, expanding his reach, and cementing his place in the alternative rap landscape.`,
+];
+
+const SHORT_BIO = `Elcee the Alchemist is a Manchester-based alternative rap artist with six years of independent experience. Operating solo without a team or label, he creates raw, introspective music that pushes genre boundaries. As a recording engineer, producer, and performer, Elcee controls every aspect of his craft. In 2026, he's releasing a minimum of 2 tracks per month, building momentum across streaming platforms and live performances. He also teaches music production in Manchester, helping develop the next generation of artists while cementing his place in the UK alternative rap scene.`;
 
 export default function EPKPage() {
   return (
-    <div className="min-h-screen bg-white text-black">
-      {/* Navigation */}
-      <Navigation theme="light" />
+    <div style={{ background: '#080808', color: '#fafafa', overflowX: 'hidden' }}>
+      <Navigation />
 
-      {/* Header */}
-      <section className="pt-32 pb-12 px-6 bg-black text-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4">Electronic Press Kit</h1>
-          <p className="text-xl text-gray-400">Elcee the Alchemist</p>
-        </div>
-      </section>
-
-      {/* Quick Facts */}
-      <section className="py-12 px-6 border-b border-black/10">
-        <div className="max-w-4xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8 text-center">
-            <div>
-              <h3 className="font-bold mb-2">Genre</h3>
-              <p className="text-gray-600">Alternative Rap</p>
-            </div>
-            <div>
-              <h3 className="font-bold mb-2">Location</h3>
-              <p className="text-gray-600">Manchester, England</p>
-            </div>
-            <div>
-              <h3 className="font-bold mb-2">Experience</h3>
-              <p className="text-gray-600">6 Years</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Bio */}
-      <section className="py-16 px-6">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold mb-8">Biography</h2>
-          
-          <div className="space-y-6 text-lg leading-relaxed">
-            <p>
-              <strong>Elcee the Alchemist</strong> is an independent alternative rap artist from Manchester, England, 
-              who has spent six years carving out a unique space in the UK music scene. Operating completely solo — 
-              without a team, manager, or label — Elcee embodies the DIY spirit, controlling every aspect of his 
-              artistic vision from production to performance.
-            </p>
-            
-            <p>
-              As both a skilled recording engineer and producer, Elcee not only creates his own music but also runs 
-              a professional recording studio, working with artists across Manchester and beyond. This dual role gives 
-              him a deep understanding of both the creative and technical sides of music production, reflected in the 
-              polished, experimental soundscapes that define his work.
-            </p>
-            
-            <p>
-              His music blends raw, introspective lyricism with alchemical production — transforming pain, ambition, 
-              and social commentary into tracks that push the boundaries of alternative rap. Influenced by both UK 
-              underground culture and global hip-hop, Elcee's sound is distinctly his own: gritty, atmospheric, and 
-              unapologetically authentic.
-            </p>
-            
-            <p>
-              In 2026, Elcee is committing to an aggressive release schedule: a minimum of 2 tracks per month, 
-              alongside multiple EPs. This relentless output is part of his evolution as an artist — building 
-              momentum, expanding his reach, and cementing his place in the alternative rap landscape.
-            </p>
-            
-            <p>
-              Beyond the music, Elcee is also an educator, teaching music production and songwriting to the next 
-              generation of Manchester talent. His mission is clear: create transformative music, support other 
-              artists, and prove that independence doesn't mean compromise — it means control.
-            </p>
-          </div>
-
-          <div className="mt-12 p-8 bg-black text-white">
-            <h3 className="text-2xl font-bold mb-4">Short Bio (100 words)</h3>
-            <p className="leading-relaxed">
-              Elcee the Alchemist is a Manchester-based alternative rap artist with six years of independent 
-              experience. Operating solo without a team or label, he creates raw, introspective music that pushes 
-              genre boundaries. As a recording engineer, producer, and performer, Elcee controls every aspect of 
-              his craft. In 2026, he's releasing a minimum of 2 tracks per month, building momentum across streaming 
-              platforms and live performances. He also teaches music production in Manchester, helping develop the 
-              next generation of artists while cementing his place in the UK alternative rap scene.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Press Photos */}
-      <section className="py-16 px-6 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold mb-8">Press Photos</h2>
-          <p className="text-gray-600 mb-8">High-resolution images available for press and promotional use.</p>
-          
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="border border-black/10 p-4 bg-white">
-              <Image 
-                src="/photos/press-shot-bw.jpg" 
-                alt="Elcee the Alchemist - Press Photo 1" 
-                width={600} 
-                height={800}
-                className="w-full h-auto mb-4"
-              />
-              <a 
-                href="/photos/press-shot-bw.jpg" 
-                download 
-                className="inline-block bg-black text-white px-6 py-2 text-sm font-medium hover:bg-gray-800 transition"
-              >
-                Download High-Res
-              </a>
-            </div>
-            
-            {/* Placeholder for more photos */}
-            <div className="border border-black/10 p-4 bg-white flex items-center justify-center min-h-[400px]">
-              <p className="text-gray-400 text-center">Additional press photos<br/>coming soon</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Music & Streaming */}
-      <section className="py-16 px-6">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold mb-8">Music & Streaming</h2>
-          
-          <div className="grid md:grid-cols-2 gap-6 mb-12">
-            <a 
-              href="https://open.spotify.com/artist/6E8xwOloHnzGWVlNV9K8n7" 
-              className="border-2 border-black p-6 hover:bg-black hover:text-white transition"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <h3 className="text-xl font-bold mb-2">Spotify</h3>
-              <p className="text-sm opacity-70">Stream full discography</p>
-            </a>
-            
-            <a 
-              href="https://music.apple.com/gb/artist/elcee-the-alchemist/1479992060" 
-              className="border-2 border-black p-6 hover:bg-black hover:text-white transition"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <h3 className="text-xl font-bold mb-2">Apple Music</h3>
-              <p className="text-sm opacity-70">Stream full discography</p>
-            </a>
-            
-            <a 
-              href="https://youtube.com/@elceethealchemist" 
-              className="border-2 border-black p-6 hover:bg-black hover:text-white transition"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <h3 className="text-xl font-bold mb-2">YouTube</h3>
-              <p className="text-sm opacity-70">Music videos & visuals</p>
-            </a>
-            
-            <a 
-              href="https://elceethealchemist.bandcamp.com" 
-              className="border-2 border-black p-6 hover:bg-black hover:text-white transition"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <h3 className="text-xl font-bold mb-2">Bandcamp</h3>
-              <p className="text-sm opacity-70">Support directly</p>
-            </a>
-          </div>
-
-          {/* Stats placeholder */}
-          <div className="bg-black text-white p-8">
-            <h3 className="text-2xl font-bold mb-6">Statistics</h3>
-            <div className="grid md:grid-cols-3 gap-8 text-center">
-              <div>
-                <p className="text-4xl font-bold mb-2">6</p>
-                <p className="text-sm text-gray-400">Years Active</p>
-              </div>
-              <div>
-                <p className="text-4xl font-bold mb-2">24+</p>
-                <p className="text-sm text-gray-400">Tracks Planned 2026</p>
-              </div>
-              <div>
-                <p className="text-4xl font-bold mb-2">100%</p>
-                <p className="text-sm text-gray-400">Independent</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Social Media */}
-      <section className="py-16 px-6 bg-gray-50">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold mb-8">Social Media</h2>
-          
-          <div className="grid md:grid-cols-2 gap-4">
-            <a href="https://instagram.com/elceethealchemist" className="flex justify-between items-center border border-black/10 bg-white p-4 hover:border-black transition" target="_blank" rel="noopener noreferrer">
-              <span className="font-medium">Instagram</span>
-              <span className="text-sm text-gray-600">@elceethealchemist →</span>
-            </a>
-            
-            <a href="https://tiktok.com/@elceethealchemist" className="flex justify-between items-center border border-black/10 bg-white p-4 hover:border-black transition" target="_blank" rel="noopener noreferrer">
-              <span className="font-medium">TikTok</span>
-              <span className="text-sm text-gray-600">@elceethealchemist →</span>
-            </a>
-            
-            <a href="https://twitter.com/elceejpg" className="flex justify-between items-center border border-black/10 bg-white p-4 hover:border-black transition" target="_blank" rel="noopener noreferrer">
-              <span className="font-medium">Twitter/X</span>
-              <span className="text-sm text-gray-600">@elceejpg →</span>
-            </a>
-            
-            <a href="https://youtube.com/@elceethealchemist" className="flex justify-between items-center border border-black/10 bg-white p-4 hover:border-black transition" target="_blank" rel="noopener noreferrer">
-              <span className="font-medium">YouTube</span>
-              <span className="text-sm text-gray-600">@elceethealchemist →</span>
-            </a>
-            
-            <a href="https://facebook.com/elceethealchemist" className="flex justify-between items-center border border-black/10 bg-white p-4 hover:border-black transition" target="_blank" rel="noopener noreferrer">
-              <span className="font-medium">Facebook</span>
-              <span className="text-sm text-gray-600">@elceethealchemist →</span>
-            </a>
-            
-            <a href="https://soundcloud.com/elceethealchemist" className="flex justify-between items-center border border-black/10 bg-white p-4 hover:border-black transition" target="_blank" rel="noopener noreferrer">
-              <span className="font-medium">SoundCloud</span>
-              <span className="text-sm text-gray-600">@elceethealchemist →</span>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact */}
-      <section className="py-16 px-6 bg-black text-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-6">Booking & Press Inquiries</h2>
-          <p className="text-xl text-gray-400 mb-8">
-            For performances, interviews, collaborations, or press requests:
-          </p>
-          <Link 
-            href="/contact" 
-            className="inline-block bg-white text-black px-8 py-4 text-lg font-semibold hover:bg-gray-200 transition"
-          >
-            Get in Touch
-          </Link>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-12 px-6 border-t border-black/10">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-gray-600">© 2026 Elcee the Alchemist. All rights reserved.</p>
-          <Image 
-            src="/logos/ankh.png" 
-            alt="Ankh" 
-            width={30} 
-            height={30}
-            className="opacity-30"
+      {/* ── HERO ── */}
+      <section style={{
+        position: 'relative', width: '100%', height: '100vh', minHeight: 640,
+        overflow: 'hidden', display: 'flex', alignItems: 'flex-end',
+        paddingBottom: 72, paddingLeft: 48,
+      }}>
+        <div style={{
+          position: 'absolute', top: '-10%', left: 0, right: 0, bottom: '-10%',
+          background: '#111111',
+        }}>
+          <Image
+            src="/elcee-landscape.jpg"
+            alt=""
+            fill
+            priority
+            style={{ objectFit: 'cover', objectPosition: 'center 8%', filter: 'grayscale(100%) contrast(1.08)', opacity: 0.45 }}
           />
         </div>
-      </footer>
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: 'url(/grunge-texture.jpg)',
+          backgroundSize: 'cover', backgroundPosition: 'center',
+          opacity: 0.75, mixBlendMode: 'screen', pointerEvents: 'none',
+        } as React.CSSProperties} />
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to bottom, rgba(8,8,8,0.15) 0%, rgba(8,8,8,0.0) 40%, rgba(8,8,8,0.88) 100%)',
+          pointerEvents: 'none',
+        }} />
+        <div style={{ position: 'relative', zIndex: 2 }}>
+          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 16 }}>
+            Electronic Press Kit
+          </div>
+          <h1 style={{
+            fontWeight: 900, fontSize: 'clamp(56px, 9vw, 128px)',
+            lineHeight: 0.88, letterSpacing: '-0.03em', textTransform: 'uppercase',
+            color: '#fafafa', marginBottom: 28,
+          }}>
+            Elcee The<br />Alchemist
+          </h1>
+          <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+            {[
+              { label: 'Genre', value: 'Alternative Rap' },
+              { label: 'Location', value: 'Manchester, England' },
+              { label: 'Active', value: '6 Years' },
+            ].map(({ label, value }) => (
+              <div key={label}>
+                <p style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 4 }}>{label}</p>
+                <p style={{ fontWeight: 900, fontSize: 14 }}>{value}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── BIO — light section ── */}
+      <section style={{ background: '#f0ede8', color: '#080808', position: 'relative', overflow: 'hidden' }}>
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: 'url(/grunge-texture.jpg)',
+          backgroundSize: 'cover', opacity: 0.06, mixBlendMode: 'multiply', pointerEvents: 'none',
+        } as React.CSSProperties} />
+        <div className="grid-two-col" style={{ position: 'relative', zIndex: 1, minHeight: 520 }}>
+          <div style={{ padding: '64px 48px', borderRight: '2px solid rgba(0,0,0,0.08)' }}>
+            <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 16 }}>
+              Biography
+            </div>
+            <h2 style={{ fontWeight: 900, fontSize: 'clamp(38px, 5vw, 72px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.88, color: '#080808', marginBottom: 36 }}>
+              The Story
+            </h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {BIO_PARAS.map((para, i) => (
+                <p key={i} style={{ fontSize: 14, lineHeight: 1.9, color: 'rgba(0,0,0,0.6)' }}>{para}</p>
+              ))}
+            </div>
+          </div>
+          <div style={{ padding: '64px 48px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+            <div>
+              <p style={{ fontSize: 9, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 20 }}>Short Bio — 100 Words</p>
+              <div style={{ padding: '32px', background: '#080808', color: '#fafafa' }}>
+                <p style={{ fontSize: 14, lineHeight: 1.9, color: 'rgba(255,255,255,0.65)' }}>{SHORT_BIO}</p>
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', marginTop: 40 }}>
+              {[
+                { stat: '6', label: 'Years Active' },
+                { stat: '24+', label: 'Tracks 2026' },
+                { stat: '100%', label: 'Independent' },
+              ].map(({ stat, label }) => (
+                <div key={label}>
+                  <p style={{ fontWeight: 900, fontSize: 48, letterSpacing: '-0.04em', lineHeight: 1, color: '#080808', marginBottom: 4 }}>{stat}</p>
+                  <p style={{ fontSize: 10, color: 'rgba(0,0,0,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── PRESS PHOTOS ── */}
+      <section style={{ background: '#080808', borderTop: '1px solid #1a1a1a' }}>
+        <div style={{ padding: '48px 48px 32px', borderBottom: '1px solid #1a1a1a' }}>
+          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>
+            Press Photos
+          </div>
+          <h2 style={{ fontWeight: 900, fontSize: 'clamp(32px, 4vw, 64px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9 }}>
+            Photos
+          </h2>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.35)', marginTop: 10 }}>High-resolution images available for press and promotional use.</p>
+        </div>
+        <div className="grid-two-col" style={{ borderBottom: '1px solid #1a1a1a' }}>
+          <div style={{ position: 'relative', overflow: 'hidden', minHeight: 500, borderRight: '1px solid #1a1a1a' }}>
+            <Image
+              src="/elcee-portrait.jpg"
+              alt="Elcee the Alchemist — Press Photo"
+              fill
+              style={{ objectFit: 'cover', objectPosition: 'center 15%', filter: 'grayscale(100%) contrast(1.05)' }}
+            />
+            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '16px 24px', background: 'rgba(8,8,8,0.7)' }}>
+              <a href="/elcee-portrait.jpg" download style={{
+                fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase',
+                color: 'rgba(255,255,255,0.6)', textDecoration: 'none',
+              }}>
+                Download High-Res →
+              </a>
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 500 }}>
+            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.2)', letterSpacing: '0.1em', textAlign: 'center' }}>
+              Additional press photos<br />coming soon
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── STREAMING ── */}
+      <section style={{ background: '#f0ede8', color: '#080808', position: 'relative', overflow: 'hidden' }}>
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: 'url(/grunge-texture.jpg)',
+          backgroundSize: 'cover', opacity: 0.06, mixBlendMode: 'multiply', pointerEvents: 'none',
+        } as React.CSSProperties} />
+        <div style={{ padding: '48px 48px 32px', borderBottom: '1px solid rgba(0,0,0,0.08)', position: 'relative', zIndex: 1 }}>
+          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 12 }}>
+            Music &amp; Streaming
+          </div>
+          <h2 style={{ fontWeight: 900, fontSize: 'clamp(32px, 4vw, 64px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9, color: '#080808' }}>
+            Stream Now
+          </h2>
+        </div>
+        <div className="grid-two-col" style={{ position: 'relative', zIndex: 1, borderBottom: '1px solid rgba(0,0,0,0.08)' }}>
+          {STREAM_LINKS.map((link, i) => (
+            <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              padding: '40px 48px',
+              borderTop: i >= 2 ? '1px solid rgba(0,0,0,0.08)' : 'none',
+              borderLeft: i % 2 === 1 ? '1px solid rgba(0,0,0,0.08)' : 'none',
+              background: 'rgba(255,255,255,0.3)',
+              textDecoration: 'none', color: '#080808',
+              transition: 'background 0.2s',
+            }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.5)'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.3)'; }}
+            >
+              <div>
+                <p style={{ fontWeight: 900, fontSize: 18, letterSpacing: '-0.01em', marginBottom: 4 }}>{link.label}</p>
+                <p style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)' }}>{link.sub}</p>
+              </div>
+              <span style={{ fontSize: 20, opacity: 0.4 }}>→</span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      {/* ── SOCIAL ── */}
+      <section style={{ background: '#080808', borderTop: '1px solid #1a1a1a' }}>
+        <div style={{ padding: '48px 48px 32px', borderBottom: '1px solid #1a1a1a' }}>
+          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>
+            Social Media
+          </div>
+          <h2 style={{ fontWeight: 900, fontSize: 'clamp(32px, 4vw, 64px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9 }}>
+            Follow Along
+          </h2>
+        </div>
+        <div className="grid-two-col" style={{ borderBottom: '1px solid #1a1a1a' }}>
+          {SOCIAL_LINKS.map((link, i) => (
+            <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              padding: '28px 48px',
+              borderTop: i >= 2 ? '1px solid #1a1a1a' : 'none',
+              borderLeft: i % 2 === 1 ? '1px solid #1a1a1a' : 'none',
+              textDecoration: 'none', color: '#fafafa',
+              transition: 'background 0.2s',
+            }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#111111'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
+            >
+              <span style={{ fontWeight: 900, fontSize: 14, letterSpacing: '-0.01em' }}>{link.label}</span>
+              <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>{link.handle} →</span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      {/* ── BOOKING CTA — light section ── */}
+      <section style={{ background: '#f0ede8', color: '#080808', position: 'relative', overflow: 'hidden' }}>
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: 'url(/grunge-texture.jpg)',
+          backgroundSize: 'cover', opacity: 0.06, mixBlendMode: 'multiply', pointerEvents: 'none',
+        } as React.CSSProperties} />
+        <div className="grid-two-col" style={{ position: 'relative', zIndex: 1, minHeight: 320 }}>
+          <div style={{ padding: '64px 48px', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderRight: '2px solid rgba(0,0,0,0.08)' }}>
+            <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 16 }}>
+              Booking &amp; Press
+            </div>
+            <h2 style={{ fontWeight: 900, fontSize: 'clamp(32px, 4vw, 64px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.88, color: '#080808', marginBottom: 20 }}>
+              Enquiries
+            </h2>
+            <p style={{ fontSize: 14, lineHeight: 1.8, color: 'rgba(0,0,0,0.55)', maxWidth: 360, marginBottom: 32 }}>
+              For performances, interviews, collaborations, or press requests.
+            </p>
+            <Link href="/contact" style={{
+              display: 'inline-flex', alignItems: 'center', padding: '13px 28px',
+              fontWeight: 900, fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase',
+              background: '#080808', color: '#fafafa', textDecoration: 'none', alignSelf: 'flex-start',
+            }}>
+              Get in Touch →
+            </Link>
+          </div>
+          <div style={{ position: 'relative', overflow: 'hidden', background: '#d8d5d0', minHeight: 320 }}>
+            <Image
+              src="/elcee-landscape.jpg"
+              alt=""
+              fill
+              style={{ objectFit: 'cover', objectPosition: 'center 8%', filter: 'grayscale(30%)' }}
+            />
+          </div>
+        </div>
+      </section>
+
+      <SiteFooter />
     </div>
   );
 }
