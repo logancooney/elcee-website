@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import CalendlyEmbed from '../../components/CalendlyEmbed';
@@ -20,6 +20,8 @@ const fadeUp = {
 };
 
 export default function BookingContent() {
+  const heroParallaxRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLElement>(null);
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -31,6 +33,17 @@ export default function BookingContent() {
 
   const [selected, setSelected] = useState<BookServiceId | null>(initialService);
   const [mode, setMode] = useState<BookMode | null>(initialMode);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const y = window.scrollY;
+      if (heroParallaxRef.current) {
+        heroParallaxRef.current.style.transform = `translateY(${y * 0.35}px)`;
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -48,47 +61,60 @@ export default function BookingContent() {
 
   return (
     <>
+      {/* ── HERO ── */}
       <section
+        ref={heroRef}
         style={{
-          position: 'relative',
-          padding: '160px 48px 80px',
-          textAlign: 'center',
+          position: 'relative', width: '100%', height: '100vh', minHeight: 640,
+          overflow: 'hidden', display: 'flex', alignItems: 'flex-end',
+          paddingBottom: 72, paddingLeft: 48,
         }}
       >
-        <div
-          style={{
-            fontSize: 9,
-            letterSpacing: '0.3em',
-            textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.3)',
-            marginBottom: 14,
-          }}
-        >
-          01 — Book
-        </div>
-        <h1
-          style={{
+        <div ref={heroParallaxRef} style={{
+          position: 'absolute', top: '-10%', left: 0, right: 0, bottom: '-10%',
+          background: '#111111', willChange: 'transform',
+        }} />
+
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: 'url(/grunge-texture.jpg)',
+          backgroundSize: 'cover', backgroundPosition: 'center',
+          opacity: 0.75, mixBlendMode: 'screen', pointerEvents: 'none',
+        } as React.CSSProperties} />
+
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to bottom, rgba(8,8,8,0.4) 0%, rgba(8,8,8,0.1) 40%, rgba(8,8,8,0.88) 100%)',
+          pointerEvents: 'none',
+        }} />
+
+        <div style={{ position: 'relative', zIndex: 2 }}>
+          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 16 }}>
+            01 — Book
+          </div>
+          <h1 style={{
             fontWeight: 900,
-            fontSize: 'clamp(40px, 7vw, 96px)',
+            fontSize: 'clamp(56px, 9vw, 128px)',
             lineHeight: 0.88,
             letterSpacing: '-0.03em',
             textTransform: 'uppercase',
             color: '#fafafa',
-            marginBottom: 16,
-          }}
-        >
-          Book a<br />Session
-        </h1>
-        <div
-          style={{
-            fontSize: 13,
-            lineHeight: 1.8,
-            color: 'rgba(255,255,255,0.55)',
-            maxWidth: 480,
-            margin: '0 auto',
-          }}
-        >
-          Pick a service. Pick a time. We&rsquo;ll handle the rest.
+            marginBottom: 20,
+          }}>
+            Book a<br />Session
+          </h1>
+          <div style={{ fontSize: 13, lineHeight: 1.8, color: 'rgba(255,255,255,0.55)', maxWidth: 400 }}>
+            Pick a service. Pick a time. We&rsquo;ll handle the rest.
+          </div>
+        </div>
+
+        <div style={{
+          position: 'absolute', bottom: 24, left: '50%', transform: 'translateX(-50%)',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+          zIndex: 2, opacity: 0.3,
+        }}>
+          <div style={{ width: 1, height: 32, background: 'white', animation: 'scrollPulse 2s ease-in-out infinite' }} />
+          <span style={{ fontSize: 8, letterSpacing: '0.3em', textTransform: 'uppercase' }}>Scroll</span>
         </div>
       </section>
 
