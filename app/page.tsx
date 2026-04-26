@@ -1,145 +1,588 @@
-import Image from "next/image";
-import Link from "next/link";
-import { FeaturedRelease, MediaGrid } from "./components/MediaEmbeds";
-import Achievements from "./components/Achievements";
-import Navigation from "./components/Navigation";
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import type { ReactNode } from 'react';
+import SiteFooter from './components/SiteFooter';
+import MobileJumpNav from './components/MobileJumpNav';
+
+const outlineBtnStyle: React.CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '10px 20px',
+  fontWeight: 900,
+  fontSize: 9,
+  letterSpacing: '0.18em',
+  textTransform: 'uppercase',
+  textDecoration: 'none',
+  background: 'transparent',
+  color: '#fafafa',
+  border: '1.5px solid rgba(255,255,255,0.4)',
+  cursor: 'pointer',
+  transition: 'border-color 0.2s',
+  alignSelf: 'flex-start',
+};
+
+const fadeUp = {
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 } as { opacity: number; y: number },
+  transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] },
+  viewport: { once: true, margin: '-80px' },
+};
+
+interface ReleaseRowProps {
+  embed: ReactNode;
+  type: string;
+  name: ReactNode;
+  href: string;
+  hrefLabel: string;
+  reversed: boolean;
+  minHeight?: number;
+  infoBg?: string;
+  infoBgPosition?: string;
+}
+
+function ReleaseRow({ embed, type, name, href, hrefLabel, reversed, minHeight = 280, infoBg, infoBgPosition = 'center' }: ReleaseRowProps) {
+  const embedCell = (
+    <div style={{ position: 'relative', overflow: 'hidden', background: '#000', minHeight }}>
+      <div style={{ position: 'absolute', inset: 0 }}>{embed}</div>
+    </div>
+  );
+  const infoCell = (
+    <div
+      className="release-info-cell"
+      style={{
+        display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+        padding: '32px 40px', background: '#111111',
+        borderLeft: reversed ? 'none' : '1px solid #1a1a1a',
+        borderRight: reversed ? '1px solid #1a1a1a' : 'none',
+        minHeight,
+        position: 'relative', overflow: 'hidden',
+      }}
+    >
+      {infoBg && (
+        <div className="release-info-bg" style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: `url(${infoBg})`,
+          backgroundSize: 'cover', backgroundPosition: infoBgPosition,
+          opacity: 0.28,
+          pointerEvents: 'none',
+        }} />
+      )}
+      <div className="release-info-texture" />
+      <div>
+        <div style={{ fontSize: 8, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.25)', marginBottom: 8 }}>
+          {type}
+        </div>
+        <div style={{ fontWeight: 900, fontSize: 'clamp(20px, 2.5vw, 34px)', letterSpacing: '-0.02em', textTransform: 'uppercase', lineHeight: 1, color: '#fafafa' }}>
+          {name}
+        </div>
+      </div>
+      <a href={href} target="_blank" rel="noopener noreferrer" style={outlineBtnStyle}>
+        {hrefLabel}
+      </a>
+    </div>
+  );
+
+  return (
+    <motion.div
+      {...fadeUp}
+      className="grid-two-col"
+      style={{ borderBottom: '1px solid #1a1a1a' }}
+    >
+      {reversed ? <>{infoCell}{embedCell}</> : <>{embedCell}{infoCell}</>}
+    </motion.div>
+  );
+}
+
+const NAV_LINKS = [
+  { label: 'Music', href: '#releases' },
+  { label: 'Studio', href: '/studio' },
+  { label: 'Shop', href: '/shop' },
+  { label: 'Contact', href: '/contact' },
+];
+
+const NAV_CTA = { label: 'Book', href: '/booking' };
 
 export default function Home() {
+  const [navScrolled, setNavScrolled] = useState(false);
+  const [showAvatar, setShowAvatar] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const heroParallaxRef = useRef<HTMLDivElement>(null);
+  const heroImgRef = useRef<HTMLImageElement>(null);
+  const heroRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const y = window.scrollY;
+      setNavScrolled(y > 60);
+      if (heroParallaxRef.current) {
+        heroParallaxRef.current.style.transform = `translateY(${y * 0.35}px)`;
+      }
+      if (heroImgRef.current && heroRef.current) {
+        const heroH = heroRef.current.offsetHeight;
+        const fade = Math.max(0, 0.45 - (y / (heroH * 0.55)) * 0.45);
+        heroImgRef.current.style.opacity = String(fade);
+      }
+      if (heroRef.current) {
+        setShowAvatar(y > heroRef.current.offsetHeight * 0.95);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-black text-white">
-      {/* Navigation */}
-      <Navigation />
+    <div style={{ background: '#080808', color: '#fafafa', overflowX: 'hidden' }}>
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 px-6">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-          <div className="order-2 md:order-1">
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-              ELCEE THE ALCHEMIST
-            </h1>
-            <p className="text-xl text-gray-400 mb-8 leading-relaxed">
-              Alternative rap artist from Manchester pushing boundaries with raw lyricism and alchemical soundscapes.
-            </p>
-            <div className="flex gap-4">
-              <a 
-                href="https://open.spotify.com/artist/6E8xwOloHnzGWVlNV9K8n7" 
-                className="bg-white text-black px-10 py-4 font-bold rounded-full hover:bg-gray-200 transition-all duration-300"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Listen Now
-              </a>
-              <Link 
-                href="/studio" 
-                className="border-2 border-white px-10 py-4 font-bold rounded-full hover:bg-white hover:text-black transition-all duration-300"
-              >
-                Book Studio
-              </Link>
-            </div>
-          </div>
-          <div className="order-1 md:order-2">
-            <Image 
-              src="/photos/press-shot-bw.jpg" 
-              alt="Elcee the Alchemist" 
-              width={600} 
-              height={800}
-              className="w-full h-auto grayscale"
-              priority
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Latest Releases - MOVED UP before About */}
-      <MediaGrid />
-
-      {/* Avatar Overlay Container - spans multiple sections */}
-      <div className="relative bg-white">
-        {/* Avatar - floats over right side of multiple sections */}
-        <div className="hidden md:block absolute right-0 top-0 bottom-0 w-1/2 pointer-events-none z-10">
-          <div className="sticky top-16 h-screen flex items-start justify-end pr-6 pt-12">
-            <Image 
-              src="/elcee-avatar.png" 
-              alt="Elcee the Alchemist" 
-              width={700} 
-              height={900}
-              className="w-auto max-h-[85vh] object-contain"
-              priority
-            />
-          </div>
-        </div>
-
-        {/* Bio Section - centered text with strategic line breaks */}
-        <section className="py-20 px-6 text-black relative">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold mb-8">About</h2>
-            <div className="space-y-6">
-              <p className="text-lg leading-relaxed">
-                Elcee the Alchemist is redefining UK Alternative Rap. Winner of the JBL Martin Garrix Music Academy 
-                and named an adidas Rising Star, he's recorded at Abbey Road Studios and hit 100K views on his 
-                debut Boiler Room performance in just one week.
-              </p>
-              <p className="text-lg leading-relaxed">
-                Rooted in London's Grime scene, he moved to Manchester to study Electronic Music Production, <br className="hidden md:block" />
-                where he's been shaping the next-gen sound of the North ever since. Operating completely solo — 
-                no team, no label, just pure vision.
-              </p>
-              <p className="text-lg leading-relaxed">
-                Elcee weaves raw energy with deep introspection, alchemizing sound into a force for 
-                empowerment and transcendence.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Achievements - unchanged, avatar floats over it */}
-        <Achievements />
+      {/* FIXED AVATAR WATERMARK */}
+      <div style={{
+        position: 'fixed', right: 0, top: 0,
+        width: '50%', height: '100vh',
+        pointerEvents: 'none', zIndex: 0, overflow: 'hidden',
+        opacity: showAvatar ? 1 : 0, transition: 'opacity 0.6s ease',
+      }}>
+        <Image
+          src="/white-avatar.png"
+          alt=""
+          fill
+          style={{ objectFit: 'contain', objectPosition: 'right center', opacity: 0.09, mixBlendMode: 'screen' }}
+        />
       </div>
 
-      {/* All Platforms Links */}
-      <section className="py-12 px-6 bg-black text-white">
-        <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-8">Stream on all platforms</h2>
-          <div className="flex justify-center gap-6 flex-wrap text-lg">
-            <a href="https://open.spotify.com/artist/6E8xwOloHnzGWVlNV9K8n7" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">Spotify</a>
-            <a href="https://music.apple.com/gb/artist/elcee-the-alchemist/1479992060" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">Apple Music</a>
-            <a href="https://music.amazon.com/artists/B07V4F5QK4/elcee-the-alchemist" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">Amazon Music</a>
-            <a href="https://youtube.com/@elceethealchemist" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">YouTube</a>
-            <a href="https://www.deezer.com/artist/67198962" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">Deezer</a>
-            <a href="https://tidal.com/browse/artist/13513078" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">Tidal</a>
-            <a href="https://soundcloud.com/elceethealchemist" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">SoundCloud</a>
-            <a href="https://elceethealchemist.bandcamp.com" className="hover:underline transition-colors" target="_blank" rel="noopener noreferrer">Bandcamp</a>
-          </div>
-        </div>
-      </section>
-
-      {/* Social Links */}
-      <section className="py-12 px-6 bg-white text-black">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-8">Connect</h2>
-          <div className="flex justify-center gap-8 flex-wrap">
-            <a href="https://instagram.com/elceethealchemist" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">Instagram</a>
-            <a href="https://tiktok.com/@elceethealchemist" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">TikTok</a>
-            <a href="https://twitter.com/elceejpg" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">Twitter</a>
-            <a href="https://youtube.com/@elceethealchemist" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">YouTube</a>
-            <a href="https://facebook.com/elceethealchemist" className="text-lg hover:underline" target="_blank" rel="noopener noreferrer">Facebook</a>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-16 px-6 border-t border-white/10">
-        <div className="max-w-7xl mx-auto text-center">
-          <Image 
-            src="/logos/ankh-white.png" 
-            alt="Ankh" 
-            width={50} 
-            height={50}
-            className="mx-auto mb-6"
+      {/* NAV */}
+      <nav style={{
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: navScrolled ? '14px 48px' : '20px 48px',
+        background: navScrolled ? 'rgba(8,8,8,0.96)' : 'transparent',
+        backdropFilter: navScrolled ? 'blur(12px)' : 'none',
+        borderBottom: `1px solid ${navScrolled ? 'rgba(255,255,255,0.07)' : 'transparent'}`,
+        transition: 'background 0.4s ease, padding 0.4s ease, border-color 0.4s ease',
+      }}>
+        <Link href="/">
+          <Image
+            src="/logos/eta-logo-white-cropped.png"
+            alt="Elcee The Alchemist"
+            width={180} height={45}
+            style={{ height: 36, width: 'auto', objectFit: 'contain' }}
           />
-          <p className="text-sm text-gray-500">© 2026 Elcee the Alchemist. All rights reserved.</p>
+        </Link>
+
+        {/* Desktop links + Book CTA */}
+        <div className="hidden md:flex" style={{ alignItems: 'center', gap: 36 }}>
+          <ul style={{ display: 'flex', gap: 36, listStyle: 'none', margin: 0, padding: 0 }}>
+            {NAV_LINKS.map(({ label, href }) => (
+              <li key={label}>
+                <a
+                  href={href}
+                  style={{
+                    fontSize: 11, fontWeight: 400, letterSpacing: '0.15em',
+                    textTransform: 'uppercase', color: 'rgba(255,255,255,0.55)',
+                    textDecoration: 'none', transition: 'color 0.2s',
+                  }}
+                  onMouseEnter={e => ((e.target as HTMLElement).style.color = '#fafafa')}
+                  onMouseLeave={e => ((e.target as HTMLElement).style.color = 'rgba(255,255,255,0.55)')}
+                >
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <Link
+            href={NAV_CTA.href}
+            style={{
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              padding: '10px 22px',
+              fontWeight: 900, fontSize: 10, letterSpacing: '0.18em',
+              textTransform: 'uppercase', textDecoration: 'none',
+              background: '#fafafa', color: '#080808',
+              border: 'none', cursor: 'pointer',
+              transition: 'background 0.2s',
+            }}
+          >
+            {NAV_CTA.label} →
+          </Link>
         </div>
-      </footer>
+
+        {/* Mobile hamburger */}
+        <button
+          className="md:hidden"
+          onClick={() => setMobileMenuOpen(o => !o)}
+          style={{ background: 'none', border: 'none', color: '#fafafa', cursor: 'pointer', padding: 8 }}
+          aria-label="Toggle menu"
+        >
+          {mobileMenuOpen ? (
+            <svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          )}
+        </button>
+      </nav>
+
+      <MobileJumpNav />
+
+      {/* Mobile fullscreen menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden" style={{
+          position: 'fixed', inset: 0,
+          background: 'rgba(8,8,8,0.98)', zIndex: 99,
+          display: 'flex', flexDirection: 'column',
+          alignItems: 'center', justifyContent: 'center', gap: 40,
+        }}>
+          {NAV_LINKS.map(({ label, href }) => (
+            <a
+              key={label}
+              href={href}
+              onClick={() => setMobileMenuOpen(false)}
+              style={{
+                fontSize: 24, fontWeight: 900, letterSpacing: '0.12em',
+                textTransform: 'uppercase', color: '#fafafa', textDecoration: 'none',
+              }}
+            >
+              {label}
+            </a>
+          ))}
+          <a
+            href={NAV_CTA.href}
+            onClick={() => setMobileMenuOpen(false)}
+            style={{
+              fontSize: 22, fontWeight: 900, letterSpacing: '0.12em',
+              textTransform: 'uppercase', color: '#080808', textDecoration: 'none',
+              background: '#fafafa', padding: '14px 28px', marginTop: 16,
+            }}
+          >
+            {NAV_CTA.label} →
+          </a>
+        </div>
+      )}
+
+      {/* ── HERO ─────────────────────────────────── */}
+      <section
+        ref={heroRef}
+        style={{
+          position: 'relative', width: '100%', height: '100vh', minHeight: 640,
+          overflow: 'hidden', display: 'flex', alignItems: 'flex-end',
+          justifyContent: 'center', paddingBottom: 72,
+        }}
+      >
+        {/* Parallax photo layer */}
+        <div ref={heroParallaxRef} style={{
+          position: 'absolute', top: '-10%', left: 0, right: 0, bottom: '-10%',
+          background: '#111111', willChange: 'transform',
+        }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            ref={heroImgRef}
+            src="/elcee-landscape.jpg"
+            alt=""
+            style={{
+              position: 'absolute', inset: 0,
+              width: '100%', height: '100%',
+              objectFit: 'cover', objectPosition: 'center 8%',
+              filter: 'grayscale(100%) contrast(1.08)',
+              opacity: 0.45,
+            }}
+          />
+        </div>
+
+        {/* Grunge texture */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: 'url(/grunge-texture.jpg)',
+          backgroundSize: 'cover', backgroundPosition: 'center',
+          opacity: 0.75, mixBlendMode: 'screen', pointerEvents: 'none',
+        } as React.CSSProperties} />
+
+        {/* Bottom gradient */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to bottom, rgba(8,8,8,0.15) 0%, rgba(8,8,8,0.0) 30%, rgba(8,8,8,0.0) 50%, rgba(8,8,8,0.88) 100%)',
+          pointerEvents: 'none',
+        }} />
+
+        {/* Content */}
+        <div style={{ position: 'relative', zIndex: 2, textAlign: 'center', padding: '0 24px' }}>
+          <h1 style={{
+            fontWeight: 900,
+            fontSize: 'clamp(64px, 11vw, 148px)',
+            lineHeight: 0.88,
+            letterSpacing: '-0.03em',
+            textTransform: 'uppercase',
+            color: '#fafafa',
+            marginBottom: 20,
+          }}>
+            Elcee<br />The Alchemist
+          </h1>
+          <div style={{
+            fontSize: 10, fontWeight: 400, letterSpacing: '0.35em',
+            textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: 32,
+          }}>
+            Alternative Rap &nbsp;·&nbsp; Manchester
+          </div>
+          <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <a
+              href="https://open.spotify.com/artist/6E8xwOloHnzGWVlNV9K8n7"
+              target="_blank" rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                padding: '13px 28px', fontWeight: 900, fontSize: 10, letterSpacing: '0.18em',
+                textTransform: 'uppercase', textDecoration: 'none',
+                background: '#fafafa', color: '#080808',
+                border: 'none', cursor: 'pointer', transition: 'background 0.2s',
+              }}
+            >
+              Listen Now
+            </a>
+            <Link
+              href="/studio"
+              style={{
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                padding: '13px 28px', fontWeight: 900, fontSize: 10, letterSpacing: '0.18em',
+                textTransform: 'uppercase', textDecoration: 'none',
+                background: 'transparent', color: '#fafafa',
+                border: '1.5px solid rgba(255,255,255,0.4)', cursor: 'pointer',
+                transition: 'border-color 0.2s',
+              }}
+            >
+              Book Studio
+            </Link>
+          </div>
+        </div>
+
+        {/* Scroll cue */}
+        <div style={{
+          position: 'absolute', bottom: 24, left: '50%', transform: 'translateX(-50%)',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+          zIndex: 2, opacity: 0.3,
+        }}>
+          <div style={{ width: 1, height: 32, background: 'white', animation: 'scrollPulse 2s ease-in-out infinite' }} />
+          <span style={{ fontSize: 8, letterSpacing: '0.3em', textTransform: 'uppercase' }}>Scroll</span>
+        </div>
+      </section>
+
+      {/* ── MARQUEE ───────────────────────────────── */}
+      <div style={{
+        background: '#fafafa',
+        borderTop: '2px solid #080808', borderBottom: '2px solid #080808',
+        overflow: 'hidden', padding: '11px 0',
+      }}>
+        <div style={{
+          display: 'flex', whiteSpace: 'nowrap',
+          animation: 'marqueeScroll 18s linear infinite',
+        }}>
+          {[
+            'JBL Music Academy Winner', 'adidas Rising Star', 'Boiler Room', 'Abbey Road Studios', 'UK Rap Award with Tiffany Calver',
+            'JBL Music Academy Winner', 'adidas Rising Star', 'Boiler Room', 'Abbey Road Studios', 'UK Rap Award with Tiffany Calver',
+          ].map((item, i) => (
+            <span key={i} style={{ display: 'inline-flex', alignItems: 'center' }}>
+              <span style={{
+                fontWeight: 900, fontSize: 13, letterSpacing: '0.18em',
+                textTransform: 'uppercase', color: '#080808',
+                padding: '0 120px', flexShrink: 0,
+              }}>
+                {item}
+              </span>
+              <span style={{ fontSize: 14, opacity: 0.3, color: '#080808' }}>◆</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* ── RELEASES ──────────────────────────────── */}
+      <section id="releases" style={{ background: '#080808', position: 'relative', zIndex: 1 }}>
+        <motion.div
+          {...fadeUp}
+          style={{
+            display: 'flex', alignItems: 'baseline', justifyContent: 'space-between',
+            padding: '48px 48px 20px', borderBottom: '1px solid #1a1a1a',
+            flexWrap: 'wrap', gap: 16,
+          }}
+        >
+          <div>
+            <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 10 }}>
+              02 — Music
+            </div>
+            <div style={{ fontWeight: 900, fontSize: 'clamp(28px, 4vw, 52px)', letterSpacing: '-0.03em', textTransform: 'uppercase', color: '#fafafa' }}>
+              Latest Releases
+            </div>
+          </div>
+          <a
+            href="https://open.spotify.com/artist/6E8xwOloHnzGWVlNV9K8n7"
+            target="_blank" rel="noopener noreferrer"
+            style={{
+              fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase',
+              color: 'rgba(255,255,255,0.3)', textDecoration: 'none', transition: 'color 0.2s',
+            }}
+          >
+            All Music →
+          </a>
+        </motion.div>
+
+        {/* Row 1 — Spotify album, embed left */}
+        <ReleaseRow
+          reversed={false}
+          type="Album · 2024"
+          name={<>The Evolution<br />of Self<br />Destruction</>}
+          href="https://open.spotify.com/album/7HF3AA4vFQJARAt1ivCn0w"
+          hrefLabel="Open on Spotify →"
+          minHeight={408}
+          infoBg="/teosd-cover.png"
+          embed={
+            <iframe
+              title="The Evolution of Self Destruction"
+              style={{ border: 'none', width: '100%', height: '100%' }}
+              src="https://open.spotify.com/embed/album/7HF3AA4vFQJARAt1ivCn0w?utm_source=generator&theme=0"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+            />
+          }
+        />
+
+        {/* Row 2 — YouTube Filthy, info left (reversed) */}
+        <ReleaseRow
+          reversed={true}
+          type="Single · 2024"
+          name="Filthy"
+          href="https://www.youtube.com/watch?v=K9Bk3Mw7mIc"
+          hrefLabel="Watch on YouTube →"
+          infoBg="/filthy-cover.jpg"
+          embed={
+            <iframe
+              title="Filthy"
+              style={{ border: 'none', width: '100%', height: '100%' }}
+              src="https://www.youtube.com/embed/K9Bk3Mw7mIc"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              loading="lazy"
+            />
+          }
+        />
+
+        {/* Row 3 — YouTube, embed left */}
+        <ReleaseRow
+          reversed={false}
+          type="Single · 2023"
+          name="2bad"
+          href="https://open.spotify.com/artist/6E8xwOloHnzGWVlNV9K8n7"
+          hrefLabel="Stream on Spotify →"
+          infoBg="/2bad-cover.png"
+          infoBgPosition="center 60%"
+          embed={
+            <iframe
+              title="2bad"
+              style={{ border: 'none', width: '100%', height: '100%' }}
+              src="https://www.youtube.com/embed/KmekR33sMng"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              loading="lazy"
+            />
+          }
+        />
+      </section>
+
+      {/* ── ABOUT ─────────────────────────────────── */}
+      <motion.section
+        {...fadeUp}
+        id="about"
+        className="grid-two-col"
+        style={{ background: '#080808', borderTop: '1px solid #1a1a1a', minHeight: 380, position: 'relative', zIndex: 1 }}
+      >
+        <div style={{ padding: '64px 48px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <div>
+            <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 10 }}>
+              03 — About
+            </div>
+            <div style={{ fontWeight: 900, fontSize: 'clamp(40px, 5.5vw, 80px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.88, color: '#fafafa', marginBottom: 28 }}>
+              Raw.<br />Real.<br />Alchemical.
+            </div>
+            <p style={{ fontSize: 14, lineHeight: 1.8, color: 'rgba(255,255,255,0.45)', maxWidth: 380 }}>
+              Alternative rap artist from Manchester pushing the boundaries of the genre with raw lyricism and alchemical soundscapes. Every track is a transmutation — turning experience into art, darkness into gold.
+            </p>
+          </div>
+          <Link
+            href="/epk"
+            style={{
+              ...outlineBtnStyle,
+              padding: '13px 28px',
+              fontSize: 10,
+              marginTop: 28,
+            }}
+          >
+            Full Bio →
+          </Link>
+        </div>
+        <div style={{ position: 'relative', overflow: 'hidden', background: '#111111', borderLeft: '1px solid #1a1a1a', minHeight: 380 }}>
+          <Image
+            src="/elcee-portrait.jpg"
+            alt="Elcee The Alchemist"
+            fill
+            style={{ objectFit: 'cover', objectPosition: 'center center', filter: 'grayscale(100%) contrast(1.1)' }}
+          />
+        </div>
+      </motion.section>
+
+      {/* ── STUDIO ────────────────────────────────── */}
+      <motion.section
+        {...fadeUp}
+        id="studio"
+        style={{ background: '#f0ede8', position: 'relative', overflow: 'hidden', zIndex: 1 }}
+      >
+        {/* Texture */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: 'url(/grunge-texture.jpg)',
+          backgroundSize: 'cover',
+          opacity: 0.06,
+          mixBlendMode: 'multiply',
+          pointerEvents: 'none',
+        } as React.CSSProperties} />
+
+        <div className="grid-two-col" style={{ minHeight: 360, position: 'relative', zIndex: 1 }}>
+          <div style={{ padding: '64px 48px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
+            <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 10 }}>
+              04 — Studio
+            </div>
+            <div style={{ fontWeight: 900, fontSize: 'clamp(38px, 5vw, 72px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.88, color: '#080808', marginBottom: 20 }}>
+              The<br />Alchemist<br />Studio
+            </div>
+            <p style={{ fontSize: 13, lineHeight: 1.8, color: 'rgba(0,0,0,0.5)', marginBottom: 28, maxWidth: 340 }}>
+              Professional recording, mixing and mastering in the heart of Manchester. Built for artists who refuse to compromise on sound.
+            </p>
+            <Link
+              href="/studio"
+              style={{
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                padding: '13px 28px', fontWeight: 900, fontSize: 10, letterSpacing: '0.18em',
+                textTransform: 'uppercase', textDecoration: 'none',
+                background: '#080808', color: '#fafafa',
+                border: 'none', cursor: 'pointer', alignSelf: 'flex-start',
+                transition: 'opacity 0.2s',
+              }}
+            >
+              Book a Session →
+            </Link>
+          </div>
+          <div style={{ position: 'relative', overflow: 'hidden', background: '#d8d5d0', borderLeft: '2px solid rgba(0,0,0,0.08)', minHeight: 360 }}>
+            <Image
+              src="/studio/studio-interior-front.jpg"
+              alt="The Alchemist Studio"
+              fill
+              style={{ objectFit: 'cover', objectPosition: 'center', filter: 'grayscale(100%) contrast(1.05)' }}
+            />
+          </div>
+        </div>
+      </motion.section>
+
+      <SiteFooter />
+
     </div>
   );
 }
