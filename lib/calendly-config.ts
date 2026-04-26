@@ -1,8 +1,8 @@
 export const CALENDLY_EVENT_URLS = {
-  studio1hr: 'https://calendly.com/elcee-mgmt/studio-session-clone',
-  studio2hr: 'https://calendly.com/elcee-mgmt/studio-session-2-hours-clone',
-  studio3hr: 'https://calendly.com/elcee-mgmt/studio-session-3-hours-clone',
-  studio4hr: 'https://calendly.com/elcee-mgmt/new-meeting',
+  studio1hr: 'https://calendly.com/elcee-mgmt/new-meeting',
+  studio2hr: 'https://calendly.com/elcee-mgmt/studio-session-clone',
+  studio3hr: 'https://calendly.com/elcee-mgmt/studio-session-2-hours-clone',
+  studio4hr: 'https://calendly.com/elcee-mgmt/studio-session-3-hours-clone',
   tutoringOnline: 'https://calendly.com/elcee-mgmt/online-tutoring',
   tutoringInPerson: 'https://calendly.com/elcee-mgmt/online-tutoring-clone',
   free: 'https://calendly.com/elcee-mgmt/free-mix-review-track-feedback',
