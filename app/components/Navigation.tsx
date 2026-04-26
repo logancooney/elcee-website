@@ -7,6 +7,7 @@ import Link from 'next/link';
 const NAV_LINKS = [
   { label: 'Music', href: '/#releases' },
   { label: 'Studio', href: '/studio' },
+  { label: 'Tutoring', href: '/tutoring' },
   { label: 'Shop', href: '/shop' },
   { label: 'Contact', href: '/contact' },
 ];

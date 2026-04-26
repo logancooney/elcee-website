@@ -14,7 +14,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline' https://use.typekit.net",
       "font-src 'self' https://use.typekit.net https://p.typekit.net",
       "img-src 'self' data: blob: https:",
-      "frame-src https://calendly.com",
+      "frame-src https://calendly.com https://open.spotify.com https://www.youtube.com",
       "connect-src 'self' https://api.resend.com https://*.supabase.co https://calendly.com https://va.vercel-scripts.com",
     ].join('; '),
   },
