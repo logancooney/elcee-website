@@ -1,101 +1,93 @@
+const STUDIO_RATES = [
+  { label: 'Standard', price: '£35/hr' },
+  { label: 'Loyalty Plan', price: '£30/hr', note: '£240/month subscription' },
+];
+
+const MIXING_RATES = [
+  { label: 'Full Mix + Master', price: '£340' },
+  { label: 'Vocal Mix', price: '£190' },
+  { label: 'Mastering', price: '£40' },
+];
+
+const PACKAGES = [
+  { label: '3-Track Package', price: '£920', saving: 'Save £100' },
+  { label: '5-Track Package', price: '£1,450', saving: 'Save £250' },
+];
+
+const ADDONS = [
+  { label: 'Vocal Tuning', price: '£40' },
+  { label: 'Stem Separation', price: '£75' },
+  { label: 'Rush Delivery', price: '+40%' },
+];
+
 export default function Pricing() {
   return (
-    <section className="py-24 px-6 bg-white text-black">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl md:text-5xl font-bold mb-6 text-center">
+    <section style={{ padding: '80px 48px', background: '#f0ede8', color: '#080808' }}>
+      <div style={{ maxWidth: 960, margin: '0 auto' }}>
+        <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 16 }}>
+          Rates
+        </div>
+        <h2 style={{ fontWeight: 900, fontSize: 'clamp(28px, 4vw, 56px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9, marginBottom: 8 }}>
           Pricing
         </h2>
-        <p className="text-xl text-gray-600 text-center max-w-3xl mx-auto mb-16">
-          Transparent pricing with no hidden fees. Choose individual services or package 
-          multiple tracks for complete projects.
-        </p>
+        <p style={{ fontSize: 14, color: 'rgba(0,0,0,0.45)', marginBottom: 56 }}>Transparent pricing. No hidden fees.</p>
 
-        <div className="grid md:grid-cols-2 gap-8 mb-12">
+        <div className="grid-two-col" style={{ gap: 1, marginBottom: 2 }}>
           {/* Studio Sessions */}
-          <div className="border-2 border-black p-8 rounded-2xl">
-            <h3 className="text-2xl font-bold mb-4">Studio Sessions</h3>
-            <div className="space-y-3">
-              <div className="flex justify-between items-baseline">
-                <span className="text-gray-700">Standard</span>
-                <span className="text-xl font-semibold">£35/hour</span>
-              </div>
-              <div className="flex justify-between items-baseline">
-                <span className="text-gray-700">Loyalty Plan</span>
-                <span className="text-xl font-semibold">£30/hour</span>
-              </div>
-              <p className="text-sm text-gray-500 pt-2">
-                Loyalty plan: £240/month subscription
-              </p>
+          <div style={{ padding: '48px 40px', border: '1px solid rgba(0,0,0,0.12)', background: 'rgba(255,255,255,0.5)' }}>
+            <p style={{ fontSize: 8, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 20 }}>Studio Sessions</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {STUDIO_RATES.map(r => (
+                <div key={r.label}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                    <span style={{ fontSize: 13, color: 'rgba(0,0,0,0.55)' }}>{r.label}</span>
+                    <span style={{ fontWeight: 900, fontSize: 20, letterSpacing: '-0.02em' }}>{r.price}</span>
+                  </div>
+                  {r.note && <p style={{ fontSize: 11, color: 'rgba(0,0,0,0.35)', marginTop: 2 }}>{r.note}</p>}
+                </div>
+              ))}
             </div>
           </div>
 
           {/* Mixing Services */}
-          <div className="border-2 border-black p-8 rounded-2xl">
-            <h3 className="text-2xl font-bold mb-4">Mixing Services</h3>
-            <div className="space-y-3">
-              <div className="flex justify-between items-baseline">
-                <span className="text-gray-700">Full Mix & Master</span>
-                <span className="text-xl font-semibold">£340</span>
-              </div>
-              <div className="flex justify-between items-baseline">
-                <span className="text-gray-700">Vocal Mix</span>
-                <span className="text-xl font-semibold">£190</span>
-              </div>
-              <div className="flex justify-between items-baseline">
-                <span className="text-gray-700">Mastering</span>
-                <span className="text-xl font-semibold">£40</span>
-              </div>
+          <div style={{ padding: '48px 40px', border: '1px solid rgba(0,0,0,0.12)', background: 'rgba(255,255,255,0.5)' }}>
+            <p style={{ fontSize: 8, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 20 }}>Mixing Services</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {MIXING_RATES.map(r => (
+                <div key={r.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                  <span style={{ fontSize: 13, color: 'rgba(0,0,0,0.55)' }}>{r.label}</span>
+                  <span style={{ fontWeight: 900, fontSize: 20, letterSpacing: '-0.02em' }}>{r.price}</span>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Production */}
-          <div className="border-2 border-black p-8 rounded-2xl">
-            <h3 className="text-2xl font-bold mb-4">Production</h3>
-            <div className="space-y-3">
-              <div className="flex justify-between items-baseline">
-                <span className="text-gray-700">Custom Production</span>
-                <span className="text-xl font-semibold">From £400</span>
-              </div>
-              <div className="flex justify-between items-baseline">
-                <span className="text-gray-700">Additional Production</span>
-                <span className="text-xl font-semibold">From £150</span>
-              </div>
+          {/* Multi-track Packages */}
+          <div style={{ padding: '48px 40px', background: '#080808', color: '#fafafa' }}>
+            <p style={{ fontSize: 8, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 20 }}>Multi-Track Packages</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              {PACKAGES.map(p => (
+                <div key={p.label}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                    <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)' }}>{p.label}</span>
+                    <span style={{ fontWeight: 900, fontSize: 20, letterSpacing: '-0.02em' }}>{p.price}</span>
+                  </div>
+                  <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', marginTop: 2 }}>{p.saving}</p>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Packages */}
-          <div className="bg-black text-white p-8 rounded-2xl">
-            <h3 className="text-2xl font-bold mb-4">Multi-Track Packages</h3>
-            <div className="space-y-3">
-              <div className="flex justify-between items-baseline">
-                <span>3-Track Package</span>
-                <span className="text-xl font-semibold">£920</span>
-              </div>
-              <p className="text-sm text-gray-400">Save £100</p>
-              <div className="flex justify-between items-baseline pt-3">
-                <span>5-Track Package</span>
-                <span className="text-xl font-semibold">£1,450</span>
-              </div>
-              <p className="text-sm text-gray-400">Save £250</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Add-ons */}
-        <div className="border border-gray-300 p-8 rounded-2xl">
-          <h3 className="text-xl font-bold mb-4">Add-ons</h3>
-          <div className="flex flex-wrap gap-6">
-            <div className="flex-1 min-w-[200px]">
-              <p className="font-semibold">Vocal Tuning</p>
-              <p className="text-gray-600">£40</p>
-            </div>
-            <div className="flex-1 min-w-[200px]">
-              <p className="font-semibold">Stem Separation</p>
-              <p className="text-gray-600">£75</p>
-            </div>
-            <div className="flex-1 min-w-[200px]">
-              <p className="font-semibold">Rush Delivery</p>
-              <p className="text-gray-600">+40%</p>
+          {/* Add-ons */}
+          <div style={{ padding: '48px 40px', border: '1px solid rgba(0,0,0,0.12)', background: 'rgba(255,255,255,0.5)' }}>
+            <p style={{ fontSize: 8, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 20 }}>Add-ons</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {ADDONS.map(a => (
+                <div key={a.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                  <span style={{ fontSize: 13, color: 'rgba(0,0,0,0.55)' }}>{a.label}</span>
+                  <span style={{ fontWeight: 900, fontSize: 20, letterSpacing: '-0.02em' }}>{a.price}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>

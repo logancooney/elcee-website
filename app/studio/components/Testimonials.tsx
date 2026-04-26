@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState } from 'react';
 
@@ -11,70 +11,98 @@ interface Testimonial {
 const testimonials: Testimonial[] = [
   {
     quote: "I've been working with Elcee for the past year, you won't find a better space to build your craft.",
-    author: "Malaki",
-    location: "Salford"
+    author: 'Malaki',
+    location: 'Salford',
   },
   {
     quote: "Elcee provides not only an exceptional studio environment with everything an artist might need, but he's also an excellent creative partner to bounce ideas off. It's really useful to talk to someone who has direct experience producing music for brands.",
-    author: "Fieves",
-    location: "Manchester"
+    author: 'Fieves',
+    location: 'Manchester',
   },
   {
-    quote: "Elcee is a true multi-disciplinary creative and master of his crafts - from creative direction, song-writing, production, mixing and mastering and more.",
-    author: "Ninja Tea",
-    location: "Manchester"
-  }
+    quote: 'Elcee is a true multi-disciplinary creative and master of his crafts — from creative direction, song-writing, production, mixing and mastering and more.',
+    author: 'Ninja Tea',
+    location: 'Manchester',
+  },
 ];
 
 export default function Testimonials() {
   const [current, setCurrent] = useState(0);
 
   return (
-    <section className="py-16 px-6 bg-white text-black">
-      <div className="max-w-5xl mx-auto">
-        <h2 className="text-4xl font-bold mb-12 text-center">
+    <section style={{ padding: '80px 48px', background: '#f0ede8', color: '#080808', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+      <div style={{ maxWidth: 960, margin: '0 auto' }}>
+        <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 16 }}>
+          Artists
+        </div>
+        <h2 style={{ fontWeight: 900, fontSize: 'clamp(28px, 4vw, 56px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9, marginBottom: 48 }}>
           Trusted by Manchester Artists
         </h2>
-        
-        <div className="relative">
-          <div className="bg-black text-white p-10 md:p-12 rounded-2xl">
-            <p className="text-xl md:text-2xl font-light leading-relaxed mb-6">
-              "{testimonials[current].quote}"
+
+        <div>
+          <div style={{ padding: '48px', border: '1.5px solid rgba(0,0,0,0.15)', background: 'rgba(255,255,255,0.5)' }}>
+            <p style={{ fontSize: 'clamp(16px, 2vw, 22px)', fontWeight: 900, lineHeight: 1.5, letterSpacing: '-0.01em', marginBottom: 32 }}>
+              &ldquo;{testimonials[current].quote}&rdquo;
             </p>
-            <div className="flex items-center justify-between">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
               <div>
-                <p className="font-semibold text-lg">{testimonials[current].author}</p>
-                <p className="text-gray-400">{testimonials[current].location}</p>
+                <p style={{ fontWeight: 900, fontSize: 14, letterSpacing: '-0.01em' }}>{testimonials[current].author}</p>
+                <p style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: 4 }}>{testimonials[current].location}</p>
               </div>
-              
-              <div className="flex gap-3">
+              <div style={{ display: 'flex', gap: 10 }}>
                 <button
                   onClick={() => setCurrent(current === 0 ? testimonials.length - 1 : current - 1)}
-                  className="w-12 h-12 border border-white rounded-full hover:bg-white hover:text-black transition flex items-center justify-center"
                   aria-label="Previous testimonial"
+                  style={{
+                    width: 44, height: 44,
+                    border: '1.5px solid rgba(0,0,0,0.3)',
+                    background: 'transparent',
+                    cursor: 'pointer',
+                    fontSize: 16,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    transition: 'background 0.2s, color 0.2s',
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#080808'; (e.currentTarget as HTMLButtonElement).style.color = '#fafafa'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = '#080808'; }}
                 >
                   ←
                 </button>
                 <button
                   onClick={() => setCurrent(current === testimonials.length - 1 ? 0 : current + 1)}
-                  className="w-12 h-12 border border-white rounded-full hover:bg-white hover:text-black transition flex items-center justify-center"
                   aria-label="Next testimonial"
+                  style={{
+                    width: 44, height: 44,
+                    border: '1.5px solid rgba(0,0,0,0.3)',
+                    background: 'transparent',
+                    cursor: 'pointer',
+                    fontSize: 16,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    transition: 'background 0.2s, color 0.2s',
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#080808'; (e.currentTarget as HTMLButtonElement).style.color = '#fafafa'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = '#080808'; }}
                 >
                   →
                 </button>
               </div>
             </div>
           </div>
-          
-          <div className="flex justify-center gap-2 mt-6">
+
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 20 }}>
             {testimonials.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrent(index)}
-                className={`w-2 h-2 rounded-full transition ${
-                  current === index ? 'bg-black w-8' : 'bg-gray-300'
-                }`}
                 aria-label={`Go to testimonial ${index + 1}`}
+                style={{
+                  height: 4,
+                  width: current === index ? 28 : 8,
+                  background: current === index ? '#080808' : 'rgba(0,0,0,0.2)',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 0,
+                  transition: 'width 0.3s, background 0.3s',
+                }}
               />
             ))}
           </div>

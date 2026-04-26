@@ -1,64 +1,76 @@
-export default function Services() {
-  const services = [
-    {
-      title: "Recording & Engineering",
-      description: "Capture your performance with clarity and precision. Professional vocal and instrument tracking in a focused environment built for quality.",
-      includes: [
-        "High-end signal chain",
-        "Experienced engineering and session direction",
-        "Flexible session lengths",
-        "All session files delivered"
-      ]
-    },
-    {
-      title: "Mixing & Mastering",
-      description: "Transform recordings into polished, competitive releases. Technical precision meets creative vision.",
-      includes: [
-        "Professional mix with depth, clarity, and impact",
-        "Industry-standard processing and plugins",
-        "Multiple revision rounds",
-        "Stems and final mix delivery",
-        "Loudness optimization for streaming",
-        "Format delivery for all platforms"
-      ]
-    },
-    {
-      title: "Music Production",
-      description: "Custom production tailored to your sound. From full beat creation to arrangement and sonic direction.",
-      includes: [
-        "Bespoke production or additional production work",
-        "Professional sound design and arrangement",
-        "Stems and project files",
-        "Collaborative creative process"
-      ]
-    }
-  ];
+const services = [
+  {
+    label: '01',
+    title: 'Recording & Engineering',
+    description: 'Capture your performance with clarity and precision. Professional vocal and instrument tracking in a focused environment built for quality.',
+    includes: [
+      'High-end signal chain',
+      'Experienced engineering and session direction',
+      'Flexible session lengths',
+      'All session files delivered',
+    ],
+  },
+  {
+    label: '02',
+    title: 'Mixing & Mastering',
+    description: 'Transform recordings into polished, competitive releases. Technical precision meets creative vision.',
+    includes: [
+      'Professional mix with depth, clarity, and impact',
+      'Industry-standard processing and plugins',
+      'Multiple revision rounds',
+      'Stems and final mix delivery',
+      'Loudness optimisation for streaming',
+    ],
+  },
+  {
+    label: '03',
+    title: 'Music Production',
+    description: 'Custom production tailored to your sound. From full beat creation to arrangement and sonic direction.',
+    includes: [
+      'Bespoke production or additional production work',
+      'Professional sound design and arrangement',
+      'Stems and project files',
+      'Collaborative creative process',
+    ],
+  },
+];
 
+export default function Services() {
   return (
-    <section className="py-24 px-6 bg-black text-white">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl md:text-5xl font-bold mb-6 text-center">
-          Services
+    <section style={{ padding: '80px 48px', background: '#080808', color: '#fafafa', borderTop: '1px solid #1a1a1a' }}>
+      <div style={{ maxWidth: 960, margin: '0 auto' }}>
+        <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 16 }}>
+          What We Offer
+        </div>
+        <h2 style={{ fontWeight: 900, fontSize: 'clamp(28px, 4vw, 56px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9, marginBottom: 8 }}>
+          Studio Services
         </h2>
-        <p className="text-xl text-gray-400 text-center max-w-3xl mx-auto mb-16">
-          Complete studio services from tracking to final master. Professional equipment, 
-          experienced engineering, and a results-focused approach.
+        <p style={{ fontSize: 14, lineHeight: 1.8, color: 'rgba(255,255,255,0.45)', maxWidth: 480, marginBottom: 56 }}>
+          Complete studio services from tracking to final master.
         </p>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <div key={index} className="bg-white text-black p-8 rounded-2xl">
-              <h3 className="text-2xl font-bold mb-4">{service.title}</h3>
-              <p className="text-gray-700 mb-6 leading-relaxed">
+        <div className="grid-three-col" style={{ borderTop: '1px solid #1a1a1a', borderBottom: '1px solid #1a1a1a' }}>
+          {services.map((service, i) => (
+            <div
+              key={service.label}
+              style={{
+                padding: '48px 40px',
+                borderLeft: i === 0 ? 'none' : '1px solid #1a1a1a',
+              }}
+            >
+              <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>
+                {service.label}
+              </div>
+              <p style={{ fontWeight: 900, fontSize: 'clamp(18px, 2vw, 26px)', letterSpacing: '-0.02em', textTransform: 'uppercase', lineHeight: 1, marginBottom: 16 }}>
+                {service.title}
+              </p>
+              <p style={{ fontSize: 13, lineHeight: 1.8, color: 'rgba(255,255,255,0.5)', marginBottom: 28 }}>
                 {service.description}
               </p>
-              <div className="space-y-2">
-                <p className="font-semibold text-sm uppercase tracking-wide mb-3">
-                  Includes:
-                </p>
-                {service.includes.map((item, i) => (
-                  <p key={i} className="text-sm text-gray-600 leading-relaxed">
-                    • {item}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {service.includes.map(item => (
+                  <p key={item} style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', lineHeight: 1.6 }}>
+                    — {item}
                   </p>
                 ))}
               </div>
