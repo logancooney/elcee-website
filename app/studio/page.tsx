@@ -162,11 +162,6 @@ export default function StudioPage() {
         </div>
       </section>
 
-      {/* ── TESTIMONIALS ── */}
-      <motion.div {...fadeUp}>
-        <Testimonials />
-      </motion.div>
-
       {/* ── SERVICES ── */}
       <motion.section {...fadeUp} id="services" style={{ background: '#080808', borderTop: '1px solid #1a1a1a' }}>
         <div style={{ padding: '48px 48px 32px', borderBottom: '1px solid #1a1a1a' }}>
@@ -197,56 +192,11 @@ export default function StudioPage() {
         </div>
       </motion.section>
 
-      {/* ── FACILITY ── */}
-      <motion.section
-        {...fadeUp}
-        style={{ background: '#f0ede8', color: '#080808', position: 'relative', overflow: 'hidden' }}
-      >
-        <div style={{
-          position: 'absolute', inset: 0,
-          backgroundImage: 'url(/grunge-texture.jpg)',
-          backgroundSize: 'cover',
-          opacity: 0.06,
-          mixBlendMode: 'multiply',
-          pointerEvents: 'none',
-        } as React.CSSProperties} />
-        <div className="grid-two-col" style={{ position: 'relative', zIndex: 1, minHeight: 520 }}>
-          <div style={{ padding: '64px 48px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-            <div>
-              <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 12 }}>
-                03 — Facility
-              </div>
-              <h2 style={{ fontWeight: 900, fontSize: 'clamp(38px, 5vw, 72px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.88, color: '#080808', marginBottom: 20 }}>
-                The<br />Space
-              </h2>
-              <p style={{ fontSize: 14, lineHeight: 1.8, color: 'rgba(0,0,0,0.5)', maxWidth: 380 }}>
-                Professional recording environment in Manchester. Built by a working artist with 6+ years industry experience. Acoustically treated for accurate recording and mixing.
-              </p>
-            </div>
-            <div>
-              <p style={{ fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 6 }}>Location</p>
-              <p style={{ fontSize: 14, lineHeight: 1.8, color: 'rgba(0,0,0,0.6)' }}>
-                Cambridge Street, Manchester, M7 1UY<br />
-                10 minutes from city centre
-              </p>
-            </div>
-          </div>
-          <div style={{ position: 'relative', overflow: 'hidden', background: '#d8d5d0', borderLeft: '2px solid rgba(0,0,0,0.08)', minHeight: 520 }}>
-            <Image
-              src="/studio/studio-interior-front.jpg"
-              alt="The Alchemist Studio interior"
-              fill
-              style={{ objectFit: 'cover', objectPosition: 'center', filter: 'grayscale(20%)' }}
-            />
-          </div>
-        </div>
-      </motion.section>
-
       {/* ── PRICING ── */}
       <motion.section {...fadeUp} style={{ background: '#080808', borderTop: '1px solid #1a1a1a' }}>
         <div style={{ padding: '48px 48px 32px', borderBottom: '1px solid #1a1a1a' }}>
           <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>
-            04 — Rates
+            03 — Rates
           </div>
           <h2 style={{ fontWeight: 900, fontSize: 'clamp(32px, 4vw, 64px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9 }}>
             Pricing
@@ -322,44 +272,11 @@ export default function StudioPage() {
         </div>
       </motion.section>
 
-      {/* ── HOW IT WORKS ── */}
-      <motion.section {...fadeUp} style={{ background: '#f0ede8', color: '#080808', position: 'relative', overflow: 'hidden' }}>
-        <div style={{
-          position: 'absolute', inset: 0,
-          backgroundImage: 'url(/grunge-texture.jpg)',
-          backgroundSize: 'cover',
-          opacity: 0.06,
-          mixBlendMode: 'multiply',
-          pointerEvents: 'none',
-        } as React.CSSProperties} />
-        <div style={{ padding: '48px 48px 32px', borderBottom: '1px solid rgba(0,0,0,0.08)', position: 'relative', zIndex: 1 }}>
-          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 12 }}>
-            05 — Process
-          </div>
-          <h2 style={{ fontWeight: 900, fontSize: 'clamp(32px, 4vw, 64px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9, color: '#080808' }}>
-            How It Works
-          </h2>
-        </div>
-        <div className="grid-three-col" style={{ position: 'relative', zIndex: 1, borderBottom: '1px solid rgba(0,0,0,0.08)' }}>
-          {[
-            { step: '01', title: 'Book Your Session', desc: 'Check calendar availability and book online. Flexible scheduling with confirmation within 24 hours.' },
-            { step: '02', title: 'Create', desc: 'Professional environment with experienced engineering. Focused sessions designed for results.' },
-            { step: '03', title: 'Receive Final Files', desc: "Fast turnaround with professional delivery. Revisions included to ensure you're satisfied with the result." },
-          ].map((item, i) => (
-            <div key={item.step} style={{ padding: '56px 48px', borderLeft: i === 0 ? 'none' : '1px solid rgba(0,0,0,0.08)' }}>
-              <p style={{ fontWeight: 900, fontSize: 64, letterSpacing: '-0.04em', color: 'rgba(0,0,0,0.08)', marginBottom: 20, lineHeight: 1 }}>{item.step}</p>
-              <p style={{ fontWeight: 900, fontSize: 16, letterSpacing: '-0.01em', textTransform: 'uppercase', marginBottom: 12, color: '#080808' }}>{item.title}</p>
-              <p style={{ fontSize: 13, lineHeight: 1.8, color: 'rgba(0,0,0,0.5)' }}>{item.desc}</p>
-            </div>
-          ))}
-        </div>
-      </motion.section>
-
       {/* ── BOOKING ── */}
       <motion.section {...fadeUp} id="booking" style={{ background: '#080808', borderTop: '1px solid #1a1a1a' }}>
         <div style={{ padding: '48px 48px 32px', borderBottom: '1px solid #1a1a1a' }}>
           <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>
-            06 — Book
+            04 — Book
           </div>
           <h2 style={{ fontWeight: 900, fontSize: 'clamp(32px, 4vw, 64px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9 }}>
             Book a Session
@@ -411,11 +328,89 @@ export default function StudioPage() {
         </div>
       </motion.section>
 
+      {/* ── FACILITY ── */}
+      <motion.section
+        {...fadeUp}
+        style={{ background: '#f0ede8', color: '#080808', position: 'relative', overflow: 'hidden' }}
+      >
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: 'url(/grunge-texture.jpg)',
+          backgroundSize: 'cover',
+          opacity: 0.06,
+          mixBlendMode: 'multiply',
+          pointerEvents: 'none',
+        } as React.CSSProperties} />
+        <div className="grid-two-col" style={{ position: 'relative', zIndex: 1, minHeight: 520 }}>
+          <div style={{ padding: '64px 48px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+            <div>
+              <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 12 }}>
+                03 — Facility
+              </div>
+              <h2 style={{ fontWeight: 900, fontSize: 'clamp(38px, 5vw, 72px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.88, color: '#080808', marginBottom: 20 }}>
+                The<br />Space
+              </h2>
+              <p style={{ fontSize: 14, lineHeight: 1.8, color: 'rgba(0,0,0,0.5)', maxWidth: 380 }}>
+                Professional recording environment in Manchester. Built by a working artist with 6+ years industry experience. Acoustically treated for accurate recording and mixing.
+              </p>
+            </div>
+            <div>
+              <p style={{ fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 6 }}>Location</p>
+              <p style={{ fontSize: 14, lineHeight: 1.8, color: 'rgba(0,0,0,0.6)' }}>
+                Cambridge Street, Manchester, M7 1UY<br />
+                10 minutes from city centre
+              </p>
+            </div>
+          </div>
+          <div style={{ position: 'relative', overflow: 'hidden', background: '#d8d5d0', borderLeft: '2px solid rgba(0,0,0,0.08)', minHeight: 520 }}>
+            <Image
+              src="/studio/studio-interior-front.jpg"
+              alt="The Alchemist Studio interior"
+              fill
+              style={{ objectFit: 'cover', objectPosition: 'center', filter: 'grayscale(20%)' }}
+            />
+          </div>
+        </div>
+      </motion.section>
+
+      {/* ── HOW IT WORKS ── */}
+      <motion.section {...fadeUp} style={{ background: '#f0ede8', color: '#080808', position: 'relative', overflow: 'hidden' }}>
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: 'url(/grunge-texture.jpg)',
+          backgroundSize: 'cover',
+          opacity: 0.06,
+          mixBlendMode: 'multiply',
+          pointerEvents: 'none',
+        } as React.CSSProperties} />
+        <div style={{ padding: '48px 48px 32px', borderBottom: '1px solid rgba(0,0,0,0.08)', position: 'relative', zIndex: 1 }}>
+          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 12 }}>
+            06 — Process
+          </div>
+          <h2 style={{ fontWeight: 900, fontSize: 'clamp(32px, 4vw, 64px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9, color: '#080808' }}>
+            How It Works
+          </h2>
+        </div>
+        <div className="grid-three-col" style={{ position: 'relative', zIndex: 1, borderBottom: '1px solid rgba(0,0,0,0.08)' }}>
+          {[
+            { step: '01', title: 'Book Your Session', desc: 'Check calendar availability and book online. Flexible scheduling with confirmation within 24 hours.' },
+            { step: '02', title: 'Create', desc: 'Professional environment with experienced engineering. Focused sessions designed for results.' },
+            { step: '03', title: 'Receive Final Files', desc: "Fast turnaround with professional delivery. Revisions included to ensure you're satisfied with the result." },
+          ].map((item, i) => (
+            <div key={item.step} style={{ padding: '56px 48px', borderLeft: i === 0 ? 'none' : '1px solid rgba(0,0,0,0.08)' }}>
+              <p style={{ fontWeight: 900, fontSize: 64, letterSpacing: '-0.04em', color: 'rgba(0,0,0,0.08)', marginBottom: 20, lineHeight: 1 }}>{item.step}</p>
+              <p style={{ fontWeight: 900, fontSize: 16, letterSpacing: '-0.01em', textTransform: 'uppercase', marginBottom: 12, color: '#080808' }}>{item.title}</p>
+              <p style={{ fontSize: 13, lineHeight: 1.8, color: 'rgba(0,0,0,0.5)' }}>{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </motion.section>
+
       {/* ── REMOTE SERVICES ── */}
       <motion.section {...fadeUp} style={{ background: '#080808', borderTop: '1px solid #1a1a1a' }}>
         <div style={{ padding: '48px 48px 32px', borderBottom: '1px solid #1a1a1a' }}>
           <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>
-            07 — Remote
+            07 — Remote Mixing &amp; Mastering
           </div>
           <h2 style={{ fontWeight: 900, fontSize: 'clamp(32px, 4vw, 64px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9 }}>
             Mixing &amp; Mastering
@@ -455,6 +450,10 @@ export default function StudioPage() {
           </p>
         </div>
       </motion.section>
+
+      <motion.div {...fadeUp}>
+        <Testimonials />
+      </motion.div>
 
       <BookingPrompt />
 

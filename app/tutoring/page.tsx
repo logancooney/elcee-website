@@ -149,81 +149,11 @@ export default function TutoringPage() {
         </div>
       </section>
 
-      {/* ── THE CASE ── */}
-      <motion.section
-        {...fadeUp}
-        className="grid-two-col"
-        style={{ background: '#080808', borderTop: '1px solid #1a1a1a', minHeight: 360 }}
-      >
-        <div style={{ padding: '64px 48px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <p style={{ fontWeight: 900, fontSize: 'clamp(20px, 2.5vw, 34px)', letterSpacing: '-0.02em', lineHeight: 1.4, marginBottom: 24 }}>
-            You&apos;ve got music in you.<br />You know it.
-          </p>
-          <p style={{ fontSize: 14, lineHeight: 1.9, color: 'rgba(255,255,255,0.5)', marginBottom: 16 }}>
-            Maybe you&apos;ve got half-finished tracks and no idea what&apos;s missing. Maybe you&apos;ve never opened a DAW but music is what you want to do with your life. Maybe you&apos;ve spent months watching tutorials and still feel like you&apos;re going nowhere.
-          </p>
-          <p style={{ fontWeight: 900, fontSize: 18, letterSpacing: '-0.01em' }}>
-            These sessions change that.
-          </p>
-        </div>
-        <div style={{
-          borderLeft: '1px solid #1a1a1a', padding: '64px 48px',
-          display: 'flex', flexDirection: 'column', justifyContent: 'center',
-          background: '#111111',
-        }}>
-          <p style={{ fontSize: 14, lineHeight: 1.9, color: 'rgba(255,255,255,0.5)', marginBottom: 16 }}>
-            The problem isn&apos;t talent. It&apos;s having nobody in your corner who actually knows what they&apos;re doing. Who can look at what you&apos;re making, tell you exactly what it needs, and show you how to get there.
-          </p>
-          <p style={{ fontSize: 14, lineHeight: 1.9, color: 'rgba(255,255,255,0.5)' }}>
-            I&apos;m not a teacher who used to make music. I&apos;m an artist who also teaches. That&apos;s a different thing entirely.
-          </p>
-        </div>
-      </motion.section>
-
-      {/* ── THE GUIDE — light section ── */}
-      <motion.section
-        {...fadeUp}
-        style={{ background: '#f0ede8', color: '#080808', position: 'relative', overflow: 'hidden' }}
-      >
-        <div style={{
-          position: 'absolute', inset: 0,
-          backgroundImage: 'url(/grunge-texture.jpg)',
-          backgroundSize: 'cover',
-          opacity: 0.06,
-          mixBlendMode: 'multiply',
-          pointerEvents: 'none',
-        } as React.CSSProperties} />
-        <div className="grid-two-col" style={{ position: 'relative', zIndex: 1, minHeight: 480 }}>
-          <div style={{ padding: '64px 48px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 16 }}>
-              02 — The Guide
-            </div>
-            <p style={{ fontWeight: 900, fontSize: 'clamp(20px, 2.5vw, 34px)', letterSpacing: '-0.02em', lineHeight: 1.4, marginBottom: 20 }}>
-              I&apos;m Elcee. Recording artist, mixing engineer, and studio owner based in Manchester.
-            </p>
-            <p style={{ fontSize: 14, lineHeight: 1.9, color: 'rgba(0,0,0,0.55)', marginBottom: 16 }}>
-              I&apos;m still in the room. Still making music. Which means everything I teach is tested, current, and real.
-            </p>
-            <p style={{ fontSize: 14, lineHeight: 1.9, color: 'rgba(0,0,0,0.55)', marginBottom: 16 }}>
-              I&apos;ve recorded at Abbey Road. Flown to Amsterdam by JBL to work in Lady Gaga&apos;s studio and break down unreleased Justin Bieber tracks. First Class degree in Electronic Music Production.
-            </p>
-          </div>
-          <div style={{ position: 'relative', overflow: 'hidden', background: '#d8d5d0', borderLeft: '2px solid rgba(0,0,0,0.08)', minHeight: 480 }}>
-            <Image
-              src="/elcee-portrait.jpg"
-              alt="Elcee The Alchemist"
-              fill
-              style={{ objectFit: 'cover', objectPosition: 'center 15%', filter: 'grayscale(20%)' }}
-            />
-          </div>
-        </div>
-      </motion.section>
-
       {/* ── WHAT YOU'LL LEARN ── */}
       <motion.section {...fadeUp} id="what-you-learn" style={{ background: '#080808', borderTop: '1px solid #1a1a1a' }}>
         <div style={{ padding: '48px 48px 32px', borderBottom: '1px solid #1a1a1a' }}>
           <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>
-            03 — What You&apos;ll Learn
+            02 — What You&apos;ll Learn
           </div>
           <h2 style={{ fontWeight: 900, fontSize: 'clamp(32px, 4vw, 64px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9 }}>
             Every Session<br />Is Bespoke
@@ -245,43 +175,10 @@ export default function TutoringPage() {
         </div>
       </motion.section>
 
-      {/* ── HOW IT WORKS ── */}
-      <motion.section {...fadeUp} style={{ background: '#f0ede8', color: '#080808', position: 'relative', overflow: 'hidden' }}>
-        <div style={{
-          position: 'absolute', inset: 0,
-          backgroundImage: 'url(/grunge-texture.jpg)',
-          backgroundSize: 'cover',
-          opacity: 0.06,
-          mixBlendMode: 'multiply',
-          pointerEvents: 'none',
-        } as React.CSSProperties} />
-        <div style={{ padding: '48px 48px 32px', borderBottom: '1px solid rgba(0,0,0,0.08)', position: 'relative', zIndex: 1 }}>
-          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 12 }}>04 — Process</div>
-          <h2 style={{ fontWeight: 900, fontSize: 'clamp(32px, 4vw, 64px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9, color: '#080808' }}>How It Works</h2>
-        </div>
-        <div className="grid-three-col" style={{ position: 'relative', zIndex: 1, borderBottom: '1px solid rgba(0,0,0,0.08)' }}>
-          {[
-            { step: '01', text: "Book your free first session — a 20-minute call to figure out where you are and where you want to go." },
-            { step: '02', text: "Every session is built around you. No wasted time on things you don't need yet." },
-            { step: '03', text: "Make music you're proud of. At your pace. Online or in the studio in Manchester." },
-          ].map((item, i) => (
-            <div key={item.step} style={{ padding: '56px 48px', borderLeft: i === 0 ? 'none' : '1px solid rgba(0,0,0,0.08)' }}>
-              <p style={{ fontWeight: 900, fontSize: 64, letterSpacing: '-0.04em', color: 'rgba(0,0,0,0.08)', marginBottom: 20, lineHeight: 1 }}>{item.step}</p>
-              <p style={{ fontSize: 13, lineHeight: 1.8, color: 'rgba(0,0,0,0.5)' }}>{item.text}</p>
-            </div>
-          ))}
-        </div>
-      </motion.section>
-
-      {/* ── TESTIMONIALS ── */}
-      <motion.div {...fadeUp}>
-        <Testimonials />
-      </motion.div>
-
       {/* ── PRICING ── */}
       <motion.section {...fadeUp} style={{ background: '#080808', borderTop: '1px solid #1a1a1a' }}>
         <div style={{ padding: '48px 48px 32px', borderBottom: '1px solid #1a1a1a' }}>
-          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>05 — Pricing</div>
+          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>03 — Pricing</div>
           <h2 style={{ fontWeight: 900, fontSize: 'clamp(32px, 4vw, 64px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9 }}>Simple Rates</h2>
           <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.35)', marginTop: 10 }}>No hidden costs. First session is always free.</p>
         </div>
@@ -309,7 +206,7 @@ export default function TutoringPage() {
       {/* ── BOOKING ── */}
       <motion.section {...fadeUp} id="booking" style={{ background: '#080808', borderTop: '1px solid #1a1a1a' }}>
         <div style={{ padding: '48px 48px 32px', borderBottom: '1px solid #1a1a1a' }}>
-          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>06 — Book</div>
+          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>04 — Book</div>
           <h2 style={{ fontWeight: 900, fontSize: 'clamp(32px, 4vw, 64px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9 }}>Book a Session</h2>
           <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', marginTop: 10 }}>First session is free — 20 minutes, no pressure. Or jump straight in.</p>
         </div>
@@ -369,7 +266,7 @@ export default function TutoringPage() {
       {/* ── BULK SESSIONS ── */}
       <motion.section {...fadeUp} style={{ background: '#080808', borderTop: '1px solid #1a1a1a' }}>
         <div style={{ padding: '48px 48px 32px', borderBottom: '1px solid #1a1a1a' }}>
-          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>07 — Bulk Sessions</div>
+          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>05 — Bulk Sessions</div>
           <h2 style={{ fontWeight: 900, fontSize: 'clamp(32px, 4vw, 64px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9 }}>Commit &amp; Save</h2>
           <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', marginTop: 10 }}>Pay upfront, book at your own pace. Save up to £120 on a block of sessions.</p>
         </div>
@@ -421,6 +318,108 @@ export default function TutoringPage() {
           </p>
         </div>
       </motion.section>
+
+      {/* ── THE CASE ── */}
+      <motion.section
+        {...fadeUp}
+        className="grid-two-col"
+        style={{ background: '#080808', borderTop: '1px solid #1a1a1a', minHeight: 360 }}
+      >
+        <div style={{ padding: '64px 48px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <p style={{ fontWeight: 900, fontSize: 'clamp(20px, 2.5vw, 34px)', letterSpacing: '-0.02em', lineHeight: 1.4, marginBottom: 24 }}>
+            You&apos;ve got music in you.<br />You know it.
+          </p>
+          <p style={{ fontSize: 14, lineHeight: 1.9, color: 'rgba(255,255,255,0.5)', marginBottom: 16 }}>
+            Maybe you&apos;ve got half-finished tracks and no idea what&apos;s missing. Maybe you&apos;ve never opened a DAW but music is what you want to do with your life. Maybe you&apos;ve spent months watching tutorials and still feel like you&apos;re going nowhere.
+          </p>
+          <p style={{ fontWeight: 900, fontSize: 18, letterSpacing: '-0.01em' }}>
+            These sessions change that.
+          </p>
+        </div>
+        <div style={{
+          borderLeft: '1px solid #1a1a1a', padding: '64px 48px',
+          display: 'flex', flexDirection: 'column', justifyContent: 'center',
+          background: '#111111',
+        }}>
+          <p style={{ fontSize: 14, lineHeight: 1.9, color: 'rgba(255,255,255,0.5)', marginBottom: 16 }}>
+            The problem isn&apos;t talent. It&apos;s having nobody in your corner who actually knows what they&apos;re doing. Who can look at what you&apos;re making, tell you exactly what it needs, and show you how to get there.
+          </p>
+          <p style={{ fontSize: 14, lineHeight: 1.9, color: 'rgba(255,255,255,0.5)' }}>
+            I&apos;m not a teacher who used to make music. I&apos;m an artist who also teaches. That&apos;s a different thing entirely.
+          </p>
+        </div>
+      </motion.section>
+
+      {/* ── THE GUIDE — light section ── */}
+      <motion.section
+        {...fadeUp}
+        style={{ background: '#f0ede8', color: '#080808', position: 'relative', overflow: 'hidden' }}
+      >
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: 'url(/grunge-texture.jpg)',
+          backgroundSize: 'cover',
+          opacity: 0.06,
+          mixBlendMode: 'multiply',
+          pointerEvents: 'none',
+        } as React.CSSProperties} />
+        <div className="grid-two-col" style={{ position: 'relative', zIndex: 1, minHeight: 480 }}>
+          <div style={{ padding: '64px 48px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 16 }}>
+              06 — The Guide
+            </div>
+            <p style={{ fontWeight: 900, fontSize: 'clamp(20px, 2.5vw, 34px)', letterSpacing: '-0.02em', lineHeight: 1.4, marginBottom: 20 }}>
+              I&apos;m Elcee. Recording artist, mixing engineer, and studio owner based in Manchester.
+            </p>
+            <p style={{ fontSize: 14, lineHeight: 1.9, color: 'rgba(0,0,0,0.55)', marginBottom: 16 }}>
+              I&apos;m still in the room. Still making music. Which means everything I teach is tested, current, and real.
+            </p>
+            <p style={{ fontSize: 14, lineHeight: 1.9, color: 'rgba(0,0,0,0.55)', marginBottom: 16 }}>
+              I&apos;ve recorded at Abbey Road. Flown to Amsterdam by JBL to work in Lady Gaga&apos;s studio and break down unreleased Justin Bieber tracks. First Class degree in Electronic Music Production.
+            </p>
+          </div>
+          <div style={{ position: 'relative', overflow: 'hidden', background: '#d8d5d0', borderLeft: '2px solid rgba(0,0,0,0.08)', minHeight: 480 }}>
+            <Image
+              src="/elcee-portrait.jpg"
+              alt="Elcee The Alchemist"
+              fill
+              style={{ objectFit: 'cover', objectPosition: 'center 15%', filter: 'grayscale(20%)' }}
+            />
+          </div>
+        </div>
+      </motion.section>
+
+      {/* ── HOW IT WORKS ── */}
+      <motion.section {...fadeUp} style={{ background: '#f0ede8', color: '#080808', position: 'relative', overflow: 'hidden' }}>
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: 'url(/grunge-texture.jpg)',
+          backgroundSize: 'cover',
+          opacity: 0.06,
+          mixBlendMode: 'multiply',
+          pointerEvents: 'none',
+        } as React.CSSProperties} />
+        <div style={{ padding: '48px 48px 32px', borderBottom: '1px solid rgba(0,0,0,0.08)', position: 'relative', zIndex: 1 }}>
+          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 12 }}>07 — Process</div>
+          <h2 style={{ fontWeight: 900, fontSize: 'clamp(32px, 4vw, 64px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9, color: '#080808' }}>How It Works</h2>
+        </div>
+        <div className="grid-three-col" style={{ position: 'relative', zIndex: 1, borderBottom: '1px solid rgba(0,0,0,0.08)' }}>
+          {[
+            { step: '01', text: "Book your free first session — a 20-minute call to figure out where you are and where you want to go." },
+            { step: '02', text: "Every session is built around you. No wasted time on things you don't need yet." },
+            { step: '03', text: "Make music you're proud of. At your pace. Online or in the studio in Manchester." },
+          ].map((item, i) => (
+            <div key={item.step} style={{ padding: '56px 48px', borderLeft: i === 0 ? 'none' : '1px solid rgba(0,0,0,0.08)' }}>
+              <p style={{ fontWeight: 900, fontSize: 64, letterSpacing: '-0.04em', color: 'rgba(0,0,0,0.08)', marginBottom: 20, lineHeight: 1 }}>{item.step}</p>
+              <p style={{ fontSize: 13, lineHeight: 1.8, color: 'rgba(0,0,0,0.5)' }}>{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </motion.section>
+
+      <motion.div {...fadeUp}>
+        <Testimonials />
+      </motion.div>
 
       <BookingPrompt />
 
