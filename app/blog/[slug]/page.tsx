@@ -1,8 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import Navigation from "../../components/Navigation";
+import SiteFooter from "../../components/SiteFooter";
 
-const blogPosts: Record<string, any> = {
+const blogPosts: Record<string, { title: string; date: string; category: string; readTime: string; content: string }> = {
   "preparing-first-studio-session": {
     title: "How to Prepare for Your First Studio Session",
     date: "2026-02-18",
@@ -89,52 +90,9 @@ Perfectionism kills momentum. Here's the truth:
 - **Small imperfections add character.** A perfectly autotuned, time-aligned, overly polished vocal often sounds lifeless. Embrace the rawness.
 - **Trust your engineer.** If I say we got it, we probably did. I've heard hundreds of takes—I know when it's good.
 
-### Be Open to Trying Things
-
-Sometimes I'll suggest:
-
-- Doubling a vocal line for emphasis
-- Trying a different delivery style
-- Adding adlibs or harmonies you didn't plan
-
-Stay open. Some of the best moments happen spontaneously.
-
-## After the Session
-
-### What to Expect
-
-- **Rough mix:** I'll usually send a rough mix within 24-48 hours so you can hear what we recorded.
-- **Final mix/master:** If we're doing full mixing, expect 3-7 days depending on complexity.
-- **Revisions:** Most engineers (including me) offer 2-3 rounds of revisions. Use them wisely—don't ask for major changes, but definitely speak up if something's not sitting right.
-
-### Follow-Up
-
-- **Provide clear feedback on the rough mix.** "Make it louder" isn't helpful. "The vocals feel buried—can we bring them up 2dB?" is.
-- **Reference other tracks if you're struggling to articulate what you want.** "I want the vocal clarity of [Artist X]" gives me a target.
-- **Be patient.** Mixing takes time. Rushing it leads to subpar results.
-
-## Common First-Timer Mistakes
-
-**1. Not hydrating properly**  
-Your voice needs water. Start hydrating the day before your session, not 10 minutes before.
-
-**2. Bringing too many people**  
-A supportive friend? Great. Five friends with five different opinions? Disaster.
-
-**3. Trying to record and mix in one session**  
-Unless it's a very simple track, this rarely works well. Focus on getting a great recording first, then mix separately.
-
-**4. Not trusting the process**  
-You hired a professional. Trust their judgment. If something feels off, communicate—but don't micromanage every decision.
-
-**5. Showing up late**  
-Studio time is expensive. Being 15 minutes late means you just lost £7-10 and threw off the whole session's rhythm.
-
 ## Bottom Line
 
 A great studio session comes down to preparation, communication, and trust. Come ready, stay open, and work with your engineer—not against them.
-
-And if you're looking for a recording studio in Manchester, [book a session](/studio) with me. I specialize in working with independent artists who are serious about their sound but don't have major-label budgets.
 
 ---
 
@@ -155,233 +113,168 @@ Here are the five biggest mistakes I see, and how to fix them.
 
 ## 1. Over-Compressing Vocals
 
-**The Mistake:**  
+**The Mistake:**
 You want your vocals loud and upfront, so you crank the compressor until the vocal sits perfectly on top of the beat. Problem: it sounds lifeless, flat, and fatiguing to listen to.
 
-**Why It Happens:**  
-Compression makes quiet parts louder and loud parts quieter, creating a more consistent volume. But too much compression removes all the dynamics—the natural rise and fall that makes vocals feel human.
-
-**The Fix:**  
+**The Fix:**
 - Use compression to control peaks, not flatten everything.
 - Start with a ratio of 3:1 or 4:1 (not 8:1 or higher).
 - Aim for 3-6dB of gain reduction, not 10-15dB.
-- If you need more presence, use EQ or saturation instead of more compression.
-
-**Rule of thumb:** If you mute the compressor and the vocal disappears, you're compressing too hard.
 
 ## 2. Not Cutting Low-End Mud
 
-**The Mistake:**  
+**The Mistake:**
 Your mix sounds fine on your laptop speakers or headphones, but on a real system it's muddy, boomy, and the bass is fighting with everything else.
 
-**Why It Happens:**  
-Most instruments—even vocals—have low-frequency content you don't need. This "mud" builds up and clutters your mix, especially between 200-500Hz.
-
-**The Fix:**  
-- **High-pass filter everything that isn't bass or kick.** Start around 80-100Hz for vocals, 100-150Hz for guitars, etc.
-- **Cut, don't boost.** If something sounds muddy, cut 200-400Hz with a narrow EQ band. Don't boost highs to compensate—that just makes it harsh.
-- **Reference your mix on different speakers.** What sounds fine on laptop speakers might be a mess on a real system.
-
-**Rule of thumb:** If it's not the bass or kick drum, it probably doesn't need to be loud below 100Hz.
+**The Fix:**
+- High-pass filter everything that isn't bass or kick.
+- Cut, don't boost. If something sounds muddy, cut 200-400Hz.
+- Reference your mix on different speakers.
 
 ## 3. Making Everything Loud
 
-**The Mistake:**  
-Every element in your mix is at maximum volume because you want it all to be heard. Result: a cluttered, fatiguing mess where nothing stands out.
+**The Mistake:**
+Every element is at maximum volume. Result: a cluttered, fatiguing mess where nothing stands out.
 
-**Why It Happens:**  
-When you're making music, every part feels important. But good mixing is about contrast—some things need to be quiet so others can shine.
-
-**The Fix:**  
-- **Start your mix with faders at -10dB to -15dB.** This gives you headroom and forces you to make intentional choices about what's loudest.
-- **Create a hierarchy.** In most tracks: vocals are loudest, drums/bass next, then everything else. Don't fight this.
-- **Use automation.** If a part only needs to be loud during the chorus, automate it—don't leave it blasting through the whole track.
-
-**Rule of thumb:** If everything is loud, nothing is loud.
+**The Fix:**
+- Start your mix with faders at -10dB to -15dB.
+- Create a hierarchy. In most tracks: vocals are loudest, drums/bass next.
+- Use automation for dynamic sections.
 
 ## 4. Relying on Mastering to Fix a Bad Mix
 
-**The Mistake:**  
-Your mix sounds weak, thin, or messy, but you think "the mastering engineer will fix it." Spoiler: they won't.
+**The Mistake:**
+Your mix sounds weak or messy, but you think the mastering engineer will fix it.
 
-**Why It Happens:**  
-Mastering is often misunderstood as magic fairy dust that makes everything sound professional. In reality, mastering is about making a *good mix* sound *great*—it can't fix fundamental mix problems.
-
-**The Fix:**  
-- **Get your mix right first.** If the vocal is buried, mastering won't suddenly make it audible. If the bass is muddy, mastering will just make it louder mud.
-- **Master your own tracks if you're learning.** Use a reference track in the same genre and match its overall loudness and tone. Tools like Ozone or free alternatives can get you 80% there.
-- **Hire a mastering engineer for important releases.** But only once your mix is actually finished.
-
-**Rule of thumb:** If your mix doesn't sound good before mastering, it won't sound good after.
+**The Fix:**
+- Get your mix right first. Mastering makes a good mix great—it can't fix fundamental problems.
+- If your mix doesn't sound good before mastering, it won't sound good after.
 
 ## 5. Not Using Reference Tracks
 
-**The Mistake:**  
-You mix in a vacuum, trusting your ears and your monitors. Your mix sounds "good" to you, but when you compare it to professional tracks, it's thin, dull, or harsh.
+**The Mistake:**
+You mix in a vacuum. Your mix sounds "good" to you, but compared to professional tracks it's thin, dull, or harsh.
 
-**Why It Happens:**  
-Your ears adjust to what you're hearing. After an hour of mixing, you lose objectivity. What sounded "bright" at the start now sounds normal, so you keep adding more highs.
-
-**The Fix:**  
-- **Load a reference track into your DAW** from the same genre as your song. Match the loudness (turn the reference down to match your mix level).
-- **A/B constantly.** Listen to your mix, then the reference, then your mix again. Pay attention to:
-  - How loud is the vocal relative to the beat?
-  - How much bass is there?
-  - How bright are the hi-hats?
-  - How wide does it feel?
-- **Steal the vibe, not the sound.** You're not trying to copy the reference exactly—you're using it as a north star to stay objective.
-
-**Rule of thumb:** If you're not referencing, you're guessing.
-
-## Bonus: Mixing at Loud Volumes
-
-Not technically one of the five, but it's worth mentioning: **don't mix at loud volumes.**
-
-Loud volumes trick your ears into thinking the mix sounds better than it does (the Fletcher-Munson curve). You'll also fatigue your ears, making it impossible to judge accurately after an hour.
-
-**Mix at conversational volume**—quiet enough that you can talk over it comfortably. Check your mix at loud volumes occasionally, but don't make decisions there.
-
-## Bottom Line
-
-Mixing is a skill that takes time to develop. These mistakes aren't signs you're bad at music—they're part of the learning process. The key is recognizing them and fixing them.
-
-And if you'd rather leave the mixing to someone who's made all these mistakes (and learned from them), [book a mixing session](/studio) with me. I offer professional mixing and mastering for independent artists in Manchester and beyond.
+**The Fix:**
+- Load a reference track into your DAW from the same genre.
+- A/B constantly. Listen to your mix, then the reference, then back.
+- If you're not referencing, you're guessing.
 
 ---
 
-**Want more mixing tips?** [Follow me on Instagram](https://instagram.com/elceethealchemist) where I share quick production insights and before/after examples.
+**Want professional mixing?** [Book a session](/studio) with me. I offer mixing and mastering for independent artists in Manchester and beyond.
     `
   },
-  // Additional blog posts truncated for brevity - can add more later
 };
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const post = blogPosts[params.slug];
-  
-  if (!post) {
-    return {
-      title: "Post Not Found",
-    };
-  }
-
+  if (!post) return { title: "Post Not Found" };
   return {
     title: `${post.title} | Elcee the Alchemist`,
-    description: post.content.substring(0, 155),
+    description: post.content.substring(0, 155).replace(/[#*-]/g, '').trim(),
   };
+}
+
+function renderContent(content: string): string {
+  return content
+    .split('\n')
+    .map((line: string) => {
+      if (line.startsWith('# ')) return `<h1>${line.slice(2)}</h1>`;
+      if (line.startsWith('## ')) return `<h2>${line.slice(3)}</h2>`;
+      if (line.startsWith('### ')) return `<h3>${line.slice(4)}</h3>`;
+      if (line.startsWith('- **') || line.startsWith('- ')) {
+        const inner = line.slice(2).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+        return `<li>${inner}</li>`;
+      }
+      if (line.startsWith('---')) return `<hr />`;
+      if (line.trim() === '') return '';
+      const withLinks = line.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+      const withBold = withLinks.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      return `<p>${withBold}</p>`;
+    })
+    .join('');
 }
 
 export default function BlogPost({ params }: { params: { slug: string } }) {
   const post = blogPosts[params.slug];
-
-  if (!post) {
-    notFound();
-  }
+  if (!post) notFound();
 
   return (
-    <div className="min-h-screen bg-white text-black">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/90 backdrop-blur-sm z-50 border-b border-black/10">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <Link href="/">
-            <Image 
-              src="/logos/eta-logo-black.png" 
-              alt="Elcee the Alchemist" 
-              width={120} 
-              height={40}
-              className="h-10 w-auto"
-            />
-          </Link>
-          <div className="flex gap-8 text-sm font-medium">
-            <Link href="/" className="hover:text-gray-600 transition">Home</Link>
-            <Link href="/studio" className="hover:text-gray-600 transition">Studio</Link>
-            <Link href="/blog" className="hover:text-gray-600 transition">Blog</Link>
-            <Link href="/contact" className="hover:text-gray-600 transition">Contact</Link>
-          </div>
-        </div>
-      </nav>
+    <div style={{ background: '#080808', color: '#fafafa', minHeight: '100vh' }}>
+      <Navigation />
 
-      {/* Article Header */}
-      <article className="pt-32 pb-20 px-6">
-        <div className="max-w-3xl mx-auto">
-          <Link 
-            href="/blog"
-            className="inline-block text-sm font-medium mb-6 hover:underline"
-          >
+      <article style={{ paddingTop: 120, paddingBottom: 80, paddingLeft: 48, paddingRight: 48 }}>
+        <div style={{ maxWidth: 720, margin: '0 auto' }}>
+          <Link href="/blog" style={{
+            fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase',
+            color: 'rgba(255,255,255,0.35)', textDecoration: 'none', display: 'inline-block', marginBottom: 32,
+          }}>
             ← Back to Blog
           </Link>
 
-          <div className="flex gap-4 text-sm text-gray-500 mb-4">
-            <span className="bg-black text-white px-3 py-1">{post.category}</span>
-            <span>{post.date}</span>
-            <span>•</span>
-            <span>{post.readTime}</span>
+          <div style={{ display: 'flex', gap: 16, alignItems: 'center', marginBottom: 24, flexWrap: 'wrap' }}>
+            <span style={{
+              fontSize: 8, letterSpacing: '0.2em', textTransform: 'uppercase',
+              padding: '4px 10px', border: '1px solid rgba(255,255,255,0.2)',
+              color: 'rgba(255,255,255,0.5)',
+            }}>{post.category}</span>
+            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)' }}>{post.date}</span>
+            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)' }}>·</span>
+            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)' }}>{post.readTime}</span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl font-bold mb-8 leading-tight">
+          <h1 style={{ fontWeight: 900, fontSize: 'clamp(28px, 4vw, 56px)', letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: 48, borderBottom: '1px solid #1a1a1a', paddingBottom: 48 }}>
             {post.title}
           </h1>
 
-          {/* Article Content */}
-          <div 
-            className="prose prose-lg max-w-none"
-            dangerouslySetInnerHTML={{ 
-              __html: post.content
-                .split('\n')
-                .map((line: string) => {
-                  if (line.startsWith('# ')) return `<h1 class="text-4xl font-bold mt-12 mb-6">${line.slice(2)}</h1>`;
-                  if (line.startsWith('## ')) return `<h2 class="text-3xl font-bold mt-10 mb-4">${line.slice(3)}</h2>`;
-                  if (line.startsWith('### ')) return `<h3 class="text-2xl font-bold mt-8 mb-3">${line.slice(4)}</h3>`;
-                  if (line.startsWith('**') && line.endsWith('**')) return `<p class="font-bold mt-4 mb-2">${line.slice(2, -2)}</p>`;
-                  if (line.startsWith('- ')) return `<li class="ml-6">${line.slice(2)}</li>`;
-                  if (line.startsWith('---')) return `<hr class="my-8 border-black/10" />`;
-                  if (line.trim() === '') return '<br />';
-                  if (line.includes('[') && line.includes('](')) {
-                    const linkRegex = /\[([^\]]+)\]\(([^\)]+)\)/g;
-                    return `<p class="mb-4 leading-relaxed">${line.replace(linkRegex, '<a href="$2" class="underline font-medium">$1</a>')}</p>`;
-                  }
-                  return `<p class="mb-4 leading-relaxed">${line}</p>`;
-                })
-                .join('')
-            }}
+          <div
+            style={{ fontSize: 15, lineHeight: 1.9, color: 'rgba(255,255,255,0.65)' }}
+            dangerouslySetInnerHTML={{ __html: renderContent(post.content) }}
           />
         </div>
       </article>
 
-      {/* CTA Section */}
-      <section className="py-20 px-6 bg-black text-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-6">Ready to Work Together?</h2>
-          <p className="text-xl text-gray-300 mb-8">
+      {/* Inline style block for article typography */}
+      <style>{`
+        article h1 { font-weight: 900; font-size: clamp(22px, 3vw, 40px); letter-spacing: -0.02em; color: #fafafa; margin: 48px 0 16px; line-height: 1.15; }
+        article h2 { font-weight: 900; font-size: clamp(18px, 2.5vw, 28px); letter-spacing: -0.01em; color: #fafafa; margin: 40px 0 12px; line-height: 1.2; }
+        article h3 { font-weight: 900; font-size: 17px; color: #fafafa; margin: 32px 0 8px; }
+        article p { margin-bottom: 16px; }
+        article li { padding-left: 16px; position: relative; margin-bottom: 8px; }
+        article li::before { content: '—'; position: absolute; left: 0; color: rgba(255,255,255,0.25); }
+        article hr { border: none; border-top: 1px solid #1a1a1a; margin: 40px 0; }
+        article strong { color: #fafafa; font-weight: 900; }
+        article a { color: #fafafa; text-decoration: underline; }
+      `}</style>
+
+      {/* CTA — light section */}
+      <section style={{ padding: '80px 48px', background: '#f0ede8', color: '#080808' }}>
+        <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
+          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 16 }}>
+            Ready to Work Together?
+          </div>
+          <h2 style={{ fontWeight: 900, fontSize: 'clamp(28px, 4vw, 56px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9, marginBottom: 20 }}>
+            Book Studio Time
+          </h2>
+          <p style={{ fontSize: 14, lineHeight: 1.8, color: 'rgba(0,0,0,0.55)', marginBottom: 36 }}>
             Professional recording, mixing, and mastering services in Manchester.
           </p>
-          <Link 
-            href="/studio"
-            className="inline-block bg-white text-black px-8 py-4 text-lg font-semibold hover:bg-gray-200 transition"
-          >
-            Book Studio Time
+          <Link href="/studio" style={{
+            display: 'inline-flex', alignItems: 'center', padding: '13px 28px',
+            fontWeight: 900, fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase',
+            background: '#080808', color: '#fafafa', textDecoration: 'none',
+          }}>
+            View Studio Services
           </Link>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 px-6 border-t border-black/10">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-gray-600">© 2026 Elcee the Alchemist. All rights reserved.</p>
-          <Image 
-            src="/logos/ankh.png" 
-            alt="Ankh" 
-            width={30} 
-            height={30}
-            className="opacity-30"
-          />
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
 
 export async function generateStaticParams() {
-  return Object.keys(blogPosts).map((slug) => ({
-    slug,
-  }));
+  return Object.keys(blogPosts).map((slug) => ({ slug }));
 }

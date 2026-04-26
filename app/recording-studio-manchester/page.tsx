@@ -1,5 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
+import Navigation from "../components/Navigation";
+import SiteFooter from "../components/SiteFooter";
 
 export const metadata = {
   title: "Recording Studio Manchester | Professional Mixing & Mastering | Elcee the Alchemist",
@@ -7,282 +8,231 @@ export const metadata = {
   keywords: "recording studio manchester, mixing and mastering manchester, music production manchester, ableton tutor manchester, affordable recording studio, rap recording studio manchester, independent artist recording",
 };
 
+const SERVICE_ITEMS = [
+  {
+    title: 'Recording Sessions',
+    prices: [
+      { label: 'Ad-hoc hourly rate', value: '£35/hr' },
+      { label: 'Loyalty subscription (£240/mo)', value: '£30/hr' },
+    ],
+    features: ['Vocal recording & comping', 'Live instrument tracking', 'Professional microphones & preamps', 'Real-time monitoring & feedback', 'Stems provided after session'],
+  },
+  {
+    title: 'Mixing & Mastering',
+    prices: [
+      { label: 'Full Mix & Master', value: '£340' },
+      { label: 'Vocal Mix (no master)', value: '£190' },
+      { label: 'Mastering only', value: '£40' },
+    ],
+    features: ['Industry-standard plugins & processing', 'Up to 3 revisions included', 'Mastered for streaming platforms', 'Fast turnaround (3–7 days)'],
+  },
+  {
+    title: 'Music Production',
+    prices: [
+      { label: 'Bespoke production', value: '£400+' },
+      { label: 'Additional production', value: '£150+' },
+    ],
+    features: ['Custom beats from scratch', 'Arrangement & composition', 'Sound design & sampling', 'Co-production sessions available', 'Stems & project files included'],
+  },
+  {
+    title: 'Ableton Tutoring',
+    prices: [
+      { label: '1-on-1 sessions', value: '£35/hr' },
+    ],
+    features: ['Beginner to advanced levels', 'Music production fundamentals', 'Mixing & mastering techniques', 'Workflow optimisation', 'Personalised curriculum'],
+  },
+];
+
+const TESTIMONIALS = [
+  { quote: "Working with Elcee transformed my sound. Professional setup, great ear for detail, and actually understands what independent artists need.", author: "Manchester Artist" },
+  { quote: "Best value recording studio in Manchester. Quality rivals the big studios but at a fraction of the price. Highly recommend.", author: "Local Producer" },
+  { quote: "As someone new to recording, Elcee made the whole process easy and stress-free. Explained everything clearly and got amazing results.", author: "Singer-Songwriter" },
+];
+
 export default function RecordingStudioManchesterPage() {
   return (
-    <div className="min-h-screen bg-white text-black">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/90 backdrop-blur-sm z-50 border-b border-black/10">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <Link href="/">
-            <Image 
-              src="/logos/eta-logo-black.png" 
-              alt="Elcee the Alchemist" 
-              width={120} 
-              height={40}
-              className="h-10 w-auto"
-            />
-          </Link>
-          <div className="flex gap-8 text-sm font-medium">
-            <Link href="/" className="hover:text-gray-600 transition">Home</Link>
-            <Link href="/studio" className="hover:text-gray-600 transition">Studio</Link>
-            <Link href="/shop" className="hover:text-gray-600 transition">Shop</Link>
-            <Link href="/contact" className="hover:text-gray-600 transition">Contact</Link>
-          </div>
-        </div>
-      </nav>
+    <div style={{ background: '#080808', color: '#fafafa', minHeight: '100vh' }}>
+      <Navigation />
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 px-6 bg-black text-white">
-        <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6">
-            Recording Studio in Manchester
+      {/* Hero */}
+      <section style={{ paddingTop: 120, paddingBottom: 80, paddingLeft: 48, paddingRight: 48 }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 16 }}>
+            Recording Studio — Manchester
+          </div>
+          <h1 style={{ fontWeight: 900, fontSize: 'clamp(36px, 5.5vw, 88px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9, marginBottom: 24 }}>
+            Professional<br />Recording Studio<br />Manchester
           </h1>
-          <p className="text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
-            Professional recording, mixing, mastering, and production services for independent artists. 
-            Competitive rates, premium quality.
+          <p style={{ fontSize: 16, lineHeight: 1.8, color: 'rgba(255,255,255,0.45)', maxWidth: 520, marginBottom: 36 }}>
+            Recording, mixing, mastering, and production for independent artists. Competitive rates, premium quality.
           </p>
-          <div className="flex gap-4 justify-center flex-wrap">
-            <Link 
-              href="/studio#booking" 
-              className="bg-white text-black px-8 py-4 text-lg font-semibold hover:bg-gray-200 transition"
-            >
+          <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
+            <Link href="/studio#booking" style={{
+              display: 'inline-flex', alignItems: 'center', padding: '13px 28px',
+              fontWeight: 900, fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase',
+              background: '#fafafa', color: '#080808', textDecoration: 'none',
+            }}>
               Book Studio Time
             </Link>
-            <Link 
-              href="#services" 
-              className="border-2 border-white px-8 py-4 text-lg font-semibold hover:bg-white hover:text-black transition"
-            >
+            <a href="#services" style={{
+              display: 'inline-flex', alignItems: 'center', padding: '13px 28px',
+              fontWeight: 900, fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase',
+              background: 'transparent', color: '#fafafa',
+              border: '1.5px solid rgba(255,255,255,0.4)', textDecoration: 'none',
+            }}>
               View Services
-            </Link>
+            </a>
           </div>
         </div>
       </section>
 
-      {/* Why Choose Us */}
-      <section className="py-20 px-6">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold mb-12 text-center">Why Choose Our Manchester Studio?</h2>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="border-2 border-black p-8">
-              <h3 className="text-2xl font-bold mb-4">Professional Equipment</h3>
-              <p className="text-gray-700 leading-relaxed">
-                Industry-standard recording gear, acoustic treatment, and monitoring for pristine sound quality. 
-                The same tools used by top studios, at independent artist prices.
-              </p>
-            </div>
-            
-            <div className="border-2 border-black p-8">
-              <h3 className="text-2xl font-bold mb-4">Expert Engineer</h3>
-              <p className="text-gray-700 leading-relaxed">
-                6 years of experience recording, mixing, and producing for independent artists across genres. 
-                As an artist myself, I understand your vision and workflow.
-              </p>
-            </div>
-            
-            <div className="border-2 border-black p-8">
-              <h3 className="text-2xl font-bold mb-4">Affordable Rates</h3>
-              <p className="text-gray-700 leading-relaxed">
-                Starting at £30/hr for loyalty clients. Transparent pricing, no hidden fees. 
-                Payment plans available for larger projects like EPs and albums.
-              </p>
-            </div>
+      {/* Why Choose */}
+      <section style={{ padding: '80px 48px', borderTop: '1px solid #1a1a1a' }}>
+        <div style={{ maxWidth: 960, margin: '0 auto' }}>
+          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 16 }}>
+            Why Choose Us
+          </div>
+          <h2 style={{ fontWeight: 900, fontSize: 'clamp(28px, 4vw, 56px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9, marginBottom: 48 }}>
+            Built for<br />Independent Artists
+          </h2>
+          <div className="grid-two-col" style={{ gap: 1 }}>
+            {[
+              { title: 'Professional Equipment', body: 'Industry-standard recording gear, acoustic treatment, and monitoring for pristine sound quality. The same tools used by top studios, at independent artist prices.' },
+              { title: 'Expert Engineer', body: '6 years of experience recording, mixing, and producing for independent artists across genres. As an artist myself, I understand your vision and workflow.' },
+              { title: 'Affordable Rates', body: 'Starting at £30/hr for loyalty clients. Transparent pricing, no hidden fees. Payment plans available for larger projects like EPs and albums.' },
+              { title: 'Artist-Run', body: "I'm not just a service provider — I'm still actively making music. That means everything I do is current, tested, and built around what actually works." },
+            ].map((item) => (
+              <div key={item.title} style={{ padding: '40px', border: '1px solid #1a1a1a' }}>
+                <p style={{ fontWeight: 900, fontSize: 17, letterSpacing: '-0.01em', marginBottom: 12 }}>{item.title}</p>
+                <p style={{ fontSize: 14, lineHeight: 1.8, color: 'rgba(255,255,255,0.45)' }}>{item.body}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Services Section */}
-      <section id="services" className="py-20 px-6 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold mb-4 text-center">Studio Services & Pricing</h2>
-          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-            Professional recording and production services tailored for independent artists in Manchester and beyond.
-          </p>
-          
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            {/* Recording */}
-            <div className="bg-white border-2 border-black p-8">
-              <h3 className="text-3xl font-bold mb-4">Recording Sessions</h3>
-              <div className="space-y-3 mb-6">
-                <div className="flex justify-between items-baseline">
-                  <span className="font-medium">Ad-hoc hourly rate</span>
-                  <span className="text-2xl font-bold">£35/hr</span>
-                </div>
-                <div className="flex justify-between items-baseline">
-                  <span className="font-medium">Loyalty subscription (£240/mo)</span>
-                  <span className="text-2xl font-bold">£30/hr</span>
-                </div>
-              </div>
-              <ul className="space-y-2 text-gray-700">
-                <li>✓ Vocal recording & comping</li>
-                <li>✓ Live instrument tracking</li>
-                <li>✓ Professional microphones & preamps</li>
-                <li>✓ Real-time monitoring & feedback</li>
-                <li>✓ Stems provided after session</li>
-              </ul>
-            </div>
+      {/* Services — light section */}
+      <section id="services" style={{ padding: '80px 48px', background: '#f0ede8', color: '#080808' }}>
+        <div style={{ maxWidth: 960, margin: '0 auto' }}>
+          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 16 }}>
+            Services &amp; Pricing
+          </div>
+          <h2 style={{ fontWeight: 900, fontSize: 'clamp(28px, 4vw, 56px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9, marginBottom: 8 }}>
+            Studio Services
+          </h2>
+          <p style={{ fontSize: 14, color: 'rgba(0,0,0,0.45)', marginBottom: 48 }}>Professional recording and production services for independent artists.</p>
 
-            {/* Mixing & Mastering */}
-            <div className="bg-white border-2 border-black p-8">
-              <h3 className="text-3xl font-bold mb-4">Mixing & Mastering</h3>
-              <div className="space-y-3 mb-6">
-                <div className="flex justify-between items-baseline">
-                  <span className="font-medium">Full Mix & Master</span>
-                  <span className="text-2xl font-bold">£340</span>
+          <div className="grid-two-col" style={{ gap: 1, marginBottom: 1 }}>
+            {SERVICE_ITEMS.map((service) => (
+              <div key={service.title} style={{ padding: '40px', border: '1px solid rgba(0,0,0,0.12)', background: 'rgba(255,255,255,0.4)' }}>
+                <p style={{ fontWeight: 900, fontSize: 18, letterSpacing: '-0.01em', marginBottom: 20 }}>{service.title}</p>
+                <div style={{ marginBottom: 20 }}>
+                  {service.prices.map((p) => (
+                    <div key={p.label} style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(0,0,0,0.08)', paddingBottom: 8, marginBottom: 8 }}>
+                      <span style={{ fontSize: 13, color: 'rgba(0,0,0,0.55)' }}>{p.label}</span>
+                      <span style={{ fontWeight: 900, fontSize: 16 }}>{p.value}</span>
+                    </div>
+                  ))}
                 </div>
-                <div className="flex justify-between items-baseline">
-                  <span className="font-medium">Vocal Mix (no master)</span>
-                  <span className="text-2xl font-bold">£190</span>
-                </div>
-                <div className="flex justify-between items-baseline">
-                  <span className="font-medium">Mastering only</span>
-                  <span className="text-2xl font-bold">£40</span>
-                </div>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                  {service.features.map((f) => (
+                    <li key={f} style={{ fontSize: 13, color: 'rgba(0,0,0,0.5)', marginBottom: 6, paddingLeft: 14, position: 'relative' }}>
+                      <span style={{ position: 'absolute', left: 0 }}>—</span>{f}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="space-y-2 text-gray-700">
-                <li>✓ Industry-standard plugins & processing</li>
-                <li>✓ Up to 3 revisions included</li>
-                <li>✓ Mastered for streaming platforms</li>
-                <li>✓ Fast turnaround (3-7 days)</li>
-              </ul>
-            </div>
-
-            {/* Production */}
-            <div className="bg-white border-2 border-black p-8">
-              <h3 className="text-3xl font-bold mb-4">Music Production</h3>
-              <div className="space-y-3 mb-6">
-                <div className="flex justify-between items-baseline">
-                  <span className="font-medium">Bespoke production</span>
-                  <span className="text-2xl font-bold">£400+</span>
-                </div>
-                <div className="flex justify-between items-baseline">
-                  <span className="font-medium">Additional production</span>
-                  <span className="text-2xl font-bold">£150+</span>
-                </div>
-              </div>
-              <ul className="space-y-2 text-gray-700">
-                <li>✓ Custom beats from scratch</li>
-                <li>✓ Arrangement & composition</li>
-                <li>✓ Sound design & sampling</li>
-                <li>✓ Co-production sessions available</li>
-                <li>✓ Stems & project files included</li>
-              </ul>
-            </div>
-
-            {/* Tutoring */}
-            <div className="bg-white border-2 border-black p-8">
-              <h3 className="text-3xl font-bold mb-4">Ableton Tutoring</h3>
-              <div className="space-y-3 mb-6">
-                <div className="flex justify-between items-baseline">
-                  <span className="font-medium">1-on-1 sessions</span>
-                  <span className="text-2xl font-bold">£35/hr</span>
-                </div>
-              </div>
-              <ul className="space-y-2 text-gray-700">
-                <li>✓ Beginner to advanced levels</li>
-                <li>✓ Music production fundamentals</li>
-                <li>✓ Mixing & mastering techniques</li>
-                <li>✓ Workflow optimization</li>
-                <li>✓ Personalized curriculum</li>
-              </ul>
-            </div>
+            ))}
           </div>
 
           {/* Add-ons */}
-          <div className="bg-black text-white p-8">
-            <h3 className="text-2xl font-bold mb-6">Add-On Services</h3>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div>
-                <p className="font-medium mb-1">Vocal Tuning</p>
-                <p className="text-gray-400">£40</p>
-              </div>
-              <div>
-                <p className="font-medium mb-1">Stem Separation</p>
-                <p className="text-gray-400">£75</p>
-              </div>
-              <div>
-                <p className="font-medium mb-1">Rush Service (+40%)</p>
-                <p className="text-gray-400">Available</p>
-              </div>
+          <div style={{ padding: '40px', background: '#080808', color: '#fafafa', marginTop: 1 }}>
+            <p style={{ fontWeight: 900, fontSize: 11, marginBottom: 20, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Add-On Services</p>
+            <div className="grid-two-col" style={{ gap: 24 }}>
+              {[
+                { label: 'Vocal Tuning', value: '£40' },
+                { label: 'Stem Separation', value: '£75' },
+                { label: 'Rush Service', value: '+40%' },
+              ].map((item) => (
+                <div key={item.label} style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #1a1a1a', paddingBottom: 12 }}>
+                  <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)' }}>{item.label}</span>
+                  <span style={{ fontWeight: 900, fontSize: 16 }}>{item.value}</span>
+                </div>
+              ))}
             </div>
           </div>
 
           {/* Packages */}
-          <div className="mt-12 grid md:grid-cols-2 gap-8">
-            <div className="bg-white border-2 border-black p-8">
-              <h3 className="text-2xl font-bold mb-4">3-Song Package</h3>
-              <p className="text-4xl font-bold mb-4">£920</p>
-              <p className="text-gray-700 mb-4">Perfect for singles or small EPs</p>
-              <ul className="space-y-2 text-gray-700">
-                <li>✓ Recording + Mixing + Mastering</li>
-                <li>✓ £307 per song (save £99)</li>
-                <li>✓ Payment plan available</li>
-              </ul>
-            </div>
-
-            <div className="bg-white border-2 border-black p-8">
-              <h3 className="text-2xl font-bold mb-4">5-Song Package</h3>
-              <p className="text-4xl font-bold mb-4">£1,450</p>
-              <p className="text-gray-700 mb-4">Ideal for full EPs or mixtapes</p>
-              <ul className="space-y-2 text-gray-700">
-                <li>✓ Recording + Mixing + Mastering</li>
-                <li>✓ £290 per song (save £250)</li>
-                <li>✓ Payment plan available</li>
-              </ul>
-            </div>
+          <div className="grid-two-col" style={{ gap: 1, marginTop: 1 }}>
+            {[
+              { title: '3-Song Package', price: '£920', sub: 'Perfect for singles or small EPs', features: ['Recording + Mixing + Mastering', '£307 per song (save £99)', 'Payment plan available'] },
+              { title: '5-Song Package', price: '£1,450', sub: 'Ideal for full EPs or mixtapes', features: ['Recording + Mixing + Mastering', '£290 per song (save £250)', 'Payment plan available'] },
+            ].map((pkg) => (
+              <div key={pkg.title} style={{ padding: '40px', border: '1px solid rgba(0,0,0,0.12)', background: 'rgba(255,255,255,0.4)' }}>
+                <p style={{ fontWeight: 900, fontSize: 18, marginBottom: 4 }}>{pkg.title}</p>
+                <p style={{ fontWeight: 900, fontSize: 40, letterSpacing: '-0.02em', lineHeight: 1, marginBottom: 8 }}>{pkg.price}</p>
+                <p style={{ fontSize: 13, color: 'rgba(0,0,0,0.45)', marginBottom: 20 }}>{pkg.sub}</p>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                  {pkg.features.map((f) => (
+                    <li key={f} style={{ fontSize: 13, color: 'rgba(0,0,0,0.5)', marginBottom: 6, paddingLeft: 14, position: 'relative' }}>
+                      <span style={{ position: 'absolute', left: 0 }}>—</span>{f}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Portfolio/Testimonials */}
-      <section className="py-20 px-6">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold mb-12 text-center">What Artists Say</h2>
-          
-          <div className="space-y-8">
-            <div className="border-l-4 border-black pl-6">
-              <p className="text-lg italic mb-4">
-                "Working with Elcee transformed my sound. Professional setup, great ear for detail, and actually understands what independent artists need."
-              </p>
-              <p className="font-bold">— Manchester Artist</p>
-            </div>
-            
-            <div className="border-l-4 border-black pl-6">
-              <p className="text-lg italic mb-4">
-                "Best value recording studio in Manchester. Quality rivals the big studios but at a fraction of the price. Highly recommend."
-              </p>
-              <p className="font-bold">— Local Producer</p>
-            </div>
-
-            <div className="border-l-4 border-black pl-6">
-              <p className="text-lg italic mb-4">
-                "As someone new to recording, Elcee made the whole process easy and stress-free. Explained everything clearly and got amazing results."
-              </p>
-              <p className="font-bold">— Singer-Songwriter</p>
-            </div>
+      {/* Testimonials */}
+      <section style={{ padding: '80px 48px', borderTop: '1px solid #1a1a1a' }}>
+        <div style={{ maxWidth: 960, margin: '0 auto' }}>
+          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 16 }}>
+            What Artists Say
+          </div>
+          <h2 style={{ fontWeight: 900, fontSize: 'clamp(28px, 4vw, 56px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9, marginBottom: 48 }}>
+            Trusted by<br />Manchester Artists
+          </h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+            {TESTIMONIALS.map((t) => (
+              <div key={t.author} style={{ padding: '40px', border: '1px solid #1a1a1a', borderLeft: '3px solid rgba(255,255,255,0.3)' }}>
+                <p style={{ fontSize: 16, lineHeight: 1.8, fontStyle: 'italic', color: 'rgba(255,255,255,0.65)', marginBottom: 16 }}>
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+                <p style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>{t.author}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Location & Contact */}
-      <section className="py-20 px-6 bg-gray-50">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-6">Based in Manchester</h2>
-          <p className="text-xl text-gray-700 mb-8">
-            Professional recording studio serving independent artists across Manchester and the North West. 
-            Remote mixing and mastering services available UK-wide.
+      {/* Location CTA — light section */}
+      <section style={{ padding: '80px 48px', background: '#f0ede8', color: '#080808' }}>
+        <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
+          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 16 }}>
+            Location
+          </div>
+          <h2 style={{ fontWeight: 900, fontSize: 'clamp(28px, 4vw, 56px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9, marginBottom: 20 }}>
+            Based in<br />Manchester
+          </h2>
+          <p style={{ fontSize: 14, lineHeight: 1.8, color: 'rgba(0,0,0,0.55)', maxWidth: 460, margin: '0 auto 40px' }}>
+            Serving independent artists across Manchester and the North West. Remote mixing and mastering available UK-wide.
           </p>
-          <div className="flex gap-4 justify-center flex-wrap">
-            <Link 
-              href="/studio#booking" 
-              className="bg-black text-white px-8 py-4 text-lg font-semibold hover:bg-gray-800 transition"
-            >
+          <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Link href="/studio#booking" style={{
+              display: 'inline-flex', alignItems: 'center', padding: '13px 28px',
+              fontWeight: 900, fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase',
+              background: '#080808', color: '#fafafa', textDecoration: 'none',
+            }}>
               Book Your Session
             </Link>
-            <Link 
-              href="/contact" 
-              className="border-2 border-black px-8 py-4 text-lg font-semibold hover:bg-black hover:text-white transition"
-            >
+            <Link href="/contact" style={{
+              display: 'inline-flex', alignItems: 'center', padding: '13px 28px',
+              fontWeight: 900, fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase',
+              background: 'transparent', color: '#080808',
+              border: '1.5px solid rgba(0,0,0,0.4)', textDecoration: 'none',
+            }}>
               Get in Touch
             </Link>
           </div>
@@ -290,53 +240,32 @@ export default function RecordingStudioManchesterPage() {
       </section>
 
       {/* SEO Content */}
-      <section className="py-20 px-6">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold mb-6">Recording Studio Manchester: Professional Services for Independent Artists</h2>
-          <div className="prose prose-lg max-w-none text-gray-700 space-y-4">
-            <p>
-              Looking for a professional <strong>recording studio in Manchester</strong>? Our studio offers high-quality 
-              recording, mixing, and mastering services designed specifically for independent artists, rappers, singers, 
-              and producers who demand professional results without the premium price tag.
-            </p>
-            <p>
-              With 6 years of experience in <strong>music production</strong> and engineering, we understand the unique 
-              challenges independent artists face. Whether you're recording your debut single, working on an EP, or 
-              need professional mixing and mastering for existing tracks, our Manchester studio provides the expertise 
-              and equipment to bring your vision to life.
-            </p>
-            <p>
-              Our services include <strong>vocal recording</strong>, <strong>beat production</strong>, <strong>mixing and mastering</strong>, 
-              and <strong>Ableton tutoring</strong>. We work with artists across all genres, specializing in hip-hop, rap, 
-              alternative, and electronic music. Competitive hourly rates start at just £30/hr for loyalty clients, with 
-              package deals available for EPs and albums.
-            </p>
-            <p>
-              Based in Manchester, we're easily accessible to artists across the North West, including Salford, Stockport, 
-              Oldham, and surrounding areas. Remote mixing and mastering services are also available for artists anywhere 
-              in the UK.
-            </p>
-            <p>
-              Ready to take your music to the next level? <Link href="/studio#booking" className="underline font-medium">Book your studio session today</Link> or 
-              <Link href="/contact" className="underline font-medium"> get in touch</Link> to discuss your project.
+      <section style={{ padding: '80px 48px', borderTop: '1px solid #1a1a1a' }}>
+        <div style={{ maxWidth: 720, margin: '0 auto' }}>
+          <h2 style={{ fontWeight: 900, fontSize: 24, letterSpacing: '-0.01em', marginBottom: 24 }}>
+            Recording Studio Manchester: Professional Services for Independent Artists
+          </h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {[
+              `Looking for a professional recording studio in Manchester? Our studio offers high-quality recording, mixing, and mastering services designed specifically for independent artists, rappers, singers, and producers who demand professional results without the premium price tag.`,
+              `With 6 years of experience in music production and engineering, we understand the unique challenges independent artists face. Whether you're recording your debut single, working on an EP, or need professional mixing and mastering for existing tracks, our Manchester studio provides the expertise and equipment to bring your vision to life.`,
+              `Our services include vocal recording, beat production, mixing and mastering, and Ableton tutoring. We work with artists across all genres, specialising in hip-hop, rap, alternative, and electronic music. Competitive hourly rates start at just £30/hr for loyalty clients, with package deals available for EPs and albums.`,
+              `Based in Manchester, we're easily accessible to artists across the North West, including Salford, Stockport, Oldham, and surrounding areas. Remote mixing and mastering services are also available for artists anywhere in the UK.`,
+            ].map((para, i) => (
+              <p key={i} style={{ fontSize: 14, lineHeight: 1.9, color: 'rgba(255,255,255,0.45)' }}>{para}</p>
+            ))}
+            <p style={{ fontSize: 14, lineHeight: 1.9, color: 'rgba(255,255,255,0.45)' }}>
+              Ready to take your music to the next level?{' '}
+              <Link href="/studio#booking" style={{ color: '#fafafa', textDecoration: 'underline' }}>Book your studio session today</Link>{' '}
+              or{' '}
+              <Link href="/contact" style={{ color: '#fafafa', textDecoration: 'underline' }}>get in touch</Link>{' '}
+              to discuss your project.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 px-6 border-t border-black/10">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-gray-600">© 2026 Elcee the Alchemist. All rights reserved.</p>
-          <Image 
-            src="/logos/ankh.png" 
-            alt="Ankh" 
-            width={30} 
-            height={30}
-            className="opacity-30"
-          />
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

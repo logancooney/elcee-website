@@ -4,119 +4,83 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-interface NavigationProps {
-  theme?: 'dark' | 'light';
-}
+const NAV_LINKS = [
+  { label: 'Music', href: '/#releases' },
+  { label: 'Studio', href: '/studio' },
+  { label: 'Shop', href: '/shop' },
+  { label: 'Contact', href: '/contact' },
+];
 
-export default function Navigation({ theme = 'dark' }: NavigationProps) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const isDark = theme === 'dark';
-  const bgClass = isDark ? 'bg-black/90' : 'bg-white/90';
-  const textClass = isDark ? 'text-white' : 'text-black';
-  const hoverClass = isDark ? 'hover:text-gray-400' : 'hover:text-gray-600';
-  const borderClass = isDark ? 'border-white/10' : 'border-black/10';
-  const logoSrc = isDark ? '/logos/eta-logo-white-cropped.png' : '/logos/eta-logo-black.png';
-  const menuBgClass = isDark ? 'bg-black/95' : 'bg-white/95';
+export default function Navigation() {
+  const [open, setOpen] = useState(false);
 
   return (
-    <nav className={`fixed top-0 w-full ${bgClass} backdrop-blur-sm z-50 border-b ${borderClass}`}>
-      <div className="max-w-7xl mx-auto px-6 py-2 flex justify-between items-center">
+    <>
+      <nav style={{
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '14px 48px',
+        background: 'rgba(8,8,8,0.96)',
+        backdropFilter: 'blur(12px)',
+        borderBottom: '1px solid rgba(255,255,255,0.07)',
+      }}>
         <Link href="/">
-          <Image 
-            src={logoSrc}
-            alt="Elcee the Alchemist" 
-            width={400} 
-            height={100}
-            className="h-16 md:h-20 w-auto"
+          <Image
+            src="/logos/eta-logo-white-cropped.png"
+            alt="Elcee The Alchemist"
+            width={180} height={45}
+            style={{ height: 36, width: 'auto', objectFit: 'contain' }}
           />
         </Link>
 
-        {/* Desktop Navigation */}
-        <div className={`hidden md:flex gap-8 text-sm font-medium ${textClass}`}>
-          <Link href="/" className={hoverClass + " transition"}>Home</Link>
-          <Link href="/studio" className={hoverClass + " transition"}>Studio</Link>
-          <Link href="/shop" className={hoverClass + " transition"}>Shop</Link>
-          <Link href="/contact" className={hoverClass + " transition"}>Contact</Link>
-        </div>
+        <ul className="hidden md:flex" style={{ gap: 36, listStyle: 'none', margin: 0, padding: 0 }}>
+          {NAV_LINKS.map(({ label, href }) => (
+            <li key={label}>
+              <Link href={href} style={{
+                fontSize: 11, fontWeight: 400, letterSpacing: '0.15em',
+                textTransform: 'uppercase', color: 'rgba(255,255,255,0.55)',
+                textDecoration: 'none', transition: 'color 0.2s',
+              }}>
+                {label}
+              </Link>
+            </li>
+          ))}
+        </ul>
 
-        {/* Mobile Hamburger Button */}
         <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className={`md:hidden ${textClass} p-2`}
+          className="md:hidden"
+          onClick={() => setOpen(o => !o)}
+          style={{ background: 'none', border: 'none', color: '#fafafa', cursor: 'pointer', padding: 8 }}
           aria-label="Toggle menu"
         >
-          {mobileMenuOpen ? (
-            // X icon
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
+          {open ? (
+            <svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           ) : (
-            // Hamburger icon
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
+            <svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           )}
         </button>
-      </div>
+      </nav>
 
-      {/* Mobile Menu Dropdown */}
-      {mobileMenuOpen && (
-        <div className={`md:hidden ${menuBgClass} border-t ${borderClass}`}>
-          <div className="flex flex-col px-6 py-4 space-y-4">
-            <Link
-              href="/"
-              className={`${textClass} ${hoverClass} transition py-2`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Home
+      {open && (
+        <div className="md:hidden" style={{
+          position: 'fixed', inset: 0, background: 'rgba(8,8,8,0.98)',
+          zIndex: 99, display: 'flex', flexDirection: 'column',
+          alignItems: 'center', justifyContent: 'center', gap: 40,
+        }}>
+          {NAV_LINKS.map(({ label, href }) => (
+            <Link key={label} href={href} onClick={() => setOpen(false)} style={{
+              fontSize: 24, fontWeight: 900, letterSpacing: '0.12em',
+              textTransform: 'uppercase', color: '#fafafa', textDecoration: 'none',
+            }}>
+              {label}
             </Link>
-            <Link
-              href="/studio"
-              className={`${textClass} ${hoverClass} transition py-2`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Studio
-            </Link>
-            <Link
-              href="/shop"
-              className={`${textClass} ${hoverClass} transition py-2`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Shop
-            </Link>
-            <Link
-              href="/contact"
-              className={`${textClass} ${hoverClass} transition py-2`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Contact
-            </Link>
-          </div>
+          ))}
         </div>
       )}
-    </nav>
+    </>
   );
 }

@@ -3,6 +3,7 @@ import "./globals.css";
 import ChatWidget from "./components/ChatWidget";
 import ExitIntentPopup from "./components/ExitIntentPopup";
 import StructuredDataPerson from "./components/StructuredDataPerson";
+import LenisProvider from "./components/LenisProvider";
 import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
 
@@ -83,7 +84,9 @@ export default function RootLayout({
         <Script defer src="https://cloud.umami.is/script.js" data-website-id="d528386e-ad51-44a8-9c40-923eb17a0eca" />
       </head>
       <body className="antialiased">
-        {children}
+        <LenisProvider>
+          {children}
+        </LenisProvider>
         <ExitIntentPopup />
         <ChatWidget />
         <Analytics />

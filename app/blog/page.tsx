@@ -1,5 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
+import Navigation from "../components/Navigation";
+import SiteFooter from "../components/SiteFooter";
 
 export const metadata = {
   title: "Blog - Studio Tips & Music Insights | Elcee the Alchemist",
@@ -13,15 +14,15 @@ const blogPosts = [
     excerpt: "First time recording in a professional studio? Here's everything you need to know to make the most of your session and avoid common mistakes.",
     date: "2026-02-18",
     category: "Studio Tips",
-    readTime: "5 min read"
+    readTime: "5 min read",
   },
   {
     slug: "mixing-mistakes-independent-artists",
     title: "5 Mixing Mistakes Every Independent Artist Makes",
-    excerpt: "After mixing hundreds of tracks for independent artists, these are the most common mixing mistakes I see—and how to fix them.",
+    excerpt: "After mixing hundreds of tracks for independent artists, these are the most common mixing mistakes I see — and how to fix them.",
     date: "2026-02-17",
     category: "Mixing & Mastering",
-    readTime: "7 min read"
+    readTime: "7 min read",
   },
   {
     slug: "manchester-music-scene-2026",
@@ -29,7 +30,7 @@ const blogPosts = [
     excerpt: "What's happening in Manchester's alternative and hip-hop scene right now, and why it's the best time to be an independent artist in the city.",
     date: "2026-02-16",
     category: "Music Industry",
-    readTime: "6 min read"
+    readTime: "6 min read",
   },
   {
     slug: "home-recording-vs-professional-studio",
@@ -37,7 +38,7 @@ const blogPosts = [
     excerpt: "Recording at home has its place, but there comes a point where a professional studio is worth the investment. Here's how to know when.",
     date: "2026-02-15",
     category: "Studio Tips",
-    readTime: "5 min read"
+    readTime: "5 min read",
   },
   {
     slug: "vocal-recording-techniques",
@@ -45,112 +46,90 @@ const blogPosts = [
     excerpt: "From mic placement to room acoustics, here are the techniques I use to capture professional-quality vocals in my Manchester studio.",
     date: "2026-02-14",
     category: "Recording",
-    readTime: "8 min read"
+    readTime: "8 min read",
   },
 ];
 
 export default function BlogPage() {
   return (
-    <div className="min-h-screen bg-white text-black">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/90 backdrop-blur-sm z-50 border-b border-black/10">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <Link href="/">
-            <Image 
-              src="/logos/eta-logo-black.png" 
-              alt="Elcee the Alchemist" 
-              width={120} 
-              height={40}
-              className="h-10 w-auto"
-            />
-          </Link>
-          <div className="flex gap-8 text-sm font-medium">
-            <Link href="/" className="hover:text-gray-600 transition">Home</Link>
-            <Link href="/studio" className="hover:text-gray-600 transition">Studio</Link>
-            <Link href="/blog" className="hover:text-gray-600 transition font-bold">Blog</Link>
-            <Link href="/contact" className="hover:text-gray-600 transition">Contact</Link>
-          </div>
-        </div>
-      </nav>
+    <div style={{ background: '#080808', color: '#fafafa', minHeight: '100vh' }}>
+      <Navigation />
 
-      {/* Header */}
-      <section className="pt-32 pb-12 px-6">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">Blog</h1>
-          <p className="text-xl text-gray-600">
-            Studio tips, music production insights, and perspectives from 6 years 
-            as an independent artist and recording engineer in Manchester.
+      {/* Hero */}
+      <section style={{ paddingTop: 120, paddingBottom: 80, paddingLeft: 48, paddingRight: 48 }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 16 }}>
+            Studio Insights
+          </div>
+          <h1 style={{ fontWeight: 900, fontSize: 'clamp(40px, 6vw, 96px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9, marginBottom: 24 }}>
+            Blog
+          </h1>
+          <p style={{ fontSize: 16, lineHeight: 1.8, color: 'rgba(255,255,255,0.45)', maxWidth: 520 }}>
+            Studio tips, production insights, and perspectives from 6 years as an independent artist and recording engineer in Manchester.
           </p>
         </div>
       </section>
 
-      {/* Blog Posts Grid */}
-      <section className="py-12 px-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="space-y-12">
-            {blogPosts.map((post) => (
-              <article 
-                key={post.slug}
-                className="border-b border-black/10 pb-12 last:border-0"
-              >
-                <div className="flex gap-4 text-sm text-gray-500 mb-3">
-                  <span className="bg-black text-white px-3 py-1">{post.category}</span>
-                  <span>{post.date}</span>
-                  <span>•</span>
-                  <span>{post.readTime}</span>
-                </div>
-                
-                <Link href={`/blog/${post.slug}`}>
-                  <h2 className="text-3xl font-bold mb-4 hover:text-gray-600 transition">
-                    {post.title}
-                  </h2>
-                </Link>
-                
-                <p className="text-lg text-gray-700 mb-4 leading-relaxed">
-                  {post.excerpt}
-                </p>
-                
-                <Link 
-                  href={`/blog/${post.slug}`}
-                  className="inline-block font-medium hover:underline"
-                >
-                  Read more →
-                </Link>
-              </article>
-            ))}
-          </div>
+      {/* Posts */}
+      <section style={{ padding: '0 48px 80px', borderTop: '1px solid #1a1a1a' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+          {blogPosts.map((post, i) => (
+            <article key={post.slug} style={{
+              paddingTop: 48, paddingBottom: 48,
+              borderBottom: i < blogPosts.length - 1 ? '1px solid #1a1a1a' : 'none',
+            }}>
+              <div style={{ display: 'flex', gap: 16, alignItems: 'center', marginBottom: 16, flexWrap: 'wrap' }}>
+                <span style={{
+                  fontSize: 8, letterSpacing: '0.2em', textTransform: 'uppercase',
+                  padding: '4px 10px', border: '1px solid rgba(255,255,255,0.2)',
+                  color: 'rgba(255,255,255,0.5)',
+                }}>{post.category}</span>
+                <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', letterSpacing: '0.05em' }}>{post.date}</span>
+                <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)' }}>·</span>
+                <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', letterSpacing: '0.05em' }}>{post.readTime}</span>
+              </div>
+              <Link href={`/blog/${post.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <h2 style={{ fontWeight: 900, fontSize: 'clamp(20px, 2.5vw, 32px)', letterSpacing: '-0.02em', lineHeight: 1.15, marginBottom: 12 }}>
+                  {post.title}
+                </h2>
+              </Link>
+              <p style={{ fontSize: 14, lineHeight: 1.8, color: 'rgba(255,255,255,0.45)', maxWidth: 600, marginBottom: 20 }}>
+                {post.excerpt}
+              </p>
+              <Link href={`/blog/${post.slug}`} style={{
+                fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase',
+                color: 'rgba(255,255,255,0.5)', textDecoration: 'none',
+              }}>
+                Read More →
+              </Link>
+            </article>
+          ))}
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-6 bg-black text-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-6">Need Professional Recording?</h2>
-          <p className="text-xl text-gray-300 mb-8">
-            Book a session at my Manchester studio and get the quality your music deserves.
+      {/* CTA — light section */}
+      <section style={{ padding: '80px 48px', background: '#f0ede8', color: '#080808' }}>
+        <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
+          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 16 }}>
+            Need Professional Recording?
+          </div>
+          <h2 style={{ fontWeight: 900, fontSize: 'clamp(28px, 4vw, 56px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9, marginBottom: 20 }}>
+            Book a Session
+          </h2>
+          <p style={{ fontSize: 14, lineHeight: 1.8, color: 'rgba(0,0,0,0.55)', marginBottom: 36 }}>
+            Get the quality your music deserves. Manchester studio, professional results.
           </p>
-          <Link 
-            href="/studio"
-            className="inline-block bg-white text-black px-8 py-4 text-lg font-semibold hover:bg-gray-200 transition"
-          >
+          <Link href="/studio" style={{
+            display: 'inline-flex', alignItems: 'center', padding: '13px 28px',
+            fontWeight: 900, fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase',
+            background: '#080808', color: '#fafafa', textDecoration: 'none',
+          }}>
             View Studio Services
           </Link>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 px-6 border-t border-black/10">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-gray-600">© 2026 Elcee the Alchemist. All rights reserved.</p>
-          <Image 
-            src="/logos/ankh.png" 
-            alt="Ankh" 
-            width={30} 
-            height={30}
-            className="opacity-30"
-          />
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
