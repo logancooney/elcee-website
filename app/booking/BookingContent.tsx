@@ -62,10 +62,10 @@ export default function BookingContent() {
   return (
     <>
       {/* ── HERO ── */}
-      <section
+      <section className="hero-section"
         ref={heroRef}
         style={{
-          position: 'relative', width: '100%', height: '100vh', minHeight: 640,
+          position: 'relative', width: '100%', minHeight: 640,
           overflow: 'hidden', display: 'flex', alignItems: 'flex-end',
           paddingBottom: 72, paddingLeft: 48,
         }}
@@ -118,8 +118,7 @@ export default function BookingContent() {
         </div>
       </section>
 
-      <section
-        className="grid-three-col"
+      <section className="grid-three-col"
         style={{
           borderTop: '1px solid #1a1a1a',
           borderBottom: '1px solid #1a1a1a',
@@ -348,7 +347,7 @@ export default function BookingContent() {
       })()}
 
       {!selected && (
-        <section
+        <section className="hero-section"
           style={{
             padding: '80px 48px',
             textAlign: 'center',

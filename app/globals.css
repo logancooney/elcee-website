@@ -128,3 +128,20 @@ h1, h2, h3, h4, h5, h6 {
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+/* Hero sections — full viewport, mobile-safe */
+.hero-section {
+  height: 100vh;
+}
+@supports (height: 100svh) {
+  .hero-section {
+    height: 100svh;
+  }
+}
+@media (max-width: 768px) {
+  .hero-section {
+    min-height: unset !important;
+    padding-bottom: 48px !important;
+    padding-left: 24px !important;
+  }
+}

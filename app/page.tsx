@@ -146,10 +146,10 @@ export default function Home() {
       <MobileJumpNav />
 
       {/* ── HERO ─────────────────────────────────── */}
-      <section
+      <section className="hero-section"
         ref={heroRef}
         style={{
-          position: 'relative', width: '100%', height: '100vh', minHeight: 640,
+          position: 'relative', width: '100%', minHeight: 640,
           overflow: 'hidden', display: 'flex', alignItems: 'flex-end',
           justifyContent: 'center', paddingBottom: 72,
         }}
