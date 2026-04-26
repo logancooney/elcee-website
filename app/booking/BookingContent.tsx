@@ -35,14 +35,14 @@ export default function BookingContent() {
   useEffect(() => {
     const params = new URLSearchParams();
     if (selected) params.set('service', selected);
-    if (selected === 'tutoring' && mode) params.set('mode', mode);
+    if (selected && mode) params.set('mode', mode);
     const next = params.toString() ? `${pathname}?${params.toString()}` : pathname;
     router.replace(next, { scroll: false });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected, mode]);
 
   useEffect(() => {
-    if (selected !== 'tutoring' && mode !== null) setMode(null);
+    setMode(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
@@ -200,11 +200,14 @@ export default function BookingContent() {
         })}
       </section>
 
-      {selected === 'tutoring' && !mode && (() => {
-        const service = BOOK_SERVICES.find(s => s.id === 'tutoring')!;
+      {selected && (() => {
+        const service = BOOK_SERVICES.find(s => s.id === selected)!;
+        if (!service.modes || service.modes.length === 0 || mode) return null;
+        const togglePrompt =
+          service.id === 'tutoring' ? 'Pick a mode' : service.id === 'studio' ? 'Pick a session length' : 'Pick an option';
         return (
           <motion.section
-            key="tutoring-mode-toggle"
+            key={`mode-toggle-${selected}`}
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
@@ -223,7 +226,7 @@ export default function BookingContent() {
                 marginBottom: 14,
               }}
             >
-              Tutoring — Pick a mode
+              {service.label} — {togglePrompt}
             </div>
             <div
               style={{
@@ -233,7 +236,7 @@ export default function BookingContent() {
                 flexWrap: 'wrap',
               }}
             >
-              {service.modes!.map(m => (
+              {service.modes.map(m => (
                 <button
                   key={m.id}
                   onClick={() => setMode(m.id)}
@@ -272,10 +275,8 @@ export default function BookingContent() {
         const service = BOOK_SERVICES.find(s => s.id === selected)!;
         const url = resolveCalendlyUrl(service, mode);
         if (!url) return null;
-        const subtitle =
-          service.id === 'tutoring' && mode
-            ? `Tutoring · ${mode === 'online' ? 'Online' : 'In-Person'}`
-            : service.label;
+        const modeObj = mode ? service.modes?.find(m => m.id === mode) : undefined;
+        const subtitle = modeObj ? `${service.label} · ${modeObj.label}` : service.label;
         return (
           <motion.section
             key={`embed-${selected}-${mode ?? ''}`}
@@ -296,7 +297,7 @@ export default function BookingContent() {
             >
               Schedule &mdash; {subtitle}
             </div>
-            {service.id === 'tutoring' && mode && (
+            {service.modes && mode && (
               <div style={{ textAlign: 'center', marginBottom: 24 }}>
                 <button
                   onClick={() => setMode(null)}
@@ -311,7 +312,7 @@ export default function BookingContent() {
                     color: 'rgba(255,255,255,0.5)',
                   }}
                 >
-                  ← Switch mode
+                  ← {service.id === 'studio' ? 'Switch length' : 'Switch mode'}
                 </button>
               </div>
             )}

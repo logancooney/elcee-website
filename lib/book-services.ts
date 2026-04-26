@@ -5,7 +5,7 @@
 import { CALENDLY_EVENT_URLS } from './calendly-config';
 
 export type BookServiceId = 'tutoring' | 'studio' | 'mixing';
-export type BookMode = 'online' | 'in-person';
+export type BookMode = 'online' | 'in-person' | '1hr' | '2hr' | '3hr' | '4hr';
 
 export interface BookServiceMode {
   id: BookMode;
@@ -56,9 +56,15 @@ export const BOOK_SERVICES: BookService[] = [
   {
     id: 'studio',
     label: 'Studio',
-    priceLabel: '£45/hr',
+    priceLabel: '£35/hr',
     blurb: 'Recording, mixing, and mastering at The Alchemist Studio in Manchester.',
-    calendlyUrl: CALENDLY_EVENT_URLS.studio1hr,
+    note: 'Pick the session length that suits your project.',
+    modes: [
+      { id: '1hr', label: '1 Hour', price: '£35', priceQualifier: '', calendlyUrl: CALENDLY_EVENT_URLS.studio1hr },
+      { id: '2hr', label: '2 Hours', price: '£70', priceQualifier: '', calendlyUrl: CALENDLY_EVENT_URLS.studio2hr },
+      { id: '3hr', label: '3 Hours', price: '£105', priceQualifier: '', calendlyUrl: CALENDLY_EVENT_URLS.studio3hr },
+      { id: '4hr', label: '4 Hours', price: '£140', priceQualifier: '', calendlyUrl: CALENDLY_EVENT_URLS.studio4hr },
+    ],
   },
   {
     id: 'mixing',
