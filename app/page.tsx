@@ -47,8 +47,8 @@ interface ReleaseRowProps {
 
 function ReleaseRow({ embed, type, name, href, hrefLabel, reversed, minHeight = 280, infoBg, infoBgPosition = 'center' }: ReleaseRowProps) {
   const embedCell = (
-    <div style={{ position: 'relative', overflow: 'hidden', background: '#000', minHeight }}>
-      <div style={{ position: 'absolute', inset: 0 }}>{embed}</div>
+    <div style={{ position: 'relative', overflow: 'hidden', background: '#000', minHeight, display: 'flex', alignItems: 'center' }}>
+      <div style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>{embed}</div>
     </div>
   );
   const infoCell = (
@@ -101,6 +101,7 @@ function ReleaseRow({ embed, type, name, href, hrefLabel, reversed, minHeight = 
 const NAV_LINKS = [
   { label: 'Music', href: '#releases' },
   { label: 'Studio', href: '/studio' },
+  { label: 'Tutoring', href: '/tutoring' },
   { label: 'Shop', href: '/shop' },
   { label: 'Contact', href: '/contact' },
 ];
