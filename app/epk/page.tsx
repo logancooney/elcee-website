@@ -1,12 +1,9 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import Navigation from '../components/Navigation';
 import SiteFooter from '../components/SiteFooter';
-
-export const metadata = {
-  title: 'EPK - Electronic Press Kit | Elcee the Alchemist',
-  description: 'Electronic Press Kit for Elcee the Alchemist - Manchester alternative rap artist. Press photos, bio, music, and booking information.',
-};
 
 const STREAM_LINKS = [
   { label: 'Spotify', sub: 'Stream full discography', href: 'https://open.spotify.com/artist/6E8xwOloHnzGWVlNV9K8n7' },
