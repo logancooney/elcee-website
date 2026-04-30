@@ -10,19 +10,19 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    quote: 'PLACEHOLDER. Replace with real student quote before launch.',
-    author: 'Student Name',
-    location: 'Manchester',
+    quote: 'Absolutely delighted with the new vocal engineering course from Logan. He is great at breaking down complex topics, explaining them in a way I can easily understand. Really enjoyable. He built a plan around my needs and mapped out how we will get there over the course of the sessions. Great teacher.',
+    author: 'Caroline',
+    location: 'Student',
   },
   {
-    quote: 'PLACEHOLDER. Replace with real student quote before launch.',
-    author: 'Student Name',
-    location: 'Online',
+    quote: 'Always very helpful, able to cover all topics and recommend best ways to learn.',
+    author: 'Yuting',
+    location: 'Student',
   },
   {
-    quote: 'PLACEHOLDER. Replace with real student quote before launch.',
-    author: 'Student Name',
-    location: 'Manchester',
+    quote: 'Great teacher, only had a few lessons but already increased to twice a week.',
+    author: 'Aaliyah',
+    location: 'Student',
   },
 ];
 
