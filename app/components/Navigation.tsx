@@ -8,6 +8,7 @@ const NAV_LINKS = [
   { label: 'Music', href: '/#releases' },
   { label: 'Studio', href: '/studio' },
   { label: 'Tutoring', href: '/tutoring' },
+  { label: 'Free Call', href: '/free' },
   { label: 'Shop', href: '/shop' },
   { label: 'Contact', href: '/contact' },
 ];
