@@ -1,6 +1,99 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
+
+interface ShopifyProduct {
+  id: number;
+  title: string;
+  handle: string;
+  images: { src: string }[];
+  variants: { price: string }[];
+}
+
+function MerchGrid() {
+  const [products, setProducts] = useState<ShopifyProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('https://shop.elceethealchemist.com/products.json?limit=8')
+      .then(r => r.json())
+      .then(data => {
+        setProducts(data.products ?? []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <div style={{ padding: '24px 0', textAlign: 'center', fontSize: 11, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+        Loading...
+      </div>
+    );
+  }
+
+  if (products.length === 0) {
+    return (
+      <a
+        href="https://shop.elceethealchemist.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '16px 20px',
+          fontWeight: 900, fontSize: 11, letterSpacing: '0.15em',
+          textTransform: 'uppercase', textDecoration: 'none',
+          background: '#fafafa', color: '#080808',
+        }}
+      >
+        Shop Merch →
+      </a>
+    );
+  }
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
+      {products.map(product => {
+        const image = product.images[0]?.src;
+        const price = product.variants[0]?.price;
+        const url = `https://shop.elceethealchemist.com/products/${product.handle}`;
+        return (
+          <a
+            key={product.id}
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: 'none', color: '#fafafa', display: 'block' }}
+          >
+            <div style={{ position: 'relative', width: '100%', aspectRatio: '1/1', background: '#1a1a1a', overflow: 'hidden' }}>
+              {image && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={image}
+                  alt={product.title}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'opacity 0.2s' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLImageElement).style.opacity = '0.8'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLImageElement).style.opacity = '1'; }}
+                />
+              )}
+            </div>
+            <div style={{ padding: '10px 0 4px' }}>
+              <p style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#fafafa', marginBottom: 3 }}>
+                {product.title}
+              </p>
+              {price && (
+                <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.05em' }}>
+                  £{parseFloat(price).toFixed(2)}
+                </p>
+              )}
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  );
+}
 
 const SOCIAL_ICONS = [
   {
@@ -66,6 +159,16 @@ const STREAMING_LINKS = [
   { label: 'SoundCloud', href: 'https://soundcloud.com/elceethealchemist', primary: false },
 ];
 
+const VIDEOS = [
+  { id: 'K9Bk3Mw7mIc', title: 'Filthy' },
+  { id: 'KmekR33sMng', title: '2bad' },
+  { id: '7uelRgmMSCQ', title: 'JBL Performance' },
+];
+
+function Divider() {
+  return <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', margin: '8px 0 28px' }} />;
+}
+
 export default function LinksPage() {
   return (
     <div style={{
@@ -78,15 +181,12 @@ export default function LinksPage() {
       flexDirection: 'column',
       alignItems: 'center',
     }}>
-      {/* Grunge texture */}
       <div style={{
         position: 'fixed', inset: 0,
         backgroundImage: 'url(/grunge-texture.jpg)',
         backgroundSize: 'cover', backgroundPosition: 'center',
         opacity: 0.35, mixBlendMode: 'screen', pointerEvents: 'none', zIndex: 0,
       } as React.CSSProperties} />
-
-      {/* Portrait watermark */}
       <div style={{
         position: 'fixed', inset: 0,
         backgroundImage: 'url(/elcee-portrait.jpg)',
@@ -99,7 +199,7 @@ export default function LinksPage() {
         position: 'relative', zIndex: 1,
         width: '100%', maxWidth: 480,
         padding: '64px 24px 56px',
-        display: 'flex', flexDirection: 'column', gap: 0,
+        display: 'flex', flexDirection: 'column',
       }}>
 
         {/* Header */}
@@ -108,7 +208,7 @@ export default function LinksPage() {
             src="/logos/eta-logo-white-cropped.png"
             alt="Elcee The Alchemist"
             width={320} height={80}
-            style={{ height: 72, width: 'auto', objectFit: 'contain', marginBottom: 12, display: 'block', margin: '0 auto 12px' }}
+            style={{ height: 72, width: 'auto', objectFit: 'contain', display: 'block', margin: '0 auto 12px' }}
           />
           <p style={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>
             Alternative Rap · Manchester
@@ -151,23 +251,21 @@ export default function LinksPage() {
         </div>
 
         {/* Latest release */}
-        <div style={{ marginBottom: 4 }}>
-          <p style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 10 }}>
-            Latest Release
-          </p>
-          <iframe
-            style={{ borderRadius: 0, display: 'block', width: '100%' }}
-            src="https://open.spotify.com/embed/album/7HF3AA4vFQJARAt1ivCn0w?utm_source=generator&theme=0"
-            width="100%"
-            height="152"
-            frameBorder="0"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="lazy"
-          />
-        </div>
+        <p style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 10 }}>
+          Latest Release
+        </p>
+        <iframe
+          style={{ borderRadius: 0, display: 'block', width: '100%', marginBottom: 4 }}
+          src="https://open.spotify.com/embed/album/7HF3AA4vFQJARAt1ivCn0w?utm_source=generator&theme=0"
+          width="100%"
+          height="152"
+          frameBorder="0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy"
+        />
 
         {/* Streaming links */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 2, marginBottom: 24 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 2, marginBottom: 32 }}>
           {STREAMING_LINKS.map(link => (
             <a
               key={link.href}
@@ -201,51 +299,56 @@ export default function LinksPage() {
           ))}
         </div>
 
-        {/* Divider */}
-        <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', margin: '4px 0 24px' }} />
+        <Divider />
 
-        {/* Featured video */}
-        <div style={{ marginBottom: 24 }}>
-          <p style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 10 }}>
-            Latest Video
-          </p>
-          <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9' }}>
-            <iframe
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', display: 'block' }}
-              src="https://www.youtube.com/embed/K9Bk3Mw7mIc"
-              title="Filthy — Elcee The Alchemist"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              loading="lazy"
-            />
-          </div>
+        {/* Videos */}
+        <p style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>
+          Videos
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 32 }}>
+          {VIDEOS.map(({ id, title }) => (
+            <div key={id}>
+              <p style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: 8 }}>
+                {title}
+              </p>
+              <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9' }}>
+                <iframe
+                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', display: 'block' }}
+                  src={`https://www.youtube.com/embed/${id}`}
+                  title={`${title} — Elcee The Alchemist`}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Divider */}
-        <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', margin: '4px 0 24px' }} />
+        <Divider />
 
         {/* Merch */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 2, marginBottom: 24 }}>
-          <a
-            href="https://shop.elceethealchemist.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '16px 20px',
-              fontWeight: 900, fontSize: 11, letterSpacing: '0.15em',
-              textTransform: 'uppercase', textDecoration: 'none',
-              background: '#fafafa', color: '#080808',
-              transition: 'background 0.2s',
-            }}
-            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#e8e8e8'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#fafafa'; }}
-          >
-            Merch
-            <span style={{ opacity: 0.5, fontSize: 14, fontWeight: 400 }}>→</span>
-          </a>
+        <div style={{ marginBottom: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+            <p style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>
+              Merch
+            </p>
+            <a
+              href="https://shop.elceethealchemist.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', textDecoration: 'none' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#fafafa'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.3)'; }}
+            >
+              View all →
+            </a>
+          </div>
+          <MerchGrid />
         </div>
+
+        <Divider />
 
         {/* Work with me */}
         <a
@@ -274,12 +377,10 @@ export default function LinksPage() {
           <span style={{ opacity: 0.5, fontSize: 14, fontWeight: 400 }}>→</span>
         </a>
 
-        {/* Footer */}
         <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', margin: '32px 0 20px' }} />
         <p style={{ textAlign: 'center', fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.2)' }}>
           elceethealchemist.com
         </p>
-
       </div>
     </div>
   );
