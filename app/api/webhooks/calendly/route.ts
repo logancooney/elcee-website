@@ -26,6 +26,9 @@ function verifySignature(rawBody: string, header: string | null): boolean {
 
 function deriveService(eventName: string): string {
   const n = eventName.toLowerCase();
+  if (n.includes('intro call') || n.includes('intro-call')) return 'free-intro-call';
+  if (n.includes('studio enquiry') || n.includes('studio-enquiry')) return 'free-studio-enquiry';
+  if (n.includes('tutoring consultation') || n.includes('tutoring-consultation')) return 'free-tutoring-consultation';
   if (n.includes('studio')) return 'studio-session';
   if (n.includes('tutor')) return 'tutoring';
   if (n.includes('mix')) return 'mixing';

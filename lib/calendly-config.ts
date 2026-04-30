@@ -6,6 +6,9 @@ export const CALENDLY_EVENT_URLS = {
   tutoringOnline: 'https://calendly.com/elcee-mgmt/online-tutoring',
   tutoringInPerson: 'https://calendly.com/elcee-mgmt/online-tutoring-clone',
   free: 'https://calendly.com/elcee-mgmt/free-mix-review-track-feedback',
+  freeIntroCall: 'https://calendly.com/elcee-mgmt/free-intro-call',
+  freeStudioEnquiry: 'https://calendly.com/elcee-mgmt/free-studio-enquiry',
+  freeTutoringConsultation: 'https://calendly.com/elcee-mgmt/free-tutoring-consultation',
   schedulingPage: 'https://calendly.com/elcee-mgmt',
 };
 
