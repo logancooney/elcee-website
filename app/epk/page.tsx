@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Navigation from '../components/Navigation';
@@ -54,6 +55,94 @@ const STREAM_LINKS = [
   { label: 'YouTube', href: 'https://youtube.com/@elceethealchemist' },
   { label: 'SoundCloud', href: 'https://soundcloud.com/elceethealchemist' },
 ];
+
+const PRESS_PHOTOS = [
+  { src: '/elcee-portrait.jpg', position: 'center 15%', label: 'Portrait' },
+  { src: '/elcee-landscape.jpg', position: 'center 8%', label: 'Landscape' },
+];
+
+function PressPhotos() {
+  const [current, setCurrent] = useState(0);
+  const photo = PRESS_PHOTOS[current];
+  const prev = () => setCurrent(i => (i === 0 ? PRESS_PHOTOS.length - 1 : i - 1));
+  const next = () => setCurrent(i => (i === PRESS_PHOTOS.length - 1 ? 0 : i + 1));
+
+  return (
+    <section style={{ background: '#080808', borderTop: '1px solid #1a1a1a' }}>
+      <div style={{ padding: 'clamp(24px, 4vw, 48px) clamp(24px, 5vw, 64px)', borderBottom: '1px solid #1a1a1a' }}>
+        <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>
+          Press Photos
+        </div>
+        <h2 style={{ fontWeight: 900, fontSize: 'clamp(28px, 4vw, 56px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9 }}>
+          Photos
+        </h2>
+        <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.3)', marginTop: 10 }}>
+          High-resolution images available for press and promotional use.
+        </p>
+      </div>
+
+      <div style={{ position: 'relative', width: '100%', height: 'clamp(400px, 60vw, 680px)', overflow: 'hidden', borderBottom: '1px solid #1a1a1a' }}>
+        <Image
+          key={photo.src}
+          src={photo.src}
+          alt={`Elcee the Alchemist — Press Photo ${current + 1}`}
+          fill
+          style={{ objectFit: 'cover', objectPosition: photo.position, filter: 'grayscale(100%) contrast(1.05)', transition: 'opacity 0.3s ease' }}
+        />
+
+        {/* Prev / Next */}
+        <button
+          onClick={prev}
+          aria-label="Previous photo"
+          style={{
+            position: 'absolute', left: 20, top: '50%', transform: 'translateY(-50%)',
+            width: 48, height: 48, background: 'rgba(8,8,8,0.7)', border: '1px solid rgba(255,255,255,0.15)',
+            color: '#fafafa', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}
+        >
+          ←
+        </button>
+        <button
+          onClick={next}
+          aria-label="Next photo"
+          style={{
+            position: 'absolute', right: 20, top: '50%', transform: 'translateY(-50%)',
+            width: 48, height: 48, background: 'rgba(8,8,8,0.7)', border: '1px solid rgba(255,255,255,0.15)',
+            color: '#fafafa', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}
+        >
+          →
+        </button>
+
+        {/* Bottom bar */}
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '20px 24px', background: 'linear-gradient(to top, rgba(8,8,8,0.85), transparent)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          <div style={{ display: 'flex', gap: 8 }}>
+            {PRESS_PHOTOS.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrent(i)}
+                aria-label={`Photo ${i + 1}`}
+                style={{
+                  width: i === current ? 28 : 8, height: 4,
+                  background: i === current ? '#fafafa' : 'rgba(255,255,255,0.3)',
+                  border: 'none', cursor: 'pointer', padding: 0,
+                  transition: 'width 0.3s, background 0.3s',
+                }}
+              />
+            ))}
+          </div>
+          <a
+            href={photo.src}
+            download
+            style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}
+          >
+            Download {photo.label} →
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function EPKPage() {
   return (
@@ -293,47 +382,7 @@ export default function EPKPage() {
       </section>
 
       {/* ── PRESS PHOTOS ── */}
-      <section style={{ background: '#080808', borderTop: '1px solid #1a1a1a' }}>
-        <div style={{ padding: 'clamp(24px, 4vw, 48px) clamp(24px, 5vw, 64px)', borderBottom: '1px solid #1a1a1a' }}>
-          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>
-            Press Photos
-          </div>
-          <h2 style={{ fontWeight: 900, fontSize: 'clamp(28px, 4vw, 56px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9 }}>
-            Photos
-          </h2>
-          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.3)', marginTop: 10 }}>
-            High-resolution images available for press and promotional use.
-          </p>
-        </div>
-        <div className="grid-two-col" style={{ borderBottom: '1px solid #1a1a1a' }}>
-          <div style={{ position: 'relative', overflow: 'hidden', minHeight: 480, borderRight: '1px solid #1a1a1a' }}>
-            <Image
-              src="/elcee-portrait.jpg"
-              alt="Elcee the Alchemist — Press Photo"
-              fill
-              style={{ objectFit: 'cover', objectPosition: 'center 15%', filter: 'grayscale(100%) contrast(1.05)' }}
-            />
-            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '16px 24px', background: 'linear-gradient(to top, rgba(8,8,8,0.8), transparent)' }}>
-              <a href="/elcee-portrait.jpg" download style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>
-                Download →
-              </a>
-            </div>
-          </div>
-          <div style={{ position: 'relative', overflow: 'hidden', minHeight: 480 }}>
-            <Image
-              src="/elcee-landscape.jpg"
-              alt="Elcee the Alchemist — Press Photo"
-              fill
-              style={{ objectFit: 'cover', objectPosition: 'center 8%', filter: 'grayscale(100%) contrast(1.05)' }}
-            />
-            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '16px 24px', background: 'linear-gradient(to top, rgba(8,8,8,0.8), transparent)' }}>
-              <a href="/elcee-landscape.jpg" download style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>
-                Download →
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
+      <PressPhotos />
 
       {/* ── STREAMING ── */}
       <section style={{ background: '#f0ede8', color: '#080808', position: 'relative', overflow: 'hidden' }}>

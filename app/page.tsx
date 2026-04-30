@@ -388,17 +388,6 @@ export default function Home() {
               Alternative rap artist from Manchester pushing the boundaries of the genre with raw lyricism and alchemical soundscapes. Every track is a transmutation — turning experience into art, darkness into gold.
             </p>
           </div>
-          <Link
-            href="/epk"
-            style={{
-              ...outlineBtnStyle,
-              padding: '13px 28px',
-              fontSize: 10,
-              marginTop: 28,
-            }}
-          >
-            Full Bio →
-          </Link>
         </div>
         <div style={{ position: 'relative', overflow: 'hidden', background: '#111111', borderLeft: '1px solid #1a1a1a', minHeight: 380 }}>
           <Image
