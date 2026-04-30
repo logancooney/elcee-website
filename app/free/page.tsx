@@ -1,11 +1,10 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Navigation from '../components/Navigation';
 import SiteFooter from '../components/SiteFooter';
 import { track } from '@vercel/analytics';
-import CalendlyEmbed from '../../components/CalendlyEmbed';
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -189,106 +188,77 @@ function DiscountCaptureForm() {
 }
 
 export default function FreePage() {
-  const heroParallaxRef = useRef<HTMLDivElement>(null);
-  const heroRef = useRef<HTMLElement>(null);
-
   useEffect(() => {
     if (document.referrer.includes('reddit.com')) {
       track('visit_from_reddit');
     }
   }, []);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const y = window.scrollY;
-      if (heroParallaxRef.current) {
-        heroParallaxRef.current.style.transform = `translateY(${y * 0.35}px)`;
-      }
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
     <div style={{ background: '#080808', color: '#fafafa', overflowX: 'hidden' }}>
       <Navigation />
 
-      {/* ── HERO ── */}
-      <section className="hero-section"
-        ref={heroRef}
-        style={{
-          position: 'relative', width: '100%', minHeight: 640,
-          overflow: 'hidden', display: 'flex', alignItems: 'flex-end',
-          paddingBottom: 72, paddingLeft: 48,
-        }}
-      >
-        <div ref={heroParallaxRef} style={{
-          position: 'absolute', top: '-10%', left: 0, right: 0, bottom: '-10%',
-          background: '#0d0d0d', willChange: 'transform',
-        }} />
-
-        <div style={{
-          position: 'absolute', inset: 0,
-          backgroundImage: 'url(/grunge-texture.jpg)',
-          backgroundSize: 'cover', backgroundPosition: 'center',
-          opacity: 0.75, mixBlendMode: 'screen', pointerEvents: 'none',
-        } as React.CSSProperties} />
-
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'linear-gradient(to bottom, rgba(8,8,8,0.4) 0%, rgba(8,8,8,0.1) 40%, rgba(8,8,8,0.88) 100%)',
-          pointerEvents: 'none',
-        }} />
-
-        <div style={{ position: 'relative', zIndex: 2 }}>
-          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 16 }}>
-            01 — Free Resources
-          </div>
-          <h1 style={{
-            fontWeight: 900,
-            fontSize: 'clamp(56px, 9vw, 128px)',
-            lineHeight: 0.88,
-            letterSpacing: '-0.03em',
-            textTransform: 'uppercase',
-            color: '#fafafa',
-            marginBottom: 20,
-          }}>
-            Free Tools<br />for Artists
-          </h1>
-          <p style={{ fontSize: 14, lineHeight: 1.8, color: 'rgba(255,255,255,0.5)', maxWidth: 440 }}>
-            Genuinely useful resources. Free track reviews, discount codes, and guides — no gimmicks.
-          </p>
+      {/* ── PAGE HEADER ── */}
+      <section style={{
+        padding: 'clamp(80px, 12vw, 140px) clamp(20px, 5vw, 48px) clamp(40px, 6vw, 64px)',
+        borderBottom: '1px solid #1a1a1a',
+      } as React.CSSProperties}>
+        <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 16 }}>
+          Free
         </div>
-
-        <div style={{
-          position: 'absolute', bottom: 24, left: '50%', transform: 'translateX(-50%)',
-          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-          zIndex: 2, opacity: 0.3,
+        <h1 style={{
+          fontWeight: 900,
+          fontSize: 'clamp(36px, 6vw, 80px)',
+          lineHeight: 0.88,
+          letterSpacing: '-0.03em',
+          textTransform: 'uppercase',
+          color: '#fafafa',
         }}>
-          <div style={{ width: 1, height: 32, background: 'white', animation: 'scrollPulse 2s ease-in-out infinite' }} />
-          <span style={{ fontSize: 8, letterSpacing: '0.3em', textTransform: 'uppercase' }}>Scroll</span>
-        </div>
+          Free resources<br />&amp; a free call.
+        </h1>
       </section>
 
-      {/* ── FREE TRACK REVIEW ── */}
-      <motion.section {...fadeUp} id="track-review" style={{ background: '#080808', borderTop: '1px solid #1a1a1a' }}>
-        <div style={{ padding: '48px 48px 32px', borderBottom: '1px solid #1a1a1a' }}>
+      {/* ── FREE INTRO CALL ── */}
+      <motion.section {...fadeUp} style={{ background: '#080808', borderTop: '1px solid #1a1a1a' }}>
+        <div style={{
+          padding: 'clamp(24px, 6vw, 56px) clamp(20px, 5vw, 48px)',
+          borderBottom: '1px solid #1a1a1a',
+        }}>
           <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>
-            02 — Track Review
+            01 — Free Call
           </div>
-          <h2 style={{ fontWeight: 900, fontSize: 'clamp(32px, 4vw, 64px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9 }}>
-            Free Track Review
+          <h2 style={{
+            fontWeight: 900,
+            fontSize: 'clamp(28px, 4vw, 56px)',
+            letterSpacing: '-0.03em',
+            textTransform: 'uppercase',
+            lineHeight: 0.9,
+            marginBottom: 16,
+          }}>
+            Free Intro Call
           </h2>
-          <p style={{ fontSize: 14, lineHeight: 1.8, color: 'rgba(255,255,255,0.45)', marginTop: 12, maxWidth: 520 }}>
-            15 minutes. I listen to your track before the call and come prepared with specific notes. No pitch — just honest feedback from a working engineer.
+          <p style={{ fontSize: 14, lineHeight: 1.9, color: 'rgba(255,255,255,0.45)', maxWidth: 520, marginBottom: 32 }}>
+            20 minutes. Tell me what you&apos;re working on, and I&apos;ll tell you exactly how I can help — whether that&apos;s tutoring, studio time, or mixing. No commitment.
           </p>
-        </div>
-        <div style={{ padding: '64px 48px' }}>
-          <CalendlyEmbed
-            key="free-track-review"
-            url="https://calendly.com/elcee-mgmt/free-mix-review-track-feedback"
-            height={700}
-          />
+          <a
+            href="https://calendly.com/elcee-mgmt/free-intro-call"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              padding: '16px 32px',
+              fontWeight: 900,
+              fontSize: 13,
+              letterSpacing: '0.05em',
+              textTransform: 'uppercase',
+              background: '#fafafa',
+              color: '#080808',
+              textDecoration: 'none',
+            }}
+          >
+            Book a Free Intro Call →
+          </a>
         </div>
       </motion.section>
 
@@ -306,11 +276,11 @@ export default function FreePage() {
           pointerEvents: 'none',
         } as React.CSSProperties} />
         <div className="grid-two-col" style={{ position: 'relative', zIndex: 1, minHeight: 400 }}>
-          <div style={{ padding: '64px 48px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <div style={{ padding: 'clamp(40px, 6vw, 64px) clamp(20px, 5vw, 48px)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 16 }}>
-              03 — Discount
+              02 — Discount
             </div>
-            <h2 style={{ fontWeight: 900, fontSize: 'clamp(32px, 4vw, 64px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.88, color: '#080808', marginBottom: 20 }}>
+            <h2 style={{ fontWeight: 900, fontSize: 'clamp(28px, 4vw, 56px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.88, color: '#080808', marginBottom: 20 }}>
               10% Off Your<br />First Booking
             </h2>
             <p style={{ fontSize: 14, lineHeight: 1.8, color: 'rgba(0,0,0,0.5)', maxWidth: 400, marginBottom: 36 }}>
@@ -322,8 +292,8 @@ export default function FreePage() {
             borderLeft: '2px solid rgba(0,0,0,0.08)',
             background: 'rgba(0,0,0,0.04)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            padding: '64px 48px',
-          }}>
+            padding: 'clamp(40px, 6vw, 64px) clamp(20px, 5vw, 48px)',
+          } as React.CSSProperties}>
             <div style={{ textAlign: 'center' }}>
               <p style={{ fontWeight: 900, fontSize: 'clamp(64px, 8vw, 112px)', letterSpacing: '-0.04em', lineHeight: 1, color: '#080808' }}>10%</p>
               <p style={{ fontSize: 11, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginTop: 8 }}>Off Your First Booking</p>
@@ -334,11 +304,11 @@ export default function FreePage() {
 
       {/* ── FREE DOWNLOADS ── */}
       <motion.section {...fadeUp} style={{ background: '#080808', borderTop: '1px solid #1a1a1a' }}>
-        <div style={{ padding: '48px 48px 32px', borderBottom: '1px solid #1a1a1a' }}>
+        <div style={{ padding: 'clamp(24px, 6vw, 48px) clamp(20px, 5vw, 48px)', borderBottom: '1px solid #1a1a1a' }}>
           <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>
-            04 — Downloads
+            03 — Downloads
           </div>
-          <h2 style={{ fontWeight: 900, fontSize: 'clamp(32px, 4vw, 64px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9 }}>
+          <h2 style={{ fontWeight: 900, fontSize: 'clamp(28px, 4vw, 56px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9 }}>
             Free Downloads
           </h2>
           <p style={{ fontSize: 14, lineHeight: 1.8, color: 'rgba(255,255,255,0.45)', marginTop: 12 }}>
