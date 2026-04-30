@@ -145,3 +145,37 @@ h1, h2, h3, h4, h5, h6 {
     padding-left: 24px !important;
   }
 }
+
+/* Compact hero — 440px min desktop, auto on mobile */
+.hero-compact {
+  min-height: 440px;
+}
+@media (max-width: 768px) {
+  .hero-compact {
+    min-height: unset;
+    padding-bottom: 48px !important;
+    padding-left: 24px !important;
+  }
+}
+
+/* Booking options grid — 2-col desktop, 1-col mobile */
+.booking-options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 480px) {
+  .booking-options-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Sticky call bar — hidden desktop, shown mobile only */
+.sticky-call-bar {
+  display: none;
+}
+@media (max-width: 768px) {
+  .sticky-call-bar {
+    display: block;
+  }
+}
