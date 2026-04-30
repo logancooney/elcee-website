@@ -24,23 +24,25 @@ export default function BookingContent() {
         padding: '80px clamp(20px, 5vw, 48px) 40px',
         borderBottom: '1px solid #1a1a1a',
       } as React.CSSProperties}>
-        <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 16 }}>
-          Book
+        <div style={{ maxWidth: 580, margin: '0 auto' }}>
+          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 16 }}>
+            Book
+          </div>
+          <h1 style={{
+            fontWeight: 900,
+            fontSize: 'clamp(40px, 7vw, 96px)',
+            lineHeight: 0.88,
+            letterSpacing: '-0.03em',
+            textTransform: 'uppercase',
+            color: '#fafafa',
+            marginBottom: 12,
+          }}>
+            Book a Session.
+          </h1>
+          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)', letterSpacing: '-0.01em' }}>
+            Pick a service &amp; choose a time.
+          </p>
         </div>
-        <h1 style={{
-          fontWeight: 900,
-          fontSize: 'clamp(40px, 7vw, 96px)',
-          lineHeight: 0.88,
-          letterSpacing: '-0.03em',
-          textTransform: 'uppercase',
-          color: '#fafafa',
-          marginBottom: 12,
-        }}>
-          Book a Session.
-        </h1>
-        <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)', letterSpacing: '-0.01em' }}>
-          Pick a service &amp; choose a time.
-        </p>
       </section>
 
       {/* ── TUTORING BLOCK ── */}
@@ -50,19 +52,21 @@ export default function BookingContent() {
           paddingBottom: 0,
           borderBottom: '1px solid #1a1a1a',
         }}>
-          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 10 }}>
-            01 — Tutoring
+          <div style={{ maxWidth: 580, margin: '0 auto' }}>
+            <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 10 }}>
+              01 — Tutoring
+            </div>
+            <h2 style={{
+              fontWeight: 900,
+              fontSize: 'clamp(24px, 3.5vw, 48px)',
+              letterSpacing: '-0.03em',
+              textTransform: 'uppercase',
+              lineHeight: 0.9,
+              paddingBottom: 'clamp(20px, 5vw, 48px)' as unknown as number,
+            }}>
+              1-1 Music Lessons
+            </h2>
           </div>
-          <h2 style={{
-            fontWeight: 900,
-            fontSize: 'clamp(24px, 3.5vw, 48px)',
-            letterSpacing: '-0.03em',
-            textTransform: 'uppercase',
-            lineHeight: 0.9,
-            paddingBottom: 'clamp(20px, 5vw, 48px)' as unknown as number,
-          }}>
-            1-1 Music Lessons
-          </h2>
         </div>
         <ServiceBookingBlock
           freeCallUrl={CALENDLY_EVENT_URLS.freeTutoringConsultation}
@@ -95,19 +99,21 @@ export default function BookingContent() {
           paddingBottom: 0,
           borderBottom: '1px solid #1a1a1a',
         }}>
-          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 10 }}>
-            02 — Studio
+          <div style={{ maxWidth: 580, margin: '0 auto' }}>
+            <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 10 }}>
+              02 — Studio
+            </div>
+            <h2 style={{
+              fontWeight: 900,
+              fontSize: 'clamp(24px, 3.5vw, 48px)',
+              letterSpacing: '-0.03em',
+              textTransform: 'uppercase',
+              lineHeight: 0.9,
+              paddingBottom: 'clamp(20px, 5vw, 48px)' as unknown as number,
+            }}>
+              Studio Recording
+            </h2>
           </div>
-          <h2 style={{
-            fontWeight: 900,
-            fontSize: 'clamp(24px, 3.5vw, 48px)',
-            letterSpacing: '-0.03em',
-            textTransform: 'uppercase',
-            lineHeight: 0.9,
-            paddingBottom: 'clamp(20px, 5vw, 48px)' as unknown as number,
-          }}>
-            Studio Recording
-          </h2>
         </div>
         <ServiceBookingBlock
           freeCallUrl={CALENDLY_EVENT_URLS.freeStudioEnquiry}
@@ -141,19 +147,21 @@ export default function BookingContent() {
           paddingBottom: 0,
           borderBottom: '1px solid #1a1a1a',
         }}>
-          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 10 }}>
-            03 — Remote
+          <div style={{ maxWidth: 580, margin: '0 auto' }}>
+            <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 10 }}>
+              03 — Remote
+            </div>
+            <h2 style={{
+              fontWeight: 900,
+              fontSize: 'clamp(24px, 3.5vw, 48px)',
+              letterSpacing: '-0.03em',
+              textTransform: 'uppercase',
+              lineHeight: 0.9,
+              paddingBottom: 'clamp(20px, 5vw, 48px)' as unknown as number,
+            }}>
+              Mixing &amp; Mastering
+            </h2>
           </div>
-          <h2 style={{
-            fontWeight: 900,
-            fontSize: 'clamp(24px, 3.5vw, 48px)',
-            letterSpacing: '-0.03em',
-            textTransform: 'uppercase',
-            lineHeight: 0.9,
-            paddingBottom: 'clamp(20px, 5vw, 48px)' as unknown as number,
-          }}>
-            Mixing &amp; Mastering
-          </h2>
         </div>
         <ServiceBookingBlock
           options={[

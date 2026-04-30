@@ -166,19 +166,21 @@ export default function StudioPage() {
           padding: 'clamp(20px, 4vw, 40px) clamp(20px, 5vw, 48px) 0',
           borderBottom: '1px solid #1a1a1a',
         }}>
-          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 10 }}>
-            Book
+          <div style={{ maxWidth: 580, margin: '0 auto' }}>
+            <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 10 }}>
+              Book
+            </div>
+            <h2 style={{
+              fontWeight: 900,
+              fontSize: 'clamp(28px, 4vw, 52px)',
+              letterSpacing: '-0.03em',
+              textTransform: 'uppercase',
+              lineHeight: 0.9,
+              paddingBottom: 'clamp(16px, 3vw, 32px)' as unknown as number,
+            }}>
+              Book a Session
+            </h2>
           </div>
-          <h2 style={{
-            fontWeight: 900,
-            fontSize: 'clamp(28px, 4vw, 52px)',
-            letterSpacing: '-0.03em',
-            textTransform: 'uppercase',
-            lineHeight: 0.9,
-            paddingBottom: 'clamp(16px, 3vw, 32px)' as unknown as number,
-          }}>
-            Book a Session
-          </h2>
         </div>
         <ServiceBookingBlock
           freeCallUrl={CALENDLY_EVENT_URLS.freeStudioEnquiry}
@@ -211,18 +213,20 @@ export default function StudioPage() {
           padding: 'clamp(20px, 4vw, 40px) clamp(20px, 5vw, 48px)',
           borderBottom: '1px solid #1a1a1a',
         }}>
-          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 10 }}>
-            What You Get
+          <div style={{ maxWidth: 580, margin: '0 auto' }}>
+            <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 10 }}>
+              What You Get
+            </div>
+            <h2 style={{
+              fontWeight: 900,
+              fontSize: 'clamp(24px, 3.5vw, 48px)',
+              letterSpacing: '-0.03em',
+              textTransform: 'uppercase',
+              lineHeight: 0.9,
+            }}>
+              The Studio
+            </h2>
           </div>
-          <h2 style={{
-            fontWeight: 900,
-            fontSize: 'clamp(24px, 3.5vw, 48px)',
-            letterSpacing: '-0.03em',
-            textTransform: 'uppercase',
-            lineHeight: 0.9,
-          }}>
-            The Studio
-          </h2>
         </div>
         {WHAT_YOU_GET.map(item => (
           <div key={item.label} style={{ borderBottom: '1px solid #1a1a1a' }}>
@@ -232,6 +236,7 @@ export default function StudioPage() {
               gridTemplateColumns: '36px 1fr',
               gap: 20,
               maxWidth: 760,
+              margin: '0 auto',
             }}>
               <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', paddingTop: 4 }}>
                 {item.label}
