@@ -161,20 +161,19 @@ export default function TutoringPage() {
       {/* ── BOOKING ── */}
       <motion.section {...fadeUp} id="booking" style={{ background: '#080808', borderTop: '1px solid #1a1a1a' }}>
         <div style={{
-          padding: 'clamp(20px, 5vw, 48px)',
-          paddingBottom: 0,
+          padding: 'clamp(20px, 4vw, 40px) clamp(20px, 5vw, 48px) 0',
           borderBottom: '1px solid #1a1a1a',
         }}>
-          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>
+          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 10 }}>
             Book
           </div>
           <h2 style={{
             fontWeight: 900,
-            fontSize: 'clamp(28px, 4vw, 56px)',
+            fontSize: 'clamp(28px, 4vw, 52px)',
             letterSpacing: '-0.03em',
             textTransform: 'uppercase',
             lineHeight: 0.9,
-            paddingBottom: 'clamp(20px, 5vw, 48px)' as unknown as number,
+            paddingBottom: 'clamp(16px, 3vw, 32px)' as unknown as number,
           }}>
             Book a Session
           </h2>
@@ -206,15 +205,15 @@ export default function TutoringPage() {
       {/* ── WHAT YOU GET ── */}
       <motion.section {...fadeUp} id="what-you-get" style={{ background: '#080808', borderTop: '1px solid #1a1a1a' }}>
         <div style={{
-          padding: 'clamp(24px, 6vw, 56px) clamp(20px, 5vw, 48px)',
+          padding: 'clamp(20px, 4vw, 40px) clamp(20px, 5vw, 48px)',
           borderBottom: '1px solid #1a1a1a',
         }}>
-          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>
+          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 10 }}>
             What You Get
           </div>
           <h2 style={{
             fontWeight: 900,
-            fontSize: 'clamp(28px, 4vw, 56px)',
+            fontSize: 'clamp(24px, 3.5vw, 48px)',
             letterSpacing: '-0.03em',
             textTransform: 'uppercase',
             lineHeight: 0.9,
@@ -223,26 +222,25 @@ export default function TutoringPage() {
           </h2>
         </div>
         {WHAT_YOU_GET.map(item => (
-          <div
-            key={item.label}
-            style={{
-              padding: 'clamp(24px, 6vw, 48px) clamp(20px, 5vw, 48px)',
-              borderBottom: '1px solid #1a1a1a',
+          <div key={item.label} style={{ borderBottom: '1px solid #1a1a1a' }}>
+            <div style={{
+              padding: 'clamp(24px, 4vw, 40px) clamp(20px, 5vw, 48px)',
               display: 'grid',
-              gridTemplateColumns: '40px 1fr',
-              gap: 24,
-            }}
-          >
-            <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', paddingTop: 4 }}>
-              {item.label}
-            </div>
-            <div>
-              <p style={{ fontWeight: 900, fontSize: 'clamp(15px, 2vw, 20px)', letterSpacing: '-0.02em', textTransform: 'uppercase', lineHeight: 1.1, marginBottom: 10 }}>
-                {item.title}
-              </p>
-              <p style={{ fontSize: 13, lineHeight: 1.8, color: 'rgba(255,255,255,0.5)' }}>
-                {item.desc}
-              </p>
+              gridTemplateColumns: '36px 1fr',
+              gap: 20,
+              maxWidth: 760,
+            }}>
+              <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', paddingTop: 4 }}>
+                {item.label}
+              </div>
+              <div>
+                <p style={{ fontWeight: 900, fontSize: 'clamp(14px, 1.6vw, 18px)', letterSpacing: '-0.02em', textTransform: 'uppercase', lineHeight: 1.1, marginBottom: 10 }}>
+                  {item.title}
+                </p>
+                <p style={{ fontSize: 13, lineHeight: 1.8, color: 'rgba(255,255,255,0.5)', maxWidth: 520 }}>
+                  {item.desc}
+                </p>
+              </div>
             </div>
           </div>
         ))}

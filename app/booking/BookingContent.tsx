@@ -21,7 +21,7 @@ export default function BookingContent() {
 
       {/* ── PAGE HEADER ── */}
       <section style={{
-        padding: 'clamp(80px, 12vw, 140px) clamp(20px, 5vw, 48px) clamp(40px, 6vw, 64px)',
+        padding: '80px clamp(20px, 5vw, 48px) 40px',
         borderBottom: '1px solid #1a1a1a',
       } as React.CSSProperties}>
         <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 16 }}>

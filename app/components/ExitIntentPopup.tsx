@@ -16,10 +16,12 @@ export default function ExitIntentPopup() {
     localStorage.setItem(VISITOR_KEY, 'true');
 
     if (isReturning) {
-      const timer = setTimeout(() => setVisible(true), 3000);
+      // Returning visitor: show after 20 seconds
+      const timer = setTimeout(() => setVisible(true), 20000);
       return () => clearTimeout(timer);
     }
 
+    // First visit: show on exit intent (mouse leaves top of viewport)
     const handleMouseLeave = (e: MouseEvent) => {
       if (e.clientY <= 0) {
         setVisible(true);
@@ -39,39 +41,100 @@ export default function ExitIntentPopup() {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center px-6"
       onClick={dismiss}
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '24px',
+        background: 'rgba(0,0,0,0.85)',
+      }}
     >
-      <div className="absolute inset-0 bg-black/80" />
       <div
-        className="relative bg-black border border-white/20 p-8 max-w-md w-full text-center"
-        onClick={(e) => e.stopPropagation()}
+        onClick={e => e.stopPropagation()}
+        style={{
+          position: 'relative',
+          background: '#111111',
+          border: '1px solid rgba(255,255,255,0.15)',
+          padding: '48px 40px 40px',
+          maxWidth: 420,
+          width: '100%',
+          textAlign: 'center',
+        }}
       >
         <button
           onClick={dismiss}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl leading-none"
           aria-label="Close"
+          style={{
+            position: 'absolute',
+            top: 16,
+            right: 20,
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: 22,
+            lineHeight: 1,
+            color: 'rgba(255,255,255,0.4)',
+          }}
         >
           ×
         </button>
-        <h2 className="text-2xl font-bold mb-3">Before you go</h2>
-        <p className="text-gray-400 mb-6">
-          10% off your first booking — studio, mixing, mastering, or tutoring.
+
+        <p style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 14 }}>
+          Before you go
         </p>
-        <div className="bg-white/5 border border-white/20 px-6 py-4 mb-6">
-          <p className="text-xs text-gray-500 mb-1 uppercase tracking-widest">Your discount code</p>
-          <p className="text-2xl font-bold tracking-widest">WELCOME10</p>
+        <h2 style={{ fontWeight: 900, fontSize: 28, letterSpacing: '-0.02em', textTransform: 'uppercase', lineHeight: 1, color: '#fafafa', marginBottom: 12 }}>
+          10% Off Your<br />First Booking
+        </h2>
+        <p style={{ fontSize: 13, lineHeight: 1.8, color: 'rgba(255,255,255,0.5)', marginBottom: 28 }}>
+          Works on studio time, mixing, mastering, or tutoring.
+        </p>
+
+        <div style={{
+          background: '#0a0a0a',
+          border: '1px solid rgba(255,255,255,0.1)',
+          padding: '16px 24px',
+          marginBottom: 24,
+        }}>
+          <p style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 8 }}>
+            Your discount code
+          </p>
+          <p style={{ fontWeight: 900, fontSize: 26, letterSpacing: '0.15em', color: '#fafafa' }}>
+            WELCOME10
+          </p>
         </div>
+
         <Link
           href="/booking"
           onClick={dismiss}
-          className="block w-full bg-white text-black py-3 font-bold hover:bg-gray-200 transition"
+          style={{
+            display: 'block',
+            width: '100%',
+            padding: '14px 24px',
+            background: '#fafafa',
+            color: '#080808',
+            textDecoration: 'none',
+            fontWeight: 900,
+            fontSize: 11,
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            marginBottom: 14,
+          }}
         >
-          Book now
+          Book Now →
         </Link>
         <button
           onClick={dismiss}
-          className="mt-4 text-sm text-gray-500 hover:text-white transition"
+          style={{
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: 12,
+            color: 'rgba(255,255,255,0.3)',
+          }}
         >
           No thanks
         </button>

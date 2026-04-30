@@ -28,6 +28,7 @@ export default function ServiceBookingBlock({
       display: 'flex',
       flexDirection: 'column',
       gap: 12,
+      maxWidth: 580,
     }}>
       {freeCallUrl && (
         <a
