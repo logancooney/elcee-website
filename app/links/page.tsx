@@ -107,8 +107,8 @@ export default function LinksPage() {
           <Image
             src="/logos/eta-logo-white-cropped.png"
             alt="Elcee The Alchemist"
-            width={240} height={60}
-            style={{ height: 48, width: 'auto', objectFit: 'contain', marginBottom: 12 }}
+            width={320} height={80}
+            style={{ height: 72, width: 'auto', objectFit: 'contain', marginBottom: 12, display: 'block', margin: '0 auto 12px' }}
           />
           <p style={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>
             Alternative Rap · Manchester
