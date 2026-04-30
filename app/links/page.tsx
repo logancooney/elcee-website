@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface ShopifyProduct {
   id: number;
@@ -204,12 +205,14 @@ export default function LinksPage() {
 
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 24 }}>
-          <Image
-            src="/logos/eta-logo-white-cropped.png"
-            alt="Elcee The Alchemist"
-            width={320} height={80}
-            style={{ height: 72, width: 'auto', objectFit: 'contain', display: 'block', margin: '0 auto 12px' }}
-          />
+          <Link href="/">
+            <Image
+              src="/logos/eta-logo-white-cropped.png"
+              alt="Elcee The Alchemist"
+              width={320} height={80}
+              style={{ height: 72, width: 'auto', objectFit: 'contain', display: 'block', margin: '0 auto 12px' }}
+            />
+          </Link>
           <p style={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>
             Alternative Rap · Manchester
           </p>
