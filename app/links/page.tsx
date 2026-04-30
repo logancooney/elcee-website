@@ -17,7 +17,7 @@ function MerchGrid() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('https://shop.elceethealchemist.com/products.json?limit=8')
+    fetch('/api/merch')
       .then(r => r.json())
       .then(data => {
         setProducts(data.products ?? []);
