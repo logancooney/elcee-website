@@ -1,7 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Anthropic from '@anthropic-ai/sdk';
-
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 const SYSTEM_PROMPT = `You are the booking assistant for Elcee the Alchemist, a recording engineer, music producer, and studio owner based in Manchester.
 
@@ -113,14 +110,26 @@ export async function POST(request: NextRequest) {
     history.push({ role: 'user', content: sanitized });
     const trimmedHistory = history.slice(-10);
 
-    const response = await client.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 300,
-      system: SYSTEM_PROMPT,
-      messages: trimmedHistory,
+    const orResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://elceethealchemist.com',
+        'X-Title': 'Elcee The Alchemist',
+      },
+      body: JSON.stringify({
+        model: 'anthropic/claude-haiku-4-5',
+        max_tokens: 300,
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          ...trimmedHistory,
+        ],
+      }),
     });
 
-    const replyText = response.content[0].type === 'text' ? response.content[0].text : 'Something went wrong. Try emailing elcee.mgmt@gmail.com';
+    const orData = await orResponse.json();
+    const replyText: string = orData.choices?.[0]?.message?.content ?? 'Something went wrong. Try emailing elcee.mgmt@gmail.com';
 
     history.push({ role: 'assistant', content: replyText });
 
