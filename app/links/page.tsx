@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 const LINKS = [
   {
     label: 'Listen on Spotify',
@@ -90,30 +92,20 @@ export default function LinksPage() {
 
         {/* Identity */}
         <div style={{ marginBottom: 48, textAlign: 'center' }}>
-          <div style={{
-            fontSize: 9, letterSpacing: '0.35em', textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.3)', marginBottom: 12,
-          }}>
-            Manchester · UK
-          </div>
-          <h1 style={{
-            fontWeight: 900,
-            fontSize: 'clamp(32px, 8vw, 52px)',
-            letterSpacing: '-0.03em',
-            textTransform: 'uppercase',
-            lineHeight: 0.9,
-            color: '#fafafa',
-            marginBottom: 10,
-          }}>
-            Elcee<br />The Alchemist
-          </h1>
+          <Image
+            src="/logos/eta-logo-white-cropped.png"
+            alt="Elcee The Alchemist"
+            width={240}
+            height={60}
+            style={{ height: 52, width: 'auto', objectFit: 'contain', marginBottom: 16 }}
+          />
           <p style={{
             fontSize: 11,
             letterSpacing: '0.2em',
             textTransform: 'uppercase',
             color: 'rgba(255,255,255,0.3)',
           }}>
-            Alternative Rap
+            Alternative Rap · Manchester
           </p>
         </div>
 

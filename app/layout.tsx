@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import ChatWidget from "./components/ChatWidget";
-import ExitIntentPopup from "./components/ExitIntentPopup";
 import StructuredDataPerson from "./components/StructuredDataPerson";
 import LenisProvider from "./components/LenisProvider";
 import { Analytics } from "@vercel/analytics/next";
@@ -87,8 +85,6 @@ export default function RootLayout({
         <LenisProvider>
           {children}
         </LenisProvider>
-        <ExitIntentPopup />
-        <ChatWidget />
         <Analytics />
       </body>
     </html>
