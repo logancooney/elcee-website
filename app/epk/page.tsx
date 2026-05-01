@@ -7,7 +7,7 @@ import Navigation from '../components/Navigation';
 import SiteFooter from '../components/SiteFooter';
 
 const ACHIEVEMENTS = [
-  'Winner of the UK JBL Martin Garrix Music Academy — 1 of 30 selected worldwide',
+  'Winner of the UK JBL Martin Garrix Music Academy (1 of 30 selected worldwide)',
   'Chosen as an adidas Rising Star for Forum Studio',
   'Debut Boiler Room performance hit 100,000 views in its first week',
   'Wrote, produced and recorded an EP at Abbey Road Studios for adidas (mentored by slowthai)',
@@ -36,15 +36,15 @@ const FEATURED_IN = [
 ];
 
 const LIVE_CREDITS = [
-  'JBL Global Product Launch — London',
-  'Sofar Sounds × Represent Clothing — Manchester',
-  'Bloom Magazine Issue 3 Launch — Bristol',
+  'JBL Global Product Launch, London',
+  'Sofar Sounds x Represent Clothing, Manchester',
+  'Bloom Magazine Issue 3 Launch, Bristol',
   'Beyond The Music Festival — Manchester',
   'New York City · Amsterdam · The Algarve · UK Tour dates',
 ];
 
 const VIDEOS = [
-  { id: '7uelRgmMSCQ', label: 'Live Performance', title: 'Winner — UK JBL Martin Garrix Music Academy' },
+  { id: '7uelRgmMSCQ', label: 'Live Performance', title: 'Winner, UK JBL Martin Garrix Music Academy' },
   { id: 'K9Bk3Mw7mIc', label: 'Music Video', title: 'Filthy' },
   { id: 'KmekR33sMng', label: 'Music Video', title: '2bad' },
 ];
@@ -85,7 +85,7 @@ function PressPhotos() {
         <Image
           key={photo.src}
           src={photo.src}
-          alt={`Elcee the Alchemist — Press Photo ${current + 1}`}
+          alt={`Elcee the Alchemist Press Photo ${current + 1}`}
           fill
           style={{ objectFit: 'cover', objectPosition: photo.position, filter: 'grayscale(100%) contrast(1.05)', transition: 'opacity 0.3s ease' }}
         />
@@ -194,7 +194,7 @@ export default function EPKPage() {
             marginBottom: 32,
             maxWidth: 540,
           }}>
-            &ldquo;Redefining the style and sound of tomorrow&rdquo; — Boiler Room
+            &ldquo;Redefining the style and sound of tomorrow&rdquo; / Boiler Room
           </p>
           <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
             {[
@@ -228,7 +228,7 @@ export default function EPKPage() {
               The Story
             </h2>
             <p style={{ fontSize: 15, lineHeight: 1.9, color: 'rgba(0,0,0,0.65)', marginBottom: 20 }}>
-              Elcee the Alchemist is redefining UK Alternative Rap. As the UK winner of the JBL Martin Garrix Music Academy — one of just 30 artists selected worldwide — he&apos;s been named a Rising Star for Adidas Forum Studio, recorded at the legendary Abbey Road Studios (receiving mentorship from slowthai), and his debut Boiler Room performance hit 100K views in its first week.
+              Elcee the Alchemist is redefining UK Alternative Rap. As the UK winner of the JBL Martin Garrix Music Academy (one of just 30 artists selected worldwide) he&apos;s been named a Rising Star for adidas Forum Studio, recorded at the legendary Abbey Road Studios (receiving mentorship from slowthai) and his debut Boiler Room performance hit 100K views in its first week. Elcee is consistently evolving his style and fanbase with each release.
             </p>
             <p style={{ fontSize: 15, lineHeight: 1.9, color: 'rgba(0,0,0,0.65)' }}>
               Rooted in London&apos;s Grime scene, he moved to Manchester to study Electronic Music Production, where he has been shaping the next-gen sound of the North ever since. His focus on Alchemy is reflected not just in his creative process, but in his spiritual philosophy, which can be found embellished in his lyrics. He has been featured by Notion, DMY, Slanky and more. Elcee weaves raw energy with deep introspection, alchemizing sound into a force for empowerment and transcendence.
@@ -237,11 +237,11 @@ export default function EPKPage() {
           <div style={{ padding: 'clamp(40px, 6vw, 72px) clamp(24px, 5vw, 64px)', display: 'flex', flexDirection: 'column', gap: 40 }}>
             <div>
               <p style={{ fontSize: 9, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 16 }}>
-                Short Bio — For Press Use
+                Short Bio for Press Use
               </p>
               <div style={{ padding: '28px 32px', background: '#080808', color: '#fafafa' }}>
                 <p style={{ fontSize: 13, lineHeight: 1.9, color: 'rgba(255,255,255,0.6)' }}>
-                  Elcee the Alchemist is a Salford-based alternative rap artist. UK winner of the JBL Martin Garrix Music Academy, adidas Rising Star, and Boiler Room performer — his debut Boiler Room set hit 100K views in a week. He recorded at Abbey Road Studios, has been featured by Notion, Slanky and DMY, and has performed internationally across New York, Amsterdam, and The Algarve. 500,000+ streams. 15,000+ followers across platforms.
+                  Elcee the Alchemist is a Salford-based alternative rap artist. UK winner of the JBL Martin Garrix Music Academy, adidas Rising Star and Boiler Room performer. His debut Boiler Room set hit 100K views in a week. He recorded at Abbey Road Studios, has been featured by Notion, Slanky and DMY, and has performed internationally across New York, Amsterdam, and The Algarve. 500,000+ streams. 15,000+ followers across platforms.
                 </p>
               </div>
             </div>
@@ -277,7 +277,7 @@ export default function EPKPage() {
               &ldquo;{q.quote}&rdquo;
             </p>
             <p style={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>
-              — {q.source}
+              {q.source}
             </p>
           </div>
         ))}
@@ -342,7 +342,7 @@ export default function EPKPage() {
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {LIVE_CREDITS.map((credit, i) => (
-              <p key={i} style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', lineHeight: 1.5 }}>— {credit}</p>
+              <p key={i} style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', lineHeight: 1.5 }}>{credit}</p>
             ))}
           </div>
         </div>
@@ -463,7 +463,7 @@ export default function EPKPage() {
             <div>
               <p style={{ fontSize: 9, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 8 }}>Socials</p>
               <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', lineHeight: 1.8 }}>
-                @elceethealchemist — Instagram, TikTok, YouTube<br />
+                @elceethealchemist on Instagram, TikTok, YouTube<br />
                 @elceejpg — Twitter / X
               </p>
             </div>

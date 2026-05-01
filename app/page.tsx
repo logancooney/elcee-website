@@ -382,10 +382,10 @@ export default function Home() {
               03 — About
             </div>
             <div style={{ fontWeight: 900, fontSize: 'clamp(40px, 5.5vw, 80px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.88, color: '#fafafa', marginBottom: 28 }}>
-              Raw.<br />Real.<br />Alchemical.
+              The<br />Artist
             </div>
             <p style={{ fontSize: 14, lineHeight: 1.8, color: 'rgba(255,255,255,0.45)', maxWidth: 380 }}>
-              Alternative rap artist from Manchester pushing the boundaries of the genre with raw lyricism and alchemical soundscapes. Every track is a transmutation — turning experience into art, darkness into gold.
+              Elcee the Alchemist is redefining UK Alternative Rap. UK winner of the JBL Martin Garrix Music Academy, adidas Rising Star for Forum Studio, and Boiler Room performer whose debut set hit 100K views in its first week.
             </p>
           </div>
         </div>
@@ -415,39 +415,29 @@ export default function Home() {
           pointerEvents: 'none',
         } as React.CSSProperties} />
 
-        <div className="grid-two-col" style={{ minHeight: 360, position: 'relative', zIndex: 1 }}>
-          <div style={{ padding: '64px 48px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
-            <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 10 }}>
-              04 — Studio
-            </div>
-            <div style={{ fontWeight: 900, fontSize: 'clamp(38px, 5vw, 72px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.88, color: '#080808', marginBottom: 20 }}>
-              The<br />Alchemist<br />Studio
-            </div>
-            <p style={{ fontSize: 13, lineHeight: 1.8, color: 'rgba(0,0,0,0.5)', marginBottom: 28, maxWidth: 340 }}>
-              Professional recording, mixing and mastering in the heart of Manchester. Built for artists who refuse to compromise on sound.
-            </p>
-            <Link
-              href="/studio"
-              style={{
-                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                padding: '13px 28px', fontWeight: 900, fontSize: 10, letterSpacing: '0.18em',
-                textTransform: 'uppercase', textDecoration: 'none',
-                background: '#080808', color: '#fafafa',
-                border: 'none', cursor: 'pointer', alignSelf: 'flex-start',
-                transition: 'opacity 0.2s',
-              }}
-            >
-              Book a Session →
-            </Link>
+        <div style={{ padding: '64px 48px', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 10 }}>
+            04 — Studio
           </div>
-          <div style={{ position: 'relative', overflow: 'hidden', background: '#d8d5d0', borderLeft: '2px solid rgba(0,0,0,0.08)', minHeight: 360 }}>
-            <Image
-              src="/studio/studio-interior-front.jpg"
-              alt="The Alchemist Studio"
-              fill
-              style={{ objectFit: 'cover', objectPosition: 'center', filter: 'grayscale(100%) contrast(1.05)' }}
-            />
+          <div style={{ fontWeight: 900, fontSize: 'clamp(38px, 5vw, 72px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.88, color: '#080808', marginBottom: 20 }}>
+            The<br />Alchemist<br />Studio
           </div>
+          <p style={{ fontSize: 13, lineHeight: 1.8, color: 'rgba(0,0,0,0.5)', marginBottom: 28, maxWidth: 340 }}>
+            Professional recording, mixing and mastering in the heart of Manchester. Built for artists who refuse to compromise on sound.
+          </p>
+          <Link
+            href="/studio"
+            style={{
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              padding: '13px 28px', fontWeight: 900, fontSize: 10, letterSpacing: '0.18em',
+              textTransform: 'uppercase', textDecoration: 'none',
+              background: '#080808', color: '#fafafa',
+              border: 'none', cursor: 'pointer',
+              transition: 'opacity 0.2s',
+            }}
+          >
+            Book a Session →
+          </Link>
         </div>
       </motion.section>
 
