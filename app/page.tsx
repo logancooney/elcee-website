@@ -218,6 +218,7 @@ export default function Home() {
                 textTransform: 'uppercase', textDecoration: 'none',
                 background: '#fafafa', color: '#080808',
                 border: 'none', cursor: 'pointer', transition: 'background 0.2s',
+                minWidth: 152,
               }}
             >
               Listen Now
@@ -230,7 +231,7 @@ export default function Home() {
                 textTransform: 'uppercase', textDecoration: 'none',
                 background: 'transparent', color: '#fafafa',
                 border: '1.5px solid rgba(255,255,255,0.4)', cursor: 'pointer',
-                transition: 'border-color 0.2s',
+                transition: 'border-color 0.2s', minWidth: 152,
               }}
             >
               Book Studio
