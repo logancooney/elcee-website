@@ -255,7 +255,7 @@ export default function Home() {
         borderTop: '2px solid #080808', borderBottom: '2px solid #080808',
         overflow: 'hidden', padding: '11px 0',
       }}>
-        <div style={{
+        <div className="marquee-inner" style={{
           display: 'flex', whiteSpace: 'nowrap',
           animation: 'marqueeScroll 18s linear infinite',
         }}>
@@ -267,7 +267,7 @@ export default function Home() {
               <span style={{
                 fontWeight: 900, fontSize: 13, letterSpacing: '0.18em',
                 textTransform: 'uppercase', color: '#080808',
-                padding: '0 120px', flexShrink: 0,
+                padding: '0 48px', flexShrink: 0,
               }}>
                 {item}
               </span>
@@ -369,41 +369,12 @@ export default function Home() {
         />
       </section>
 
-      {/* ── ABOUT ─────────────────────────────────── */}
-      <motion.section
-        {...fadeUp}
-        id="about"
-        className="grid-two-col"
-        style={{ background: '#080808', borderTop: '1px solid #1a1a1a', minHeight: 380, position: 'relative', zIndex: 1 }}
-      >
-        <div style={{ padding: '64px 48px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-          <div>
-            <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 10 }}>
-              03 — About
-            </div>
-            <div style={{ fontWeight: 900, fontSize: 'clamp(40px, 5.5vw, 80px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.88, color: '#fafafa', marginBottom: 28 }}>
-              The<br />Artist
-            </div>
-            <p style={{ fontSize: 14, lineHeight: 1.8, color: 'rgba(255,255,255,0.45)', maxWidth: 380 }}>
-              Elcee the Alchemist is redefining UK Alternative Rap. UK winner of the JBL Martin Garrix Music Academy, adidas Rising Star for Forum Studio, and Boiler Room performer whose debut set hit 100K views in its first week.
-            </p>
-          </div>
-        </div>
-        <div style={{ position: 'relative', overflow: 'hidden', background: '#111111', borderLeft: '1px solid #1a1a1a', minHeight: 380 }}>
-          <Image
-            src="/elcee-portrait.jpg"
-            alt="Elcee The Alchemist"
-            fill
-            style={{ objectFit: 'cover', objectPosition: 'center center', filter: 'grayscale(100%) contrast(1.1)' }}
-          />
-        </div>
-      </motion.section>
-
       {/* ── STUDIO ────────────────────────────────── */}
       <motion.section
         {...fadeUp}
         id="studio"
-        style={{ background: '#f0ede8', position: 'relative', overflow: 'hidden', zIndex: 1 }}
+        className="grid-two-col"
+        style={{ background: '#f0ede8', position: 'relative', overflow: 'hidden', zIndex: 1, borderTop: '1px solid rgba(0,0,0,0.08)' }}
       >
         {/* Texture */}
         <div style={{
@@ -413,18 +384,22 @@ export default function Home() {
           opacity: 0.06,
           mixBlendMode: 'multiply',
           pointerEvents: 'none',
+          zIndex: 0,
         } as React.CSSProperties} />
 
-        <div style={{ padding: '64px 48px', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 10 }}>
-            04 — Studio
+        {/* Left — copy */}
+        <div style={{ padding: '64px 48px', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: 420 }}>
+          <div>
+            <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 10 }}>
+              03 — Studio
+            </div>
+            <div style={{ fontWeight: 900, fontSize: 'clamp(38px, 5vw, 72px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.88, color: '#080808', marginBottom: 20 }}>
+              The<br />Alchemist<br />Studio
+            </div>
+            <p style={{ fontSize: 13, lineHeight: 1.8, color: 'rgba(0,0,0,0.5)', marginBottom: 28, maxWidth: 340 }}>
+              Professional recording, mixing and mastering in the heart of Manchester. Built for artists who refuse to compromise on sound.
+            </p>
           </div>
-          <div style={{ fontWeight: 900, fontSize: 'clamp(38px, 5vw, 72px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.88, color: '#080808', marginBottom: 20 }}>
-            The<br />Alchemist<br />Studio
-          </div>
-          <p style={{ fontSize: 13, lineHeight: 1.8, color: 'rgba(0,0,0,0.5)', marginBottom: 28, maxWidth: 340 }}>
-            Professional recording, mixing and mastering in the heart of Manchester. Built for artists who refuse to compromise on sound.
-          </p>
           <Link
             href="/studio"
             style={{
@@ -433,11 +408,31 @@ export default function Home() {
               textTransform: 'uppercase', textDecoration: 'none',
               background: '#080808', color: '#fafafa',
               border: 'none', cursor: 'pointer',
-              transition: 'opacity 0.2s',
+              transition: 'opacity 0.2s', alignSelf: 'flex-start',
             }}
           >
             Book a Session →
           </Link>
+        </div>
+
+        {/* Right — press shots */}
+        <div className="no-mobile-pad" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderLeft: '1px solid rgba(0,0,0,0.08)', minHeight: 420, position: 'relative', zIndex: 1 }}>
+          <div style={{ position: 'relative', overflow: 'hidden' }}>
+            <Image
+              src="/photos/press-shot-1.jpg"
+              alt="Elcee The Alchemist press shot"
+              fill
+              style={{ objectFit: 'cover', objectPosition: 'center top' }}
+            />
+          </div>
+          <div style={{ position: 'relative', overflow: 'hidden', borderLeft: '1px solid rgba(0,0,0,0.08)' }}>
+            <Image
+              src="/photos/press-shot-bw.jpg"
+              alt="Elcee The Alchemist press shot"
+              fill
+              style={{ objectFit: 'cover', objectPosition: 'center top' }}
+            />
+          </div>
         </div>
       </motion.section>
 

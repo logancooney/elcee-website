@@ -5,13 +5,25 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const NAV_LINKS = [
-  { label: 'Music', href: '/#releases' },
-  { label: 'Studio', href: '/studio' },
-  { label: 'Tutoring', href: '/tutoring' },
-  { label: 'Shop', href: '/shop' },
-  { label: 'Free Call', href: '/free' },
-  { label: 'Contact', href: '/contact' },
-];
+  { label: 'Music', href: '/#releases', tier: 1 },
+  { label: 'Shop', href: '/shop', tier: 2 },
+  { label: 'Studio', href: '/studio', tier: 3 },
+  { label: 'Tutoring', href: '/tutoring', tier: 3 },
+  { label: 'Free', href: '/free', tier: 3 },
+  { label: 'Contact', href: '/contact', tier: 3 },
+] as const;
+
+const desktopLinkStyle = (tier: 1 | 2 | 3) => ({
+  1: { fontSize: 13, fontWeight: 900, color: '#fafafa',              letterSpacing: '0.15em' },
+  2: { fontSize: 11, fontWeight: 400, color: 'rgba(255,255,255,0.6)', letterSpacing: '0.15em' },
+  3: { fontSize: 10, fontWeight: 400, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.14em' },
+}[tier]);
+
+const mobileLinkStyle = (tier: 1 | 2 | 3) => ({
+  1: { fontSize: 34, fontWeight: 900, color: '#fafafa',               letterSpacing: '0.04em' },
+  2: { fontSize: 22, fontWeight: 900, color: 'rgba(255,255,255,0.75)', letterSpacing: '0.08em' },
+  3: { fontSize: 16, fontWeight: 400, color: 'rgba(255,255,255,0.5)',  letterSpacing: '0.12em' },
+}[tier]);
 
 const NAV_CTA = { label: 'Book', href: '/booking' };
 
@@ -46,23 +58,22 @@ export default function Navigation() {
         </Link>
 
         <div className="hidden md:flex" style={{ alignItems: 'center', gap: 36 }}>
-          <ul style={{ display: 'flex', gap: 36, listStyle: 'none', margin: 0, padding: 0 }}>
-            {NAV_LINKS.map(({ label, href }) => (
-              <li key={label}>
-                <Link
-                  href={href}
-                  style={{
-                    fontSize: 11, fontWeight: 400, letterSpacing: '0.15em',
-                    textTransform: 'uppercase', color: 'rgba(255,255,255,0.55)',
-                    textDecoration: 'none', transition: 'color 0.2s',
-                  }}
-                  onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = '#fafafa')}
-                  onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.55)')}
-                >
-                  {label}
-                </Link>
-              </li>
-            ))}
+          <ul style={{ display: 'flex', alignItems: 'center', gap: 32, listStyle: 'none', margin: 0, padding: 0 }}>
+            {NAV_LINKS.map(({ label, href, tier }) => {
+              const base = desktopLinkStyle(tier);
+              return (
+                <li key={label}>
+                  <Link
+                    href={href}
+                    style={{ ...base, textTransform: 'uppercase', textDecoration: 'none', transition: 'color 0.2s' }}
+                    onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = '#fafafa')}
+                    onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = base.color)}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
           <Link
             href={NAV_CTA.href}
@@ -102,28 +113,34 @@ export default function Navigation() {
           position: 'fixed', inset: 0,
           background: 'rgba(8,8,8,0.98)', zIndex: 99,
           display: 'flex', flexDirection: 'column',
-          alignItems: 'center', justifyContent: 'center', gap: 40,
+          alignItems: 'center', justifyContent: 'center',
         }}>
-          {NAV_LINKS.map(({ label, href }) => (
-            <Link
-              key={label}
-              href={href}
-              onClick={() => setMobileOpen(false)}
-              style={{
-                fontSize: 24, fontWeight: 900, letterSpacing: '0.12em',
-                textTransform: 'uppercase', color: '#fafafa', textDecoration: 'none',
-              }}
-            >
-              {label}
-            </Link>
-          ))}
+          {NAV_LINKS.map(({ label, href, tier }, i) => {
+            const prevTier = i > 0 ? NAV_LINKS[i - 1].tier : tier;
+            const topMargin = tier > prevTier ? 20 : tier === 1 ? 0 : 16;
+            return (
+              <Link
+                key={label}
+                href={href}
+                onClick={() => setMobileOpen(false)}
+                style={{
+                  ...mobileLinkStyle(tier),
+                  textTransform: 'uppercase', textDecoration: 'none',
+                  marginTop: topMargin,
+                  marginBottom: tier === 1 ? 8 : 0,
+                }}
+              >
+                {label}
+              </Link>
+            );
+          })}
           <Link
             href={NAV_CTA.href}
             onClick={() => setMobileOpen(false)}
             style={{
-              fontSize: 22, fontWeight: 900, letterSpacing: '0.12em',
+              fontSize: 14, fontWeight: 900, letterSpacing: '0.18em',
               textTransform: 'uppercase', color: '#080808', textDecoration: 'none',
-              background: '#fafafa', padding: '14px 28px', marginTop: 16,
+              background: '#fafafa', padding: '14px 28px', marginTop: 32,
             }}
           >
             {NAV_CTA.label} →
