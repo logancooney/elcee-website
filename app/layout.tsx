@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: '/og-image.jpg',
+        url: '/api/og',
         width: 1200,
         height: 630,
         alt: 'Elcee the Alchemist - Manchester Rap Artist',
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     description: "Independent alternative rap artist from Manchester. Book studio sessions.",
     creator: "@elceejpg",
     site: "@elceejpg",
-    images: ['/og-image.jpg'],
+    images: ['/api/og'],
   },
   robots: {
     index: true,
