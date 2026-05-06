@@ -9,6 +9,7 @@ import SiteFooter from './components/SiteFooter';
 import MobileJumpNav from './components/MobileJumpNav';
 import Navigation from './components/Navigation';
 import { RELEASES } from '../content/releases';
+import { MARQUEE_ITEMS } from '../content/marquee';
 
 const outlineBtnStyle: React.CSSProperties = {
   display: 'inline-flex',
@@ -261,10 +262,7 @@ export default function Home() {
           display: 'flex', whiteSpace: 'nowrap',
           animation: 'marqueeScroll 18s linear infinite',
         }}>
-          {[
-            'JBL Music Academy Winner', 'adidas Rising Star', 'Boiler Room', 'Abbey Road Studios', 'UK Rap Award with Tiffany Calver',
-            'JBL Music Academy Winner', 'adidas Rising Star', 'Boiler Room', 'Abbey Road Studios', 'UK Rap Award with Tiffany Calver',
-          ].map((item, i) => (
+          {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) => (
             <span key={i} style={{ display: 'inline-flex', alignItems: 'center' }}>
               <span style={{
                 fontWeight: 900, fontSize: 13, letterSpacing: '0.18em',
