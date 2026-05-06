@@ -204,7 +204,7 @@ export default function FreePage() {
         borderBottom: '1px solid #1a1a1a',
       } as React.CSSProperties}>
         <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 16 }}>
-          Free
+          Free Call
         </div>
         <h1 style={{
           fontWeight: 900,
@@ -213,9 +213,13 @@ export default function FreePage() {
           letterSpacing: '-0.03em',
           textTransform: 'uppercase',
           color: '#fafafa',
+          marginBottom: 20,
         }}>
-          Free resources<br />&amp; a free call.
+          20 minutes.<br />No commitment.
         </h1>
+        <p style={{ fontSize: 14, lineHeight: 1.9, color: 'rgba(255,255,255,0.45)', maxWidth: 480 }}>
+          Tell me what you&apos;re working on and I&apos;ll tell you exactly how I can help — whether that&apos;s studio time, mixing, or tutoring. Book a free call below.
+        </p>
       </section>
 
       {/* ── FREE INTRO CALL ── */}

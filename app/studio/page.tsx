@@ -23,18 +23,18 @@ const fadeUp = {
 const WHAT_YOU_GET = [
   {
     label: '01',
-    title: 'Acoustically treated Manchester studio',
-    desc: "Professional, focused recording environment. Not just a room with a mic — built for accurate results whether you're tracking vocals, instruments, or mixing.",
+    title: 'Professional setup, no compromise',
+    desc: 'Industry-standard microphones, preamps, and an acoustically treated space. Everything is dialled in before you arrive — less time troubleshooting, more time recording.',
   },
   {
     label: '02',
-    title: 'A working artist with 6+ years experience',
-    desc: "Not a session engineer who clocks in and out. Someone who's still making music, with the taste and technical skills to get the best out of your session.",
+    title: "An engineer who's still an artist",
+    desc: "Six years recording, mixing, and releasing music. JBL Music Academy winner, Boiler Room performer, 50+ releases. Technical skills and taste — if something isn't working, I'll tell you, and I'll know how to fix it.",
   },
   {
     label: '03',
-    title: 'Fast delivery, revisions included',
-    desc: "Mixes and masters back within 5 working days. You sign off — not me. Revisions until it's right.",
+    title: '3–5 day turnaround, revisions included',
+    desc: 'Mixes back within five working days. Three rounds of revisions included as standard. Nothing goes out until you approve it.',
   },
 ];
 
@@ -339,10 +339,10 @@ export default function StudioPage() {
             marginBottom: 20,
             maxWidth: 520,
           }}>
-            Not for everyone. For artists ready to commit.
+            Monthly studio access at £30/hr
           </h2>
           <p style={{ fontSize: 14, lineHeight: 1.9, color: 'rgba(255,255,255,0.5)', maxWidth: 480, marginBottom: 24 }}>
-            Consistent studio time is how careers are built. Monthly access, priority booking, and a rate that reflects your seriousness.
+            For artists with a regular recording schedule. Priority booking, fixed monthly cost, one less thing to think about between sessions.
           </p>
           <p style={{ fontWeight: 900, fontSize: 20, letterSpacing: '-0.01em', marginBottom: 28 }}>
             {PRICES.studio.loyaltyLabel}

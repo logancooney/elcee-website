@@ -370,7 +370,7 @@ export default function Home() {
               The<br />Alchemist<br />Studio
             </div>
             <p style={{ fontSize: 13, lineHeight: 1.8, color: 'rgba(0,0,0,0.5)', marginBottom: 28, maxWidth: 340 }}>
-              Professional recording, mixing and mastering in the heart of Manchester. Built for artists who refuse to compromise on sound.
+              Professional recording, engineering and tutoring in the heart of Manchester. Built for artists who refuse to compromise on sound.
             </p>
           </div>
           <Link

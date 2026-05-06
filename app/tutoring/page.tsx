@@ -21,18 +21,18 @@ const fadeUp = {
 const WHAT_YOU_GET = [
   {
     label: '01',
-    title: 'Production, mixing, recording & songwriting',
-    desc: "Ableton, any DAW, vocal engineering, flow and lyricism. Your music is the lesson — we work on what you're actually making, from day one.",
+    title: 'Ableton, mixing, recording, and more',
+    desc: "Whether you're learning to produce from scratch, getting vocals to sit right in a mix, or working on arrangement — sessions go where your music needs them to go.",
   },
   {
     label: '02',
-    title: 'Every session built around you',
-    desc: "What you're working on is what we work on. No course, no curriculum — just direct, honest feedback that moves you forward.",
+    title: 'No fixed curriculum',
+    desc: "Every session is built around what you're working on. If you bring a track, we work on the track. No vague encouragement — I'll tell you what's working, what isn't, and specifically how to fix it.",
   },
   {
     label: '03',
-    title: '6+ years. Real credits. Still making music.',
-    desc: "Recording artist, mixing engineer, studio owner. The experience to know what works — and the honesty to tell you when something doesn't.",
+    title: 'Taught by a working artist',
+    desc: "Recording artist, mix engineer, studio owner — I'm still actively making and releasing music. The advice is current, tested, and specific to what independent artists actually face.",
   },
 ];
 
