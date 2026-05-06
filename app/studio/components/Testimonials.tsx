@@ -1,30 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { STUDIO_TESTIMONIALS, type Testimonial } from '../../../content/testimonials';
 
-interface Testimonial {
-  quote: string;
-  author: string;
-  location: string;
-}
-
-const testimonials: Testimonial[] = [
-  {
-    quote: "I've been working with Elcee for the past year, you won't find a better space to build your craft.",
-    author: 'Malaki',
-    location: 'Salford',
-  },
-  {
-    quote: "Elcee provides not only an exceptional studio environment with everything an artist might need, but he's also an excellent creative partner to bounce ideas off. It's really useful to talk to someone who has direct experience producing music for brands.",
-    author: 'Fieves',
-    location: 'Manchester',
-  },
-  {
-    quote: 'Elcee is a true multi-disciplinary creative and master of his crafts — from creative direction, song-writing, production, mixing and mastering and more.',
-    author: 'Ninja Tea',
-    location: 'Manchester',
-  },
-];
+const testimonials: Testimonial[] = STUDIO_TESTIMONIALS;
 
 export default function Testimonials() {
   const [current, setCurrent] = useState(0);
