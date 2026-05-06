@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { SITE } from '../../content/site';
 
 export default function SiteFooter() {
   return (
@@ -12,7 +13,7 @@ export default function SiteFooter() {
         style={{ opacity: 0.55, marginBottom: 14 }} />
       <p style={{ fontSize: 9, fontWeight: 400, letterSpacing: '0.3em', textTransform: 'uppercase',
         color: 'rgba(255,255,255,0.28)', marginBottom: 32 }}>
-        as within, so without
+        {SITE.footerQuote}
       </p>
       <div style={{ display: 'flex', gap: 28, marginBottom: 36, flexWrap: 'wrap', justifyContent: 'center' }}>
         {[
