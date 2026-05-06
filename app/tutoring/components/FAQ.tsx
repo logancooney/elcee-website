@@ -2,38 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { TUTORING_FAQS, type FAQItem } from '../../../content/faqs';
 
-interface FAQItem {
-  question: string;
-  answer: string;
-}
-
-const faqs: FAQItem[] = [
-  {
-    question: 'Do I need any experience?',
-    answer: "None. I've worked with people who've never opened a DAW before and people with years of experience who just felt stuck. Sessions start wherever you are.",
-  },
-  {
-    question: 'What equipment do I need?',
-    answer: "For online sessions you need a computer, headphones, and your DAW. For in-studio, just show up. Everything's here. No DAW yet? We'll sort that on the call.",
-  },
-  {
-    question: 'Which DAW do you teach?',
-    answer: "I teach production in Ableton Live. For mixing I can work with you in any DAW. Logic, FL Studio, Pro Tools, whatever you're on.",
-  },
-  {
-    question: 'Can I learn online?',
-    answer: '£45/hour via video call. You share your screen, I walk you through everything live. Works just as well as being here in person.',
-  },
-  {
-    question: 'How long are sessions?',
-    answer: 'Standard sessions are 1 hour. If you want longer, that can be arranged. Just mention it on your free session.',
-  },
-  {
-    question: 'How do I pay?',
-    answer: 'Payment is taken before each session. Bank transfer or card both accepted. Packages are available if you want to block book and save. Ask about this on your free session.',
-  },
-];
+const faqs: FAQItem[] = TUTORING_FAQS;
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
