@@ -8,9 +8,9 @@ interface JumpItem {
 }
 
 const JUMP_ITEMS: JumpItem[] = [
-  { label: 'Studio', href: '#studio' },
   { label: 'Music', href: '#releases' },
-  { label: 'About', href: '#about' },
+  { label: 'Studio', href: '#studio' },
+  { label: 'Shop', href: '/shop' },
   { label: 'Book', href: '/booking' },
 ];
 
