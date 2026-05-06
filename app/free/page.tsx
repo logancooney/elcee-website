@@ -302,27 +302,7 @@ export default function FreePage() {
         </div>
       </motion.section>
 
-      {/* ── FREE DOWNLOADS ── */}
-      <motion.section {...fadeUp} style={{ background: '#080808', borderTop: '1px solid #1a1a1a' }}>
-        <div style={{ padding: 'clamp(24px, 6vw, 48px) clamp(20px, 5vw, 48px)', borderBottom: '1px solid #1a1a1a' }}>
-          <div style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>
-            03 — Downloads
-          </div>
-          <h2 style={{ fontWeight: 900, fontSize: 'clamp(28px, 4vw, 56px)', letterSpacing: '-0.03em', textTransform: 'uppercase', lineHeight: 0.9 }}>
-            Free Downloads
-          </h2>
-          <p style={{ fontSize: 14, lineHeight: 1.8, color: 'rgba(255,255,255,0.45)', marginTop: 12 }}>
-            Drop your email and I&apos;ll send it straight over.
-          </p>
-        </div>
-        <div className="grid-two-col">
-          {MAGNETS.map((m, i) => (
-            <div key={m.id} style={{ borderLeft: i % 2 === 1 ? '1px solid #1a1a1a' : 'none' }}>
-              <DownloadCard {...m} />
-            </div>
-          ))}
-        </div>
-      </motion.section>
+      {/* FREE DOWNLOADS — hidden until PDFs are ready */}
 
       <SiteFooter />
     </div>
