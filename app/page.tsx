@@ -8,6 +8,7 @@ import type { ReactNode } from 'react';
 import SiteFooter from './components/SiteFooter';
 import MobileJumpNav from './components/MobileJumpNav';
 import Navigation from './components/Navigation';
+import { RELEASES } from '../content/releases';
 
 const outlineBtnStyle: React.CSSProperties = {
   display: 'inline-flex',
@@ -308,66 +309,39 @@ export default function Home() {
           </a>
         </motion.div>
 
-        {/* Row 1 — Spotify album, embed left */}
-        <ReleaseRow
-          reversed={false}
-          type="Album · 2024"
-          name={<>The Evolution<br />of Self<br />Destruction</>}
-          href="https://open.spotify.com/album/7HF3AA4vFQJARAt1ivCn0w"
-          hrefLabel="Open on Spotify →"
-          minHeight={408}
-          infoBg="/teosd-cover.png"
-          embed={
-            <iframe
-              title="The Evolution of Self Destruction"
-              style={{ border: 'none', width: '100%', height: '100%' }}
-              src="https://open.spotify.com/embed/album/7HF3AA4vFQJARAt1ivCn0w?utm_source=generator&theme=0"
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"
-            />
-          }
-        />
-
-        {/* Row 2 — YouTube Filthy, info left (reversed) */}
-        <ReleaseRow
-          reversed={true}
-          type="Single · 2024"
-          name="Filthy"
-          href="https://www.youtube.com/watch?v=K9Bk3Mw7mIc"
-          hrefLabel="Watch on YouTube →"
-          infoBg="/filthy-cover.jpg"
-          embed={
-            <iframe
-              title="Filthy"
-              style={{ border: 'none', width: '100%', height: '100%' }}
-              src="https://www.youtube.com/embed/K9Bk3Mw7mIc"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              loading="lazy"
-            />
-          }
-        />
-
-        {/* Row 3 — YouTube, embed left */}
-        <ReleaseRow
-          reversed={false}
-          type="Single · 2023"
-          name="2bad"
-          href="https://open.spotify.com/artist/6E8xwOloHnzGWVlNV9K8n7"
-          hrefLabel="Stream on Spotify →"
-          infoBg="/2bad-cover.png"
-          infoBgPosition="center 60%"
-          embed={
-            <iframe
-              title="2bad"
-              style={{ border: 'none', width: '100%', height: '100%' }}
-              src="https://www.youtube.com/embed/KmekR33sMng"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              loading="lazy"
-            />
-          }
-        />
+        {RELEASES.map((release) => (
+          <ReleaseRow
+            key={release.name}
+            reversed={release.reversed}
+            type={release.type}
+            name={release.name}
+            href={release.href}
+            hrefLabel={release.hrefLabel}
+            minHeight={release.minHeight ?? 280}
+            infoBg={release.infoBg}
+            infoBgPosition={release.infoBgPosition}
+            embed={
+              release.embedType === 'spotify' ? (
+                <iframe
+                  title={release.embedTitle}
+                  style={{ border: 'none', width: '100%', height: '100%' }}
+                  src={release.embedSrc}
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy"
+                />
+              ) : (
+                <iframe
+                  title={release.embedTitle}
+                  style={{ border: 'none', width: '100%', height: '100%' }}
+                  src={release.embedSrc}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  loading="lazy"
+                />
+              )
+            }
+          />
+        ))}
       </section>
 
       {/* ── STUDIO ────────────────────────────────── */}
