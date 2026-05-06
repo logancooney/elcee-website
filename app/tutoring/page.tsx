@@ -9,6 +9,7 @@ import StickyCallBar from '../components/StickyCallBar';
 import Testimonials from './components/Testimonials';
 import FAQ from './components/FAQ';
 import { CALENDLY_EVENT_URLS, CALENDLY_BUNDLE_LINKS } from '../../lib/calendly-config';
+import { PRICES } from '../../content/prices';
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -136,7 +137,7 @@ export default function TutoringPage() {
             marginBottom: 28,
             letterSpacing: '0.05em',
           }}>
-            Online £45/hr · In-Person £60/hr · First session always free
+            Online {PRICES.tutoring.online} · In-Person {PRICES.tutoring.inPerson} · First session always free
           </p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <a href="#booking" style={{
@@ -187,12 +188,12 @@ export default function TutoringPage() {
           options={[
             {
               label: 'Online Tutoring',
-              price: '£45/hr',
+              price: PRICES.tutoring.online,
               url: CALENDLY_EVENT_URLS.tutoringOnline,
             },
             {
               label: 'In-Person Tutoring',
-              price: '£60/hr',
+              price: PRICES.tutoring.inPerson,
               url: CALENDLY_EVENT_URLS.tutoringInPerson,
             },
             {

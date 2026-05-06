@@ -11,6 +11,7 @@ import SiteFooter from '../components/SiteFooter';
 import ServiceBookingBlock from '../components/ServiceBookingBlock';
 import StickyCallBar from '../components/StickyCallBar';
 import { CALENDLY_EVENT_URLS, CALENDLY_PAYMENT_LINKS } from '../../lib/calendly-config';
+import { PRICES } from '../../content/prices';
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -38,11 +39,11 @@ const WHAT_YOU_GET = [
 ];
 
 const MIX_MASTER_SERVICES = [
-  { label: 'Full Mix + Master', price: '£340', url: CALENDLY_PAYMENT_LINKS.fullMixMaster },
-  { label: 'Vocal Mix', price: '£190', url: CALENDLY_PAYMENT_LINKS.vocalMix },
-  { label: 'Mastering', price: '£40', url: CALENDLY_PAYMENT_LINKS.mastering },
-  { label: 'Multi-track — 3 Tracks', price: '£920', url: CALENDLY_PAYMENT_LINKS.multitrack3, note: 'Save £100' },
-  { label: 'Multi-track — 5 Tracks', price: '£1,450', url: CALENDLY_PAYMENT_LINKS.multitrack5, note: 'Save £250' },
+  { label: 'Full Mix + Master', price: PRICES.mixing.fullMixMaster, url: CALENDLY_PAYMENT_LINKS.fullMixMaster },
+  { label: 'Vocal Mix', price: PRICES.mixing.vocalMix, url: CALENDLY_PAYMENT_LINKS.vocalMix },
+  { label: 'Mastering', price: PRICES.mixing.mastering, url: CALENDLY_PAYMENT_LINKS.mastering },
+  { label: 'Multi-track — 3 Tracks', price: PRICES.packages.threeTrack.price, url: CALENDLY_PAYMENT_LINKS.multitrack3, note: PRICES.packages.threeTrack.saving },
+  { label: 'Multi-track — 5 Tracks', price: PRICES.packages.fiveTrack.price, url: CALENDLY_PAYMENT_LINKS.multitrack5, note: PRICES.packages.fiveTrack.saving },
 ];
 
 export default function StudioPage() {
@@ -138,7 +139,7 @@ export default function StudioPage() {
             marginBottom: 28,
             letterSpacing: '0.05em',
           }}>
-            £35/hr · First session free
+            {PRICES.studio.hourly} · First session free
           </p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <a href="#booking" style={{
@@ -189,7 +190,7 @@ export default function StudioPage() {
           options={[
             {
               label: 'Book Studio Time',
-              price: '£35/hr',
+              price: PRICES.studio.hourly,
               url: CALENDLY_EVENT_URLS.studio1hr,
               sublabel: 'You pick the duration on Calendly',
             },
@@ -344,7 +345,7 @@ export default function StudioPage() {
             Consistent studio time is how careers are built. Monthly access, priority booking, and a rate that reflects your seriousness.
           </p>
           <p style={{ fontWeight: 900, fontSize: 20, letterSpacing: '-0.01em', marginBottom: 28 }}>
-            £30/hr · £240/month
+            {PRICES.studio.loyaltyLabel}
           </p>
           <Link href="/contact" style={{
             display: 'inline-flex', alignItems: 'center', padding: '13px 28px',

@@ -1,23 +1,25 @@
+import { PRICES } from '../../../content/prices';
+
 const STUDIO_RATES = [
-  { label: 'Standard', price: '£35/hr' },
-  { label: 'Loyalty Plan', price: '£30/hr', note: '£240/month subscription' },
+  { label: 'Standard', price: PRICES.studio.hourly },
+  { label: 'Loyalty Plan', price: PRICES.studio.loyaltyHourly, note: `${PRICES.studio.loyaltyMonthly} subscription` },
 ];
 
 const MIXING_RATES = [
-  { label: 'Full Mix + Master', price: '£340' },
-  { label: 'Vocal Mix', price: '£190' },
-  { label: 'Mastering', price: '£40' },
+  { label: 'Full Mix + Master', price: PRICES.mixing.fullMixMaster },
+  { label: 'Vocal Mix', price: PRICES.mixing.vocalMix },
+  { label: 'Mastering', price: PRICES.mixing.mastering },
 ];
 
 const PACKAGES = [
-  { label: '3-Track Package', price: '£920', saving: 'Save £100' },
-  { label: '5-Track Package', price: '£1,450', saving: 'Save £250' },
+  { label: '3-Track Package', price: PRICES.packages.threeTrack.price, saving: PRICES.packages.threeTrack.saving },
+  { label: '5-Track Package', price: PRICES.packages.fiveTrack.price, saving: PRICES.packages.fiveTrack.saving },
 ];
 
 const ADDONS = [
-  { label: 'Vocal Tuning', price: '£40' },
-  { label: 'Stem Separation', price: '£75' },
-  { label: 'Rush Delivery', price: '+40%' },
+  { label: 'Vocal Tuning', price: PRICES.addons.vocalTuning },
+  { label: 'Stem Separation', price: PRICES.addons.stemSeparation },
+  { label: 'Rush Delivery', price: PRICES.addons.rushDelivery },
 ];
 
 export default function Pricing() {

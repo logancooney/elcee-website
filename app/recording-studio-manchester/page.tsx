@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Navigation from "../components/Navigation";
 import SiteFooter from "../components/SiteFooter";
+import { PRICES } from "../../content/prices";
 
 export const metadata = {
   title: "Recording Studio Manchester | Professional Mixing & Mastering | Elcee the Alchemist",
@@ -12,32 +13,32 @@ const SERVICE_ITEMS = [
   {
     title: 'Recording Sessions',
     prices: [
-      { label: 'Ad-hoc hourly rate', value: '£35/hr' },
-      { label: 'Loyalty subscription (£240/mo)', value: '£30/hr' },
+      { label: 'Ad-hoc hourly rate', value: PRICES.studio.hourly },
+      { label: `Loyalty subscription (${PRICES.studio.loyaltyMonthly})`, value: PRICES.studio.loyaltyHourly },
     ],
     features: ['Vocal recording & comping', 'Live instrument tracking', 'Professional microphones & preamps', 'Real-time monitoring & feedback', 'Stems provided after session'],
   },
   {
     title: 'Mixing & Mastering',
     prices: [
-      { label: 'Full Mix & Master', value: '£340' },
-      { label: 'Vocal Mix (no master)', value: '£190' },
-      { label: 'Mastering only', value: '£40' },
+      { label: 'Full Mix & Master', value: PRICES.mixing.fullMixMaster },
+      { label: 'Vocal Mix (no master)', value: PRICES.mixing.vocalMix },
+      { label: 'Mastering only', value: PRICES.mixing.mastering },
     ],
     features: ['Industry-standard plugins & processing', 'Up to 3 revisions included', 'Mastered for streaming platforms', 'Fast turnaround (3–7 days)'],
   },
   {
     title: 'Music Production',
     prices: [
-      { label: 'Bespoke production', value: '£400+' },
-      { label: 'Additional production', value: '£150+' },
+      { label: 'Bespoke production', value: PRICES.production.bespoke },
+      { label: 'Additional production', value: PRICES.production.additional },
     ],
     features: ['Custom beats from scratch', 'Arrangement & composition', 'Sound design & sampling', 'Co-production sessions available', 'Stems & project files included'],
   },
   {
     title: 'Ableton Tutoring',
     prices: [
-      { label: '1-on-1 sessions', value: '£35/hr' },
+      { label: '1-on-1 sessions', value: PRICES.tutoring.online },
     ],
     features: ['Beginner to advanced levels', 'Music production fundamentals', 'Mixing & mastering techniques', 'Workflow optimisation', 'Personalised curriculum'],
   },

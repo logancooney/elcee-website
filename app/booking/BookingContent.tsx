@@ -6,6 +6,7 @@ import SiteFooter from '../components/SiteFooter';
 import ServiceBookingBlock from '../components/ServiceBookingBlock';
 import StickyCallBar from '../components/StickyCallBar';
 import { CALENDLY_EVENT_URLS, CALENDLY_PAYMENT_LINKS, CALENDLY_BUNDLE_LINKS } from '../../lib/calendly-config';
+import { PRICES } from '../../content/prices';
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -75,12 +76,12 @@ export default function BookingContent() {
           options={[
             {
               label: 'Online',
-              price: '£45/hr',
+              price: PRICES.tutoring.online,
               url: CALENDLY_EVENT_URLS.tutoringOnline,
             },
             {
               label: 'In-Person',
-              price: '£60/hr',
+              price: PRICES.tutoring.inPerson,
               url: CALENDLY_EVENT_URLS.tutoringInPerson,
             },
             {
@@ -122,7 +123,7 @@ export default function BookingContent() {
           options={[
             {
               label: 'Book Studio Time',
-              price: '£35/hr',
+              price: PRICES.studio.hourly,
               url: CALENDLY_EVENT_URLS.studio1hr,
               sublabel: 'Pick duration on Calendly',
             },
@@ -167,30 +168,30 @@ export default function BookingContent() {
           options={[
             {
               label: 'Full Mix + Master',
-              price: '£340',
+              price: PRICES.mixing.fullMixMaster,
               url: CALENDLY_PAYMENT_LINKS.fullMixMaster,
             },
             {
               label: 'Vocal Mix',
-              price: '£190',
+              price: PRICES.mixing.vocalMix,
               url: CALENDLY_PAYMENT_LINKS.vocalMix,
             },
             {
               label: 'Mastering',
-              price: '£40',
+              price: PRICES.mixing.mastering,
               url: CALENDLY_PAYMENT_LINKS.mastering,
             },
             {
               label: '3-Track Package',
-              price: '£920',
-              sublabel: 'Save £100',
+              price: PRICES.packages.threeTrack.price,
+              sublabel: PRICES.packages.threeTrack.saving,
               url: CALENDLY_PAYMENT_LINKS.multitrack3,
               isPacks: true,
             },
             {
               label: '5-Track Package',
-              price: '£1,450',
-              sublabel: 'Save £250',
+              price: PRICES.packages.fiveTrack.price,
+              sublabel: PRICES.packages.fiveTrack.saving,
               url: CALENDLY_PAYMENT_LINKS.multitrack5,
               isPacks: true,
             },
