@@ -74,11 +74,12 @@ export default function ContactPage() {
       <Navigation />
 
       {/* ── HERO ── */}
-      <section className="hero-section"
+      <section className="hero-compact"
         ref={heroRef}
         style={{
           position: 'relative', width: '100%', minHeight: 640,
-          overflow: 'hidden', display: 'flex', alignItems: 'flex-end',
+          overflow: 'hidden', display: 'flex', alignItems: 'flex-start',
+          paddingTop: 'clamp(80px, 12vw, 140px)' as unknown as number,
           paddingBottom: 72, paddingLeft: 48,
         }}
       >

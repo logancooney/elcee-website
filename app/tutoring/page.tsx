@@ -71,7 +71,8 @@ export default function TutoringPage() {
           width: '100%',
           overflow: 'hidden',
           display: 'flex',
-          alignItems: 'flex-end',
+          alignItems: 'flex-start',
+          paddingTop: 'clamp(80px, 12vw, 140px)' as unknown as number,
           paddingBottom: 72,
         } as React.CSSProperties}
       >
@@ -120,7 +121,8 @@ export default function TutoringPage() {
             color: '#fafafa',
             marginBottom: 16,
           }}>
-            Learn From An Artist.<br />Not An Algorithm.
+            <span className="hero-h1-desktop">Learn From An Artist.<br />Not An Algorithm.</span>
+            <span className="hero-h1-mobile">Learn From<br />An Artist.<br />Not An<br />Algorithm.</span>
           </h1>
           <p style={{
             fontWeight: 400,

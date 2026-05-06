@@ -180,6 +180,23 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* Mobile-only hero content top alignment */
+@media (max-width: 768px) {
+  .hero-mobile-top {
+    align-items: flex-start !important;
+    padding-top: 88px !important;
+    padding-bottom: 48px !important;
+  }
+}
+
+/* Hero h1 mobile/desktop variants */
+.hero-h1-mobile { display: none; }
+.hero-h1-desktop { display: inline; }
+@media (max-width: 768px) {
+  .hero-h1-mobile { display: inline; }
+  .hero-h1-desktop { display: none; }
+}
+
 /* Sticky call bar — hidden desktop, shown mobile only */
 .sticky-call-bar {
   display: none;

@@ -82,7 +82,8 @@ export default function StudioPage() {
           width: '100%',
           overflow: 'hidden',
           display: 'flex',
-          alignItems: 'flex-end',
+          alignItems: 'flex-start',
+          paddingTop: 'clamp(80px, 12vw, 140px)' as unknown as number,
           paddingBottom: 72,
         } as React.CSSProperties}
       >

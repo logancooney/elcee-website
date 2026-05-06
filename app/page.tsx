@@ -148,7 +148,7 @@ export default function Home() {
       <MobileJumpNav />
 
       {/* ── HERO ─────────────────────────────────── */}
-      <section className="hero-section"
+      <section className="hero-section hero-mobile-top"
         ref={heroRef}
         style={{
           position: 'relative', width: '100%', minHeight: 640,
