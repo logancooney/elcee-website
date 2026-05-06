@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import Navigation from '../components/Navigation';
 import SiteFooter from '../components/SiteFooter';
+import { SOCIAL_LINKS as ALL_SOCIAL_LINKS } from '../../content/social';
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -20,12 +21,9 @@ const inputStyle: React.CSSProperties = {
   fontFamily: 'inherit',
 };
 
-const SOCIAL_LINKS = [
-  { label: 'Instagram', href: 'https://instagram.com/elceethealchemist' },
-  { label: 'Twitter / X', href: 'https://twitter.com/elceejpg' },
-  { label: 'TikTok', href: 'https://tiktok.com/@elceethealchemist' },
-  { label: 'SoundCloud', href: 'https://soundcloud.com/elceethealchemist' },
-];
+const SOCIAL_LINKS = ALL_SOCIAL_LINKS.filter(l =>
+  ['Instagram', 'Twitter / X', 'TikTok', 'SoundCloud'].includes(l.label)
+);
 
 export default function ContactPage() {
   const heroParallaxRef = useRef<HTMLDivElement>(null);

@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { SITE } from '../../content/site';
+import { SOCIAL_LINKS } from '../../content/social';
 
 export default function SiteFooter() {
   return (
@@ -16,13 +17,7 @@ export default function SiteFooter() {
         {SITE.footerQuote}
       </p>
       <div style={{ display: 'flex', gap: 28, marginBottom: 36, flexWrap: 'wrap', justifyContent: 'center' }}>
-        {[
-          { label: 'Instagram', href: 'https://instagram.com/elceethealchemist' },
-          { label: 'SoundCloud', href: 'https://soundcloud.com/elceethealchemist' },
-          { label: 'Spotify', href: 'https://open.spotify.com/artist/6E8xwOloHnzGWVlNV9K8n7' },
-          { label: 'YouTube', href: 'https://youtube.com/@elceethealchemist' },
-          { label: 'TikTok', href: 'https://tiktok.com/@elceethealchemist' },
-        ].map(({ label, href }) => (
+        {SOCIAL_LINKS.slice(0, 5).map(({ label, href }) => (
           <a key={label} href={href} target="_blank" rel="noopener noreferrer" style={{
             fontSize: 11, fontWeight: 900, letterSpacing: '0.15em', textTransform: 'uppercase',
             color: 'rgba(255,255,255,0.6)', textDecoration: 'none', padding: '8px 0',
