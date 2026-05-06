@@ -31,6 +31,8 @@ export default function ContactPage() {
   const heroParallaxRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,9 +45,30 @@ export default function ContactPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSent(true);
+    setLoading(true);
+    setError(false);
+    const form = e.currentTarget;
+    const data = {
+      name: (form.elements.namedItem('name') as HTMLInputElement).value,
+      email: (form.elements.namedItem('email') as HTMLInputElement).value,
+      subject: (form.elements.namedItem('subject') as HTMLInputElement).value,
+      message: (form.elements.namedItem('message') as HTMLTextAreaElement).value,
+    };
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error();
+      setSent(true);
+    } catch {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -141,13 +164,23 @@ export default function ContactPage() {
                   <label style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)' }}>Message</label>
                   <textarea name="message" rows={6} required style={{ ...inputStyle, resize: 'none' }} />
                 </div>
-                <button type="submit" style={{
-                  marginTop: 8, padding: '14px 28px',
-                  background: '#fafafa', color: '#080808', border: 'none',
-                  fontWeight: 900, fontSize: 10, letterSpacing: '0.18em',
-                  textTransform: 'uppercase', cursor: 'pointer', alignSelf: 'flex-start',
-                }}>
-                  Send Message →
+                {error && (
+                  <p style={{ fontSize: 12, color: 'rgba(255,100,100,0.8)', marginTop: 4 }}>
+                    Something went wrong. Try again or email elcee.mgmt@gmail.com directly.
+                  </p>
+                )}
+                <button
+                  type="submit"
+                  disabled={loading}
+                  style={{
+                    marginTop: 8, padding: '14px 28px',
+                    background: '#fafafa', color: '#080808', border: 'none',
+                    fontWeight: 900, fontSize: 10, letterSpacing: '0.18em',
+                    textTransform: 'uppercase', cursor: loading ? 'not-allowed' : 'pointer',
+                    alignSelf: 'flex-start', opacity: loading ? 0.6 : 1,
+                  }}
+                >
+                  {loading ? 'Sending...' : 'Send Message →'}
                 </button>
               </form>
             )}
