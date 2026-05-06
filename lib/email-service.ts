@@ -43,7 +43,7 @@ async function sendViaResend(booking: BookingData, emailBody: string) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Elcee Studio Bookings <onboarding@resend.dev>',
+        from: 'Elcee Studio Bookings <bookings@elceethealchemist.com>',
         to: [process.env.BOOKING_EMAIL || 'elcee.mgmt@gmail.com'],
         subject: `New Studio Booking: ${booking.service}`,
         text: emailBody,
@@ -151,7 +151,7 @@ export async function sendCustomerConfirmation(booking: BookingData) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Elcee the Alchemist Studio <onboarding@resend.dev>',
+        from: 'Elcee the Alchemist Studio <bookings@elceethealchemist.com>',
         to: [booking.email],
         subject: 'Studio Booking Request Received',
         text: formatConfirmationEmail(booking),
