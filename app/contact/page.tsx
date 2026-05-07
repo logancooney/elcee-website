@@ -80,7 +80,8 @@ export default function ContactPage() {
           position: 'relative', width: '100%', minHeight: 640,
           overflow: 'hidden', display: 'flex', alignItems: 'flex-start',
           paddingTop: 'clamp(80px, 12vw, 140px)' as unknown as number,
-          paddingBottom: 72, paddingLeft: 48,
+          paddingBottom: 72,
+          paddingLeft: 'clamp(20px, 5vw, 48px)' as unknown as number,
         }}
       >
         <div ref={heroParallaxRef} style={{
