@@ -1,0 +1,153 @@
+<h2>CRM is already working — here's how</h2>
+<p class="subtitle">Every Calendly booking already flows into Supabase automatically. Questions just need setting up in Calendly itself.</p>
+
+<div class="section">
+  <h3>What's already built</h3>
+  <div style="background: #080808; border-radius: 10px; padding: 24px; border: 2px solid #27ae60; max-width: 560px; margin-top: 12px;">
+    <div style="display: flex; flex-direction: column; gap: 0;">
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #1a1a1a;">
+        <div style="background: #27ae60; border-radius: 50%; width: 8px; height: 8px; flex-shrink: 0;"></div>
+        <p style="font-size: 12px; color: rgba(255,255,255,0.7);">Someone books any Calendly call</p>
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #1a1a1a; padding-left: 20px;">
+        <div style="background: #27ae60; border-radius: 50%; width: 8px; height: 8px; flex-shrink: 0;"></div>
+        <p style="font-size: 12px; color: rgba(255,255,255,0.7);">Calendly fires a webhook to your site</p>
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #1a1a1a; padding-left: 40px;">
+        <div style="background: #27ae60; border-radius: 50%; width: 8px; height: 8px; flex-shrink: 0;"></div>
+        <p style="font-size: 12px; color: rgba(255,255,255,0.7);">Name + email saved to <code style="background: #1a1a1a; padding: 2px 6px; border-radius: 3px; font-size: 10px;">contacts</code> table in Supabase</p>
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #1a1a1a; padding-left: 40px;">
+        <div style="background: #27ae60; border-radius: 50%; width: 8px; height: 8px; flex-shrink: 0;"></div>
+        <p style="font-size: 12px; color: rgba(255,255,255,0.7);"><strong style="color: #fafafa;">All Q&A answers already captured</strong> — stored as metadata in <code style="background: #1a1a1a; padding: 2px 6px; border-radius: 3px; font-size: 10px;">contact_events</code> table</p>
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; padding-left: 40px;">
+        <div style="background: #27ae60; border-radius: 50%; width: 8px; height: 8px; flex-shrink: 0;"></div>
+        <p style="font-size: 12px; color: rgba(255,255,255,0.7);">Confirmation email sent automatically via Resend</p>
+      </div>
+    </div>
+    <p style="font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 16px; padding-top: 16px; border-top: 1px solid #1a1a1a;">The questions just need adding in Calendly admin — no code changes needed for them to be captured.</p>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Three Calendly events to set up</h3>
+  <p class="subtitle">One small code tweak needed to correctly tag each event type in Supabase.</p>
+
+  <div style="display: flex; flex-direction: column; gap: 24px; margin-top: 16px; max-width: 600px;">
+
+    <!-- Tutoring -->
+    <div style="background: #080808; border-radius: 10px; border: 2px solid #333; overflow: hidden;">
+      <div style="padding: 16px 20px; border-bottom: 1px solid #1a1a1a; background: #111;">
+        <p style="color: rgba(255,255,255,0.3); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 4px;">Calendly Event 1</p>
+        <p style="color: #fafafa; font-weight: 900; font-size: 15px;">Free Tutoring Consultation — 20 min</p>
+        <p style="color: rgba(255,255,255,0.35); font-size: 11px; margin-top: 2px;">Used on: tutoring page · /booking page</p>
+      </div>
+      <div style="padding: 16px 20px; display: flex; flex-direction: column; gap: 12px;">
+        <div>
+          <p style="color: rgba(255,255,255,0.4); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px;">Q1 — Dropdown · Required</p>
+          <p style="color: #fafafa; font-size: 12px; font-weight: 900; margin-bottom: 4px;">What are you hoping to learn?</p>
+          <p style="color: rgba(255,255,255,0.4); font-size: 11px;">Music production · Mixing · Recording & engineering · Songwriting & lyricism · Not sure — let's talk</p>
+        </div>
+        <div>
+          <p style="color: rgba(255,255,255,0.4); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px;">Q2 — Dropdown · Required</p>
+          <p style="color: #fafafa; font-size: 12px; font-weight: 900; margin-bottom: 4px;">Where are you in your journey?</p>
+          <p style="color: rgba(255,255,255,0.4); font-size: 11px;">Just starting out · Some experience, want to improve · Been at it a while but feeling stuck · More advanced — want to level up</p>
+        </div>
+        <div>
+          <p style="color: rgba(255,255,255,0.4); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px;">Q3 — Short text · Required</p>
+          <p style="color: #fafafa; font-size: 12px; font-weight: 900;">Tell me what you're working on right now, or what you want to achieve</p>
+        </div>
+        <div>
+          <p style="color: rgba(255,255,255,0.4); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px;">Q4 — Dropdown · Required</p>
+          <p style="color: #fafafa; font-size: 12px; font-weight: 900; margin-bottom: 4px;">Where are you based?</p>
+          <p style="color: rgba(255,255,255,0.4); font-size: 11px;">Manchester / nearby — open to in-person · UK — online only · International</p>
+        </div>
+        <div>
+          <p style="color: rgba(255,255,255,0.4); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px;">Q5 — Dropdown · Optional</p>
+          <p style="color: #fafafa; font-size: 12px; font-weight: 900; margin-bottom: 4px;">How did you find me?</p>
+          <p style="color: rgba(255,255,255,0.4); font-size: 11px;">Instagram · Reddit · Google · Word of mouth / referral · Other</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Studio -->
+    <div style="background: #080808; border-radius: 10px; border: 2px solid #333; overflow: hidden;">
+      <div style="padding: 16px 20px; border-bottom: 1px solid #1a1a1a; background: #111;">
+        <p style="color: rgba(255,255,255,0.3); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 4px;">Calendly Event 2</p>
+        <p style="color: #fafafa; font-weight: 900; font-size: 15px;">Free Studio Enquiry — 20 min</p>
+        <p style="color: rgba(255,255,255,0.35); font-size: 11px; margin-top: 2px;">Used on: studio page · /booking page</p>
+      </div>
+      <div style="padding: 16px 20px; display: flex; flex-direction: column; gap: 12px;">
+        <div>
+          <p style="color: rgba(255,255,255,0.4); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px;">Q1 — Dropdown · Required</p>
+          <p style="color: #fafafa; font-size: 12px; font-weight: 900; margin-bottom: 4px;">What are you looking to do?</p>
+          <p style="color: rgba(255,255,255,0.4); font-size: 11px;">Record vocals / rap · Record instruments · Full production session · Mix or master a track · Not sure — let's talk</p>
+        </div>
+        <div>
+          <p style="color: rgba(255,255,255,0.4); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px;">Q2 — Dropdown · Required</p>
+          <p style="color: #fafafa; font-size: 12px; font-weight: 900; margin-bottom: 4px;">Have you recorded in a professional studio before?</p>
+          <p style="color: rgba(255,255,255,0.4); font-size: 11px;">Yes, experienced · First time in a studio · Home recordings only so far</p>
+        </div>
+        <div>
+          <p style="color: rgba(255,255,255,0.4); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px;">Q3 — Short text · Required</p>
+          <p style="color: #fafafa; font-size: 12px; font-weight: 900;">Tell me briefly about your project — what are you working on?</p>
+        </div>
+        <div>
+          <p style="color: rgba(255,255,255,0.4); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px;">Q4 — Short text · Optional</p>
+          <p style="color: #fafafa; font-size: 12px; font-weight: 900;">How many tracks are you looking to record or mix?</p>
+        </div>
+        <div>
+          <p style="color: rgba(255,255,255,0.4); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px;">Q5 — Dropdown · Optional</p>
+          <p style="color: #fafafa; font-size: 12px; font-weight: 900; margin-bottom: 4px;">How did you find me?</p>
+          <p style="color: rgba(255,255,255,0.4); font-size: 11px;">Instagram · Reddit · Google · Word of mouth / referral · Other</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Intro call -->
+    <div style="background: #080808; border-radius: 10px; border: 2px solid #333; overflow: hidden;">
+      <div style="padding: 16px 20px; border-bottom: 1px solid #1a1a1a; background: #111;">
+        <p style="color: rgba(255,255,255,0.3); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 4px;">Calendly Event 3 — update existing</p>
+        <p style="color: #fafafa; font-weight: 900; font-size: 15px;">Free Intro Call — 20 min</p>
+        <p style="color: rgba(255,255,255,0.35); font-size: 11px; margin-top: 2px;">Used on: /free page · Reddit bot leads · anywhere "not sure" applies</p>
+      </div>
+      <div style="padding: 16px 20px; display: flex; flex-direction: column; gap: 12px;">
+        <div>
+          <p style="color: rgba(255,255,255,0.4); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px;">Q1 — Dropdown · Required</p>
+          <p style="color: #fafafa; font-size: 12px; font-weight: 900; margin-bottom: 4px;">What brings you to this call?</p>
+          <p style="color: rgba(255,255,255,0.4); font-size: 11px;">Music tutoring / 1-1 lessons · Studio recording · Mixing or mastering · Music career advice · Not sure yet — just exploring</p>
+        </div>
+        <div>
+          <p style="color: rgba(255,255,255,0.4); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px;">Q2 — Short text · Required</p>
+          <p style="color: #fafafa; font-size: 12px; font-weight: 900;">Tell me a bit about yourself and what you're working on</p>
+        </div>
+        <div>
+          <p style="color: rgba(255,255,255,0.4); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px;">Q3 — Dropdown · Required</p>
+          <p style="color: #fafafa; font-size: 12px; font-weight: 900; margin-bottom: 4px;">Where are you based?</p>
+          <p style="color: rgba(255,255,255,0.4); font-size: 11px;">Manchester / nearby · UK — online only · International</p>
+        </div>
+        <div>
+          <p style="color: rgba(255,255,255,0.4); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px;">Q4 — Dropdown · Optional</p>
+          <p style="color: #fafafa; font-size: 12px; font-weight: 900; margin-bottom: 4px;">How did you find me?</p>
+          <p style="color: rgba(255,255,255,0.4); font-size: 11px;">Instagram · Reddit · Google · Word of mouth / referral · Other</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <h3>What needs doing</h3>
+  <div style="background: #111; border-radius: 10px; padding: 20px 24px; max-width: 560px; font-size: 12px; line-height: 2; color: #aaa;">
+    <p style="color: #fafafa; font-weight: 900; margin-bottom: 8px;">In Calendly (you do this):</p>
+    Create 2 new event types (tutoring + studio enquiry)<br>
+    Rename existing "free-mix-review" → "Free Intro Call"<br>
+    Add the questions above to each event type<br><br>
+    <p style="color: #fafafa; font-weight: 900; margin-bottom: 8px;">In code (I handle this as part of the build):</p>
+    Update <code style="background: #1a1a1a; padding: 2px 6px; border-radius: 3px;">deriveService()</code> to tag each new event correctly in Supabase<br>
+    Update Calendly URLs across the site to point to the right event<br>
+    Add new URL constants to <code style="background: #1a1a1a; padding: 2px 6px; border-radius: 3px;">calendly-config.ts</code>
+  </div>
+</div>

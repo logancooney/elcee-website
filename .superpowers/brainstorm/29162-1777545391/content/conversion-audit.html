@@ -1,0 +1,101 @@
+<h2>What's killing conversion on these pages</h2>
+<p class="subtitle">An audit of the three pages before we redesign them</p>
+
+<div class="section">
+  <h3>The core problem: too many steps before booking</h3>
+  <p class="subtitle">Every page buries the booking action behind multiple clicks and sections</p>
+
+  <div class="split" style="gap: 24px; margin-top: 20px;">
+    <div class="mockup" style="flex: 1;">
+      <div class="mockup-header" style="background: #c0392b; color: white;">Current Tutoring Page — 9 Sections</div>
+      <div class="mockup-body" style="padding: 0; font-size: 13px;">
+        <div style="padding: 10px 16px; border-bottom: 1px solid #eee; color: #888;">① HERO — big, cinematic, scroll indicator</div>
+        <div style="padding: 10px 16px; border-bottom: 1px solid #eee; color: #888;">② WHAT YOU'LL LEARN — 4-item grid</div>
+        <div style="padding: 10px 16px; border-bottom: 1px solid #eee; color: #888;">③ PRICING — 2-column price display</div>
+        <div style="padding: 10px 16px; border-bottom: 1px solid #eee; background: #fff3f3; font-weight: bold; color: #c0392b;">④ BOOKING — pick online/in-person first, then calendar loads</div>
+        <div style="padding: 10px 16px; border-bottom: 1px solid #eee; color: #888;">⑤ BULK SESSIONS — 6 bundle options in grids</div>
+        <div style="padding: 10px 16px; border-bottom: 1px solid #eee; color: #888;">⑥ THE CASE — editorial copy, no CTA</div>
+        <div style="padding: 10px 16px; border-bottom: 1px solid #eee; color: #888;">⑦ THE GUIDE — about Elcee, big image</div>
+        <div style="padding: 10px 16px; border-bottom: 1px solid #eee; color: #888;">⑧ HOW IT WORKS — 3-column process</div>
+        <div style="padding: 10px 16px; border-bottom: 1px solid #eee; color: #888;">⑨ TESTIMONIALS + FAQ</div>
+        <div style="padding: 10px 16px; color: #888; font-style: italic;">→ User must scroll past 3+ big sections just to reach the calendar</div>
+      </div>
+    </div>
+
+    <div class="mockup" style="flex: 1;">
+      <div class="mockup-header" style="background: #c0392b; color: white;">Current Booking Page — 3-Step Process</div>
+      <div class="mockup-body" style="padding: 0; font-size: 13px;">
+        <div style="padding: 10px 16px; border-bottom: 1px solid #eee; color: #888;">① HERO — 640px tall, scroll indicator</div>
+        <div style="padding: 10px 16px; border-bottom: 1px solid #eee; color: #c0392b; font-weight: bold;">② STEP 1: Click a service card (studio / tutoring / mixing)</div>
+        <div style="padding: 10px 16px; border-bottom: 1px solid #eee; color: #c0392b; font-weight: bold;">③ STEP 2: Click a mode (online / in-person, or session length)</div>
+        <div style="padding: 10px 16px; border-bottom: 1px solid #eee; color: #c0392b; font-weight: bold;">④ STEP 3: Calendar finally appears</div>
+        <div style="padding: 14px 16px; color: #888; font-style: italic; background: #fff3f3;">On mobile: 640px hero, then 3 tall cards stacked vertically with 64px padding each — that's 4+ screens of scrolling before you can book</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Mobile-specific problems (no responsive design at all)</h3>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px;">
+    <div style="background: #fff3f3; border-radius: 8px; padding: 16px;">
+      <p style="font-weight: bold; color: #c0392b; margin-bottom: 8px;">Fixed 48px padding on all sides</p>
+      <p style="font-size: 13px; color: #555;">On a 375px wide phone, 48px padding left + right = 96px gone. Only 279px for content. Text and buttons overflow or get cramped.</p>
+    </div>
+    <div style="background: #fff3f3; border-radius: 8px; padding: 16px;">
+      <p style="font-weight: bold; color: #c0392b; margin-bottom: 8px;">Three-column grids on mobile</p>
+      <p style="font-size: 13px; color: #555;">The service cards, bundle options, and section grids are 3-column — they likely collapse horribly or go off-screen on mobile.</p>
+    </div>
+    <div style="background: #fff3f3; border-radius: 8px; padding: 16px;">
+      <p style="font-weight: bold; color: #c0392b; margin-bottom: 8px;">56–64px vertical padding per section</p>
+      <p style="font-size: 13px; color: #555;">Each section uses 56–64px top/bottom padding. On mobile this creates massive empty space and makes every section feel like a separate page.</p>
+    </div>
+    <div style="background: #fff3f3; border-radius: 8px; padding: 16px;">
+      <p style="font-weight: bold; color: #c0392b; margin-bottom: 8px;">No sticky CTA anywhere</p>
+      <p style="font-size: 13px; color: #555;">There's no persistent "Book Now" button that follows the user as they scroll. The only booking entry is buried mid-page.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>What a conversion-first page structure looks like</h3>
+  <div class="mockup" style="max-width: 600px; margin-top: 12px;">
+    <div class="mockup-header" style="background: #27ae60; color: white;">Proposed — Lean, Mobile-First Structure</div>
+    <div class="mockup-body" style="padding: 0; font-size: 13px;">
+      <div style="padding: 10px 16px; border-bottom: 1px solid #eee; background: #f0fff4; font-weight: bold; color: #27ae60;">① SHORT HERO — headline + price + "Book Free Session" button. Fits in one screen on mobile.</div>
+      <div style="padding: 10px 16px; border-bottom: 1px solid #eee; background: #f0fff4; font-weight: bold; color: #27ae60;">② CALENDLY EMBED — immediately visible after clicking CTA, or shown directly below hero</div>
+      <div style="padding: 10px 16px; border-bottom: 1px solid #eee; color: #555;">③ 2–3 key proof points (credibility bullets, not a wall of text)</div>
+      <div style="padding: 10px 16px; border-bottom: 1px solid #eee; color: #555;">④ Testimonials (1–2, brief)</div>
+      <div style="padding: 10px 16px; color: #555;">⑤ FAQ (objection handling)</div>
+      <div style="padding: 10px 16px; background: #f0fff4; color: #27ae60; font-style: italic;">+ Sticky "Book Now" bar on mobile visible throughout scroll</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3 style="margin-bottom: 12px;">Before we design the solution — one question</h3>
+  <p class="subtitle">The Calendly embed currently requires a mode selection step first (online vs in-person for tutoring; session length for studio). Should we keep that step, or default to showing one calendar immediately?</p>
+  <div class="options">
+    <div class="option" data-choice="keep-step" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>Keep the selection step — just make it cleaner</h3>
+        <p>Two big tappable buttons (Online / In-Person) shown immediately, then calendar. Fewer sections, same flow.</p>
+      </div>
+    </div>
+    <div class="option" data-choice="default-calendar" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>Skip the step — show a single calendar by default</h3>
+        <p>Default to the most popular option (e.g. Online tutoring) and let users change it via a small toggle. Fastest path to booking.</p>
+      </div>
+    </div>
+    <div class="option" data-choice="link-out" onclick="toggleSelect(this)">
+      <div class="letter">C</div>
+      <div class="content">
+        <h3>Replace embed with a direct Calendly link</h3>
+        <p>"Book Now" button opens Calendly in a new tab. Simpler, faster — no heavy iframe to load on mobile.</p>
+      </div>
+    </div>
+  </div>
+</div>

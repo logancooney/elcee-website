@@ -140,7 +140,7 @@ export default function StudioPage() {
             marginBottom: 28,
             letterSpacing: '0.05em',
           }}>
-            {PRICES.studio.hourly} · First session free
+            {PRICES.studio.hourly} · Free 20-min intro call
           </p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <a href="#booking" style={{

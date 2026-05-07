@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elcee The Alchemist — Homepage Wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  /* Nimbus Sans substitute — Helvetica Neue Black/Regular */
+  .ns-black { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 900; }
+  .ns-body  { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 400; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #1a1a1a; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; overflow: hidden; }
+  #root { width: 100vw; height: 100vh; }
+
+  /* Wireframe visual language */
+  .wf-label {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    font-size: 11px;
+    color: #999;
+    letter-spacing: 0.02em;
+  }
+  .wf-heading {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+  }
+  .wf-annotation {
+    font-family: 'Caveat', cursive;
+    font-size: 12px;
+  }
+  .hatch {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 4px,
+      rgba(255,255,255,0.08) 4px,
+      rgba(255,255,255,0.08) 5px
+    );
+  }
+  .hatch-light {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 4px,
+      rgba(0,0,0,0.06) 4px,
+      rgba(0,0,0,0.06) 5px
+    );
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel">
+
+/* ─── SHARED WIREFRAME PRIMITIVES ─── */
+const C = {
+  black: '#0a0a0a',
+  darkgray: '#1c1c1c',
+  midgray: '#3a3a3a',
+  lightgray: '#888',
+  offwhite: '#f0ede8',
+  white: '#fafafa',
+};
+
+const Box = ({ w, h, bg = C.midgray, border, style, children, className }) => (
+  <div className={className} style={{
+    width: w, height: h,
+    background: bg,
+    border: border || `1.5px solid ${C.midgray}`,
+    position: 'relative',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    overflow: 'hidden',
+    ...style
+  }}>{children}</div>
+);
+
+const ImgPlaceholder = ({ w, h, label, dark = true, style }) => (
+  <div className={dark ? 'hatch' : 'hatch-light'} style={{
+    width: w, height: h,
+    background: dark ? C.darkgray : '#d8d5d0',
+    border: `1.5px dashed ${dark ? '#444' : '#bbb'}`,
+    display: 'flex', flexDirection: 'column',
+    alignItems: 'center', justifyContent: 'center',
+    flexShrink: 0,
+    ...style
+  }}>
+    <span style={{ fontFamily: 'Space Mono', fontSize: 10, color: dark ? '#555' : '#999', textAlign: 'center', padding: '0 8px' }}>
+      [ {label} ]
+    </span>
+  </div>
+);
+
+const NavBar = ({ dark = true, label }) => {
+  const fg = dark ? C.offwhite : C.black;
+  const logoSrc = dark ? 'uploads/ETA WHITE new cropped.png' : 'uploads/ETA BLACK NEW.png';
+  return (
+    <div style={{
+      position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10,
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      padding: '14px 24px',
+      borderBottom: `1px solid ${dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
+    }}>
+      <img src={logoSrc} alt="ELCEE The Alchemist" style={{ height: 32, width: 'auto', objectFit: 'contain' }} />
+      <div style={{ display: 'flex', gap: 20 }}>
+        {['Music','Studio','Shop','Contact'].map(n => (
+          <span key={n} className="wf-label" style={{ color: fg, fontSize: 11 }}>{n}</span>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const Annotation = ({ text, style }) => (
+  <div className="wf-annotation" style={{
+    color: '#f0a030',
+    position: 'absolute', background: 'rgba(240,160,48,0.12)',
+    border: '1px dashed #f0a030', borderRadius: 3,
+    padding: '2px 6px', pointerEvents: 'none',
+    ...style
+  }}>{text}</div>
+);
+
+const SectionLabel = ({ text, dark = true }) => (
+  <div style={{
+    fontFamily: 'Caveat', fontSize: 11, color: dark ? '#666' : '#aaa',
+    position: 'absolute', top: 6, right: 8, letterSpacing: 1,
+    textTransform: 'uppercase'
+  }}>{text}</div>
+);
+
+const WireBtn = ({ label, filled, dark = true }) => {
+  const bg = filled ? (dark ? C.white : C.black) : 'transparent';
+  const fg = filled ? (dark ? C.black : C.white) : (dark ? C.white : C.black);
+  const border = dark ? C.white : C.black;
+  return (
+    <div style={{
+      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+      padding: '8px 18px',
+      background: bg, border: `1.5px solid ${border}`,
+      borderRadius: 1,
+    }}>
+      <span className="wf-label" style={{ fontSize: 11, color: fg }}>{label}</span>
+    </div>
+  );
+};
+
+/* ══════════════════════════════════════════
+   WIREFRAME A — Cinematic Full-Bleed Hero
+   Ravi-style: dark full-viewport hero, name
+   massive + centered, sections alternate B/W
+══════════════════════════════════════════ */
+const WireframeA = () => {
+  const W = 400, H = 680;
+  return (
+    <div style={{ width: W, fontFamily: 'Space Mono', position: 'relative' }}>
+
+      {/* SECTION 1 — Hero */}
+      <div style={{ width: W, height: 260, background: C.black, position: 'relative', overflow: 'hidden' }}>
+        <ImgPlaceholder w="100%" h="260px" label="full-bleed artist photo\n(dark, high contrast B&W)" dark />
+        {/* Gradient overlay */}
+        <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%)' }} />
+        <NavBar dark />
+        {/* Big name */}
+        <div style={{ position:'absolute', bottom: 50, left:0, right:0, textAlign:'center' }}>
+          <div className="wf-heading" style={{ fontSize: 42, color: C.white, lineHeight:1, letterSpacing:-1 }}>
+            ELCEE<br/>THE ALCHEMIST
+          </div>
+          <div className="wf-label" style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', marginTop: 8, letterSpacing: 3 }}>
+            ALTERNATIVE RAP · MANCHESTER
+          </div>
+        </div>
+        {/* Scroll cue */}
+        <div style={{ position:'absolute', bottom:16, left:'50%', transform:'translateX(-50%)' }}>
+          <div style={{ width:1, height:24, background:'rgba(255,255,255,0.4)', margin:'0 auto' }} />
+          <span className="wf-label" style={{ fontSize:9, color:'rgba(255,255,255,0.3)', display:'block', textAlign:'center', marginTop:3 }}>scroll</span>
+        </div>
+        <Annotation text="parallax photo darkens on scroll" style={{ top: 40, right: 8 }} />
+        <SectionLabel text="hero" dark />
+      </div>
+
+      {/* SECTION 2 — Releases (WHITE) */}
+      <div style={{ width: W, background: C.offwhite, padding: '24px 24px 20px', position:'relative' }}>
+        <SectionLabel text="releases" dark={false} />
+        <div className="wf-heading" style={{ fontSize: 20, color: C.black, marginBottom: 16 }}>LATEST</div>
+        {/* 2-col album grid */}
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap: 10 }}>
+          {['Album artwork\n(latest)', 'Album artwork\n(prev)'].map((l,i) => (
+            <div key={i} style={{ position:'relative' }}>
+              <ImgPlaceholder w="100%" h="140px" label={l} dark={false} />
+              <div className="wf-label" style={{ fontSize:9, color: C.black, marginTop:4 }}>Track title — 2024</div>
+              <div className="wf-label" style={{ fontSize:9, color: C.lightgray }}>▶ Play on Spotify</div>
+            </div>
+          ))}
+        </div>
+        <div style={{ marginTop:14, display:'flex', gap:8 }}>
+          <WireBtn label="All Releases →" dark={false} />
+        </div>
+        <Annotation text="horizontal swipe on mobile" style={{ bottom: 24, right: 8 }} />
+      </div>
+
+      {/* SECTION 3 — Bio (DARK) */}
+      <div style={{ width: W, background: C.black, padding: '24px', position:'relative', display:'flex', gap:16 }}>
+        <SectionLabel text="bio" dark />
+        <div style={{ flex:1 }}>
+          <div className="wf-heading" style={{ fontSize: 22, color: C.white, lineHeight:1.1, marginBottom: 10 }}>
+            RAW LYRICISM.<br/>ALCHEMICAL<br/>SOUND.
+          </div>
+          <div className="wf-label" style={{ fontSize:9, color: C.lightgray, lineHeight:1.6 }}>
+            Two lines of bio copy here.<br/>Short, punchy, cinematic.
+          </div>
+        </div>
+        <ImgPlaceholder w="120px" h="130px" label="portrait B&W" dark />
+      </div>
+
+      {/* SECTION 4 — Studio (WHITE) */}
+      <div style={{ width: W, background: C.offwhite, padding: '20px 24px', position:'relative' }}>
+        <SectionLabel text="studio" dark={false} />
+        <div className="wf-heading" style={{ fontSize: 18, color: C.black, marginBottom:6 }}>BOOK THE STUDIO</div>
+        <div className="wf-label" style={{ fontSize:9, color: C.midgray, marginBottom: 14 }}>
+          Professional recording. Manchester.
+        </div>
+        <ImgPlaceholder w="100%" h="80px" label="studio interior photo" dark={false} style={{ marginBottom: 14 }} />
+        <WireBtn label="Book a Session →" filled dark={false} />
+      </div>
+
+      {/* Footer */}
+      <div style={{ width: W, background: C.black, padding: '16px 24px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+        <span className="wf-heading" style={{ fontSize: 13, color: C.white }}>ELCEE</span>
+        <div style={{ display:'flex', gap:12 }}>
+          {['IG','SC','SP','YT'].map(s => (
+            <span key={s} className="wf-label" style={{ fontSize:9, color: C.lightgray }}>{s}</span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ══════════════════════════════════════════
+   WIREFRAME B — Type-First / KOVA-Inspired
+   Massive display type fills the hero;
+   image positioned asymmetrically right.
+   All dark. Type is the design.
+══════════════════════════════════════════ */
+const WireframeB = () => {
+  const W = 400;
+  return (
+    <div style={{ width: W, background: C.black, fontFamily: 'Space Mono' }}>
+
+      {/* Nav */}
+      <div style={{ padding:'18px 24px', display:'flex', justifyContent:'space-between', borderBottom:`1px solid #222` }}>
+        <span className="wf-label" style={{ fontSize:9, color:'#555', letterSpacing:3 }}>ETA</span>
+        <div style={{ display:'flex', gap:16 }}>
+          {['Music','Studio','Contact'].map(n => (
+            <span key={n} className="wf-label" style={{ color:'#555', fontSize:9 }}>{n}</span>
+          ))}
+        </div>
+      </div>
+
+      {/* Hero — giant type with offset image */}
+      <div style={{ padding:'0 0 0 24px', position:'relative', minHeight:220 }}>
+        <Annotation text="type bleeds off right edge →" style={{ top:12, left:24 }} />
+        <div className="wf-heading" style={{
+          fontSize: 64, color: C.white, lineHeight: 0.9,
+          letterSpacing: -2, marginTop: 16,
+          position: 'relative', zIndex: 2
+        }}>
+          ELCEE<br/>THE<br/>ALCHE<span style={{ color:'#333' }}>MIST</span>
+        </div>
+        {/* image overlapping type */}
+        <ImgPlaceholder
+          w="160px" h="200px" label="portrait\nB&W" dark
+          style={{ position:'absolute', right:0, top:10, zIndex:3, border:'none' }}
+        />
+        <div style={{ position:'relative', zIndex:4, marginTop:16, paddingBottom:24 }}>
+          <div className="wf-label" style={{ fontSize:9, color:'#555', marginBottom:12, letterSpacing:2 }}>
+            ALTERNATIVE RAP · MANCHESTER · EST. 2018
+          </div>
+          <div style={{ display:'flex', gap:8 }}>
+            <WireBtn label="Listen" filled />
+            <WireBtn label="Book Studio" />
+          </div>
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div style={{ height:1, background:'#222', margin:'0 24px' }} />
+
+      {/* Releases — giant italic list like KOVA */}
+      <div style={{ padding:'20px 24px', position:'relative' }}>
+        <SectionLabel text="music" dark />
+        <div className="wf-label" style={{ fontSize:9, color:'#444', marginBottom:14, letterSpacing:2 }}>RELEASES</div>
+        {['THE EVOLUTION OF SELF DESTRUCTION', 'FILTHY', 'DARK MATTER'].map((t,i) => (
+          <div key={i} style={{
+            padding:'12px 0',
+            borderBottom:'1px solid #1e1e1e',
+            display:'flex', justifyContent:'space-between', alignItems:'center'
+          }}>
+            <span className="wf-heading" style={{ fontSize:18, color: i===0 ? C.white : '#444' }}>{t}</span>
+            <span className="wf-label" style={{ fontSize:9, color:'#444' }}>2024 ›</span>
+          </div>
+        ))}
+        <Annotation text="hover reveals album art" style={{ bottom:8, left:24 }} />
+      </div>
+
+      {/* Bio strip */}
+      <div style={{ padding:'20px 24px', borderTop:'1px solid #1e1e1e' }}>
+        <div className="wf-heading" style={{ fontSize:28, color: C.white, lineHeight:1 }}>
+          RAW.<br/>REAL.<br/>ALCHEMICAL.
+        </div>
+        <div className="wf-label" style={{ fontSize:9, color:'#444', marginTop:10, lineHeight:1.8 }}>
+          Bio copy — 2–3 sentences, punchy.
+        </div>
+      </div>
+
+      {/* Studio CTA */}
+      <div style={{ padding:'20px 24px', borderTop:'1px solid #1e1e1e', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+        <div>
+          <div className="wf-heading" style={{ fontSize:16, color:C.white }}>BOOK THE STUDIO</div>
+          <div className="wf-label" style={{ fontSize:9, color:'#444' }}>Manchester · Professional</div>
+        </div>
+        <WireBtn label="Book →" filled />
+      </div>
+
+      {/* Footer */}
+      <div style={{ padding:'16px 24px', borderTop:'1px solid #1e1e1e', display:'flex', justifyContent:'space-between' }}>
+        <span className="wf-label" style={{ fontSize:9, color:'#333' }}>© 2025 ELCEE THE ALCHEMIST</span>
+        <div style={{ display:'flex', gap:10 }}>
+          {['IG','SC','SP'].map(s=>(
+            <span key={s} className="wf-label" style={{ fontSize:9, color:'#444' }}>{s}</span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ══════════════════════════════════════════
+   WIREFRAME C — Editorial / Spotify-grid
+   Inspired by Spotify's alternating image+text
+   blocks. B&W photos as dominant visual
+   elements with editorial section breaks.
+══════════════════════════════════════════ */
+const WireframeC = () => {
+  const W = 400;
+  return (
+    <div style={{ width: W, background: C.black, fontFamily: 'Space Mono' }}>
+
+      {/* Nav */}
+      <div style={{ padding:'16px 24px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+        <span className="wf-heading" style={{ fontSize:15, color:C.white, letterSpacing:2 }}>ELCEE THE ALCHEMIST</span>
+        <div style={{ width:28, height:28, border:`1px solid #333`, borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center' }}>
+          <span className="wf-label" style={{ fontSize:8, color:'#555' }}>☰</span>
+        </div>
+      </div>
+
+      {/* Hero — split 60/40 vertical */}
+      <div style={{ display:'flex', height:260, position:'relative' }}>
+        <ImgPlaceholder w="60%" h="260px" label="artist portrait\nfull height" dark />
+        <div style={{ width:'40%', background:'#0a0a0a', padding:'20px 16px', display:'flex', flexDirection:'column', justifyContent:'flex-end' }}>
+          <div className="wf-label" style={{ fontSize:8, color:'#555', letterSpacing:3, marginBottom:6 }}>MANCHESTER · UK</div>
+          <div className="wf-heading" style={{ fontSize:24, color:C.white, lineHeight:1 }}>
+            ELCEE<br/>THE<br/>ALCHE<br/>MIST
+          </div>
+          <div style={{ height:1, background:'#222', margin:'12px 0' }} />
+          <WireBtn label="Listen Now →" filled />
+        </div>
+        <Annotation text="name stacks vertically" style={{ bottom:8, right:8, zIndex:10 }} />
+      </div>
+
+      {/* Ticker */}
+      <div style={{
+        background: C.white, padding:'10px 24px',
+        overflow:'hidden', whiteSpace:'nowrap'
+      }}>
+        <span className="wf-label" style={{ fontSize:9, color: C.black, letterSpacing:4 }}>
+          NEW SINGLE OUT NOW &nbsp;·&nbsp; BOOK THE ALCHEMIST STUDIO &nbsp;·&nbsp; MANCHESTER'S FINEST &nbsp;·&nbsp; ◆ &nbsp;·&nbsp; NEW SINGLE OUT NOW &nbsp;·&nbsp;
+        </span>
+        <Annotation text="scrolling marquee" style={{ top:-20, right:8, position:'relative' }} />
+      </div>
+
+      {/* Releases — full-bleed editorial blocks */}
+      <div style={{ position:'relative' }}>
+        <SectionLabel text="releases" dark />
+        {/* Block 1: image left, text right */}
+        <div style={{ display:'flex', borderTop:'1px solid #1a1a1a' }}>
+          <ImgPlaceholder w="180px" h="160px" label="album art\nfull bleed" dark />
+          <div style={{ flex:1, padding:'16px', background:'#0d0d0d', display:'flex', flexDirection:'column', justifyContent:'space-between' }}>
+            <div>
+              <div className="wf-label" style={{ fontSize:8, color:'#555', letterSpacing:2 }}>ALBUM · 2024</div>
+              <div className="wf-heading" style={{ fontSize:15, color:C.white, marginTop:4 }}>THE EVOLUTION OF SELF DESTRUCTION</div>
+            </div>
+            <div style={{ display:'flex', gap:8, alignItems:'center' }}>
+              <div style={{ width:20, height:20, borderRadius:'50%', border:'1px solid #333', display:'flex',alignItems:'center',justifyContent:'center' }}>
+                <span style={{ fontSize:7, color:'#555' }}>▶</span>
+              </div>
+              <span className="wf-label" style={{ fontSize:8, color:'#555' }}>Spotify</span>
+            </div>
+          </div>
+        </div>
+        {/* Block 2: text left, image right */}
+        <div style={{ display:'flex', borderTop:'1px solid #1a1a1a' }}>
+          <div style={{ flex:1, padding:'16px', background:'#111', display:'flex', flexDirection:'column', justifyContent:'space-between' }}>
+            <div>
+              <div className="wf-label" style={{ fontSize:8, color:'#555', letterSpacing:2 }}>SINGLE · 2024</div>
+              <div className="wf-heading" style={{ fontSize:15, color:C.white, marginTop:4 }}>FILTHY</div>
+            </div>
+            <div style={{ display:'flex', gap:8, alignItems:'center' }}>
+              <div style={{ width:20, height:20, border:'1px solid #333', display:'flex',alignItems:'center',justifyContent:'center' }}>
+                <span style={{ fontSize:7, color:'#555' }}>▶</span>
+              </div>
+              <span className="wf-label" style={{ fontSize:8, color:'#555' }}>YouTube</span>
+            </div>
+          </div>
+          <ImgPlaceholder w="180px" h="120px" label="video thumbnail" dark />
+        </div>
+        <Annotation text="alternating blocks like Spotify" style={{ bottom:8, left:8, zIndex:5 }} />
+      </div>
+
+      {/* Studio section — white contrast */}
+      <div style={{ background: C.offwhite, padding:'24px' }}>
+        <div className="wf-heading" style={{ fontSize:22, color:C.black }}>THE<br/>ALCHEMIST<br/>STUDIO</div>
+        <ImgPlaceholder w="100%" h="90px" label="studio photo" dark={false} style={{ margin:'14px 0' }} />
+        <div className="wf-label" style={{ fontSize:9, color:'#666', marginBottom:12 }}>Professional recording. Mix. Master.</div>
+        <WireBtn label="Book a Session" filled dark={false} />
+      </div>
+
+      {/* Footer */}
+      <div style={{ background:C.black, padding:'16px 24px', display:'flex', justifyContent:'space-between' }}>
+        <span className="wf-label" style={{ fontSize:8, color:'#333' }}>ELCEE THE ALCHEMIST © 2025</span>
+        <div style={{ display:'flex', gap:10 }}>
+          {['IG','SC','SP','YT'].map(s=><span key={s} className="wf-label" style={{ fontSize:8, color:'#444' }}>{s}</span>)}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ══════════════════════════════════════════
+   WIREFRAME D — Scroll-Snap / Cinematic Sections
+   Full-viewport snap sections. Each section
+   fills the viewport with extreme contrast.
+   Most ambitious / Ravi-closest.
+══════════════════════════════════════════ */
+const WireframeD = () => {
+  const W = 400, SH = 180;
+  return (
+    <div style={{ width: W, background: C.black, fontFamily: 'Space Mono' }}>
+
+      {/* Snap Section 1 — Full Dark Hero */}
+      <div style={{ height: SH + 20, background: C.black, position:'relative', overflow:'hidden' }}>
+        <ImgPlaceholder w="100%" h={`${SH+20}px`} label="full viewport\ncinematic hero photo\n(artist, dark, B&W)" dark />
+        <div style={{ position:'absolute', inset:0, background:'linear-gradient(135deg, rgba(0,0,0,0.85) 40%, rgba(0,0,0,0.2) 100%)' }} />
+        <NavBar dark />
+        <div style={{ position:'absolute', bottom:20, left:24 }}>
+          <div className="wf-heading" style={{ fontSize:32, color:C.white, lineHeight:0.95 }}>
+            ELCEE<br/>THE<br/>ALCHEMIST
+          </div>
+          <div style={{ display:'flex', gap:8, marginTop:12 }}>
+            <WireBtn label="Listen" filled />
+            <WireBtn label="Studio" />
+          </div>
+        </div>
+        <div style={{ position:'absolute', bottom:8, right:16 }}>
+          <span className="wf-label" style={{ fontSize:8, color:'rgba(255,255,255,0.3)', letterSpacing:2 }}>01 / 05</span>
+        </div>
+        <Annotation text="full-vh snap, photo parallax" style={{ top:50, right:8 }} />
+      </div>
+
+      {/* Snap indicator */}
+      <div style={{ display:'flex', gap:4, justifyContent:'center', padding:'6px 0', background:C.black }}>
+        {[0,1,2,3,4].map(i=>(
+          <div key={i} style={{ width: i===0?16:4, height:4, background: i===0?C.white:'#333', borderRadius:2 }} />
+        ))}
+        <span className="wf-label" style={{ fontSize:8, color:'#333', marginLeft:6 }}>scroll-snap sections</span>
+      </div>
+
+      {/* Snap Section 2 — Releases (white) */}
+      <div style={{ height: SH, background: C.offwhite, position:'relative', padding:'16px 24px', display:'flex', flexDirection:'column', justifyContent:'space-between' }}>
+        <div>
+          <div className="wf-label" style={{ fontSize:8, color:'#999', letterSpacing:3 }}>02 / MUSIC</div>
+          <div className="wf-heading" style={{ fontSize:22, color:C.black, marginTop:4 }}>LATEST RELEASES</div>
+        </div>
+        <div style={{ display:'flex', gap:8 }}>
+          {[0,1,2].map(i=>(
+            <div key={i} style={{ flex:1 }}>
+              <ImgPlaceholder w="100%" h="70px" label={`artwork ${i+1}`} dark={false} />
+              <div className="wf-label" style={{ fontSize:7, color:C.black, marginTop:3 }}>Track Title</div>
+            </div>
+          ))}
+        </div>
+        <SectionLabel text="section 2" dark={false} />
+      </div>
+
+      {/* Snap Section 3 — Bio (dark) */}
+      <div style={{ height: SH, background:'#0a0a0a', position:'relative', display:'flex', overflow:'hidden' }}>
+        <ImgPlaceholder w="45%" h={`${SH}px`} label="portrait" dark />
+        <div style={{ flex:1, padding:'16px', display:'flex', flexDirection:'column', justifyContent:'center' }}>
+          <div className="wf-label" style={{ fontSize:8, color:'#444', letterSpacing:2, marginBottom:6 }}>03 / ABOUT</div>
+          <div className="wf-heading" style={{ fontSize:20, color:C.white, lineHeight:1.0 }}>
+            RAW.<br/>REAL.
+          </div>
+          <div className="wf-label" style={{ fontSize:8, color:'#555', marginTop:8, lineHeight:1.7 }}>
+            Bio copy — punchy,<br/>2-3 sentences.
+          </div>
+        </div>
+        <Annotation text="image + text side by side" style={{ bottom:6, left:6 }} />
+      </div>
+
+      {/* Snap Section 4 — Studio (white) */}
+      <div style={{ height: SH, background: C.white, position:'relative', overflow:'hidden' }}>
+        <ImgPlaceholder w="100%" h={`${SH}px`} label="studio photo — full bleed" dark={false} />
+        <div style={{ position:'absolute', inset:0, background:'rgba(255,255,255,0.6)' }} />
+        <div style={{ position:'absolute', bottom:16, left:24, right:16 }}>
+          <div className="wf-heading" style={{ fontSize:22, color:C.black }}>BOOK THE STUDIO</div>
+          <div className="wf-label" style={{ fontSize:8, color:'#666', marginTop:4, marginBottom:10 }}>Professional recording. Manchester.</div>
+          <WireBtn label="Book Now →" filled dark={false} />
+        </div>
+        <div style={{ position:'absolute', top:8, right:16 }}>
+          <span className="wf-label" style={{ fontSize:8, color:'#999', letterSpacing:2 }}>04 / STUDIO</span>
+        </div>
+        <Annotation text="photo bleeds through frosted overlay" style={{ top:8, left:8 }} />
+      </div>
+
+      {/* Footer section 5 */}
+      <div style={{ height: 60, background: C.black, display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 24px' }}>
+        <span className="wf-heading" style={{ fontSize:12, color:C.white, letterSpacing:2 }}>ELCEE</span>
+        <div style={{ display:'flex', gap:10 }}>
+          {['IG','SC','SP'].map(s=><span key={s} className="wf-label" style={{ fontSize:8, color:'#444' }}>{s}</span>)}
+        </div>
+        <span className="wf-label" style={{ fontSize:7, color:'#333', letterSpacing:1 }}>05 / CONNECT</span>
+      </div>
+    </div>
+  );
+};
+
+
+/* ══════════════════════════════════════════
+   WIREFRAME E — A Hero + C Editorial (SELECTED)
+   Full-bleed cinematic dark hero (A) +
+   editorial alternating release blocks (C)
+══════════════════════════════════════════ */
+const WireframeE = () => {
+  const W = 420;
+  return (
+    <div style={{ width: W, background: C.black, fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>
+
+      {/* ── HERO (from A) ── */}
+      <div style={{ width: W, height: 300, background: C.black, position: 'relative', overflow: 'hidden' }}>
+        <ImgPlaceholder w="100%" h="300px" label="full-bleed artist photo\n(dark, cinematic B&W)" dark />
+        {/* Deep gradient overlay */}
+        <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.0) 40%, rgba(0,0,0,0.85) 100%)' }} />
+        {/* Grunge texture overlay */}
+        <div style={{ position:'absolute', inset:0, backgroundImage:`url(uploads/Texturelabs_Grunge_320L.jpg)`, backgroundSize:'cover', opacity:0.18, mixBlendMode:'screen' }} />
+        <NavBar dark />
+        {/* Ankh watermark */}
+        <img src="uploads/ankh WHITE.png" alt="" style={{ position:'absolute', right:24, top:'50%', transform:'translateY(-50%)', height:80, opacity:0.07 }} />
+        {/* Name centred bottom */}
+        <div style={{ position:'absolute', bottom:44, left:0, right:0, textAlign:'center' }}>
+          <div className="wf-heading" style={{ fontSize: 52, color: C.white, lineHeight:0.9, letterSpacing:-2 }}>
+            ELCEE<br/>THE ALCHEMIST
+          </div>
+          <div className="wf-label" style={{ fontSize: 9, color: 'rgba(255,255,255,0.4)', marginTop: 10, letterSpacing: 4, textTransform:'uppercase' }}>
+            Alternative Rap · Manchester
+          </div>
+        </div>
+        {/* Scroll cue */}
+        <div style={{ position:'absolute', bottom:14, left:'50%', transform:'translateX(-50%)', textAlign:'center' }}>
+          <div style={{ width:1, height:20, background:'rgba(255,255,255,0.3)', margin:'0 auto' }} />
+          <span className="wf-label" style={{ fontSize:8, color:'rgba(255,255,255,0.25)', letterSpacing:3 }}>SCROLL</span>
+        </div>
+        <Annotation text="parallax photo + grunge overlay" style={{ top:52, right:8 }} />
+        <SectionLabel text="01 hero" dark />
+      </div>
+
+      {/* ── MARQUEE TICKER (from C) ── */}
+      <div style={{ background: C.white, padding:'9px 0', overflow:'hidden', whiteSpace:'nowrap', borderTop:`2px solid ${C.black}` }}>
+        <span className="wf-heading" style={{ fontSize:9, color: C.black, letterSpacing:4, textTransform:'uppercase' }}>
+          NEW SINGLE OUT NOW &nbsp;·&nbsp; BOOK THE ALCHEMIST STUDIO &nbsp;·&nbsp; MANCHESTER &nbsp;·&nbsp; ✦ &nbsp;·&nbsp; NEW SINGLE OUT NOW &nbsp;·&nbsp; BOOK THE ALCHEMIST STUDIO &nbsp;·&nbsp;
+        </span>
+        <Annotation text="auto-scrolling marquee" style={{ top:-18, right:8, position:'relative' }} />
+      </div>
+
+      {/* ── RELEASES — editorial alternating blocks (from C) ── */}
+      <div style={{ position:'relative' }}>
+        <SectionLabel text="02 releases" dark />
+
+        {/* Row label */}
+        <div style={{ padding:'16px 24px 8px', display:'flex', justifyContent:'space-between', alignItems:'baseline', borderBottom:'1px solid #1a1a1a' }}>
+          <div className="wf-heading" style={{ fontSize:22, color:C.white, letterSpacing:-1 }}>LATEST RELEASES</div>
+          <span className="wf-label" style={{ fontSize:8, color:'#444', letterSpacing:2 }}>ALL MUSIC →</span>
+        </div>
+
+        {/* Block 1: image LEFT, text RIGHT — dark */}
+        <div style={{ display:'flex', borderBottom:'1px solid #1a1a1a' }}>
+          <ImgPlaceholder w="190px" h="170px" label="album art\nfull bleed" dark />
+          <div style={{ flex:1, padding:'18px 16px', background:'#0d0d0d', display:'flex', flexDirection:'column', justifyContent:'space-between' }}>
+            <div>
+              <div className="wf-label" style={{ fontSize:8, color:'#555', letterSpacing:3, textTransform:'uppercase' }}>Album · 2024</div>
+              <div className="wf-heading" style={{ fontSize:14, color:C.white, marginTop:6, lineHeight:1.1 }}>THE EVOLUTION OF<br/>SELF DESTRUCTION</div>
+            </div>
+            <div style={{ display:'flex', gap:10, alignItems:'center' }}>
+              <div style={{ width:22, height:22, borderRadius:'50%', border:'1px solid #333', display:'flex',alignItems:'center',justifyContent:'center' }}>
+                <span style={{ fontSize:8, color:'#555' }}>▶</span>
+              </div>
+              <span className="wf-label" style={{ fontSize:8, color:'#444' }}>Listen on Spotify</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Block 2: text LEFT, image RIGHT — slightly lighter dark */}
+        <div style={{ display:'flex', borderBottom:'1px solid #1a1a1a' }}>
+          <div style={{ flex:1, padding:'18px 16px', background:'#111', display:'flex', flexDirection:'column', justifyContent:'space-between' }}>
+            <div>
+              <div className="wf-label" style={{ fontSize:8, color:'#555', letterSpacing:3, textTransform:'uppercase' }}>Single · 2024</div>
+              <div className="wf-heading" style={{ fontSize:22, color:C.white, marginTop:6 }}>FILTHY</div>
+            </div>
+            <div style={{ display:'flex', gap:10, alignItems:'center' }}>
+              <div style={{ width:22, height:22, border:'1px solid #333', display:'flex',alignItems:'center',justifyContent:'center' }}>
+                <span style={{ fontSize:8, color:'#555' }}>▶</span>
+              </div>
+              <span className="wf-label" style={{ fontSize:8, color:'#444' }}>Watch on YouTube</span>
+            </div>
+          </div>
+          <ImgPlaceholder w="190px" h="130px" label="video thumbnail\nB&W" dark />
+        </div>
+
+        {/* Block 3: image LEFT — dark */}
+        <div style={{ display:'flex', borderBottom:'1px solid #1a1a1a' }}>
+          <ImgPlaceholder w="190px" h="130px" label="album art" dark />
+          <div style={{ flex:1, padding:'18px 16px', background:'#0d0d0d', display:'flex', flexDirection:'column', justifyContent:'space-between' }}>
+            <div>
+              <div className="wf-label" style={{ fontSize:8, color:'#555', letterSpacing:3, textTransform:'uppercase' }}>Single · 2023</div>
+              <div className="wf-heading" style={{ fontSize:16, color:C.white, marginTop:6 }}>DARK MATTER</div>
+            </div>
+            <div style={{ display:'flex', gap:10, alignItems:'center' }}>
+              <div style={{ width:22, height:22, borderRadius:'50%', border:'1px solid #333', display:'flex',alignItems:'center',justifyContent:'center' }}>
+                <span style={{ fontSize:8, color:'#555' }}>▶</span>
+              </div>
+              <span className="wf-label" style={{ fontSize:8, color:'#444' }}>Listen on Spotify</span>
+            </div>
+          </div>
+        </div>
+        <Annotation text="image ↔ text alternates each row" style={{ bottom:6, left:8 }} />
+      </div>
+
+      {/* ── ABOUT — dark strip ── */}
+      <div style={{ padding:'22px 24px', background:'#050505', display:'flex', gap:18, alignItems:'center', borderTop:'1px solid #1a1a1a', position:'relative' }}>
+        <SectionLabel text="03 about" dark />
+        <div style={{ flex:1 }}>
+          <div className="wf-heading" style={{ fontSize:26, color:C.white, lineHeight:0.9, letterSpacing:-1 }}>
+            RAW<br/>LYRICISM.<br/>ALCHEMICAL<br/>SOUND.
+          </div>
+          <div className="wf-label" style={{ fontSize:9, color:'#555', marginTop:10, lineHeight:1.8 }}>
+            Bio copy — 2–3 punchy sentences.<br/>Manchester. Authentic. Unfiltered.
+          </div>
+        </div>
+        <div style={{ position:'relative' }}>
+          <ImgPlaceholder w="110px" h="130px" label="portrait\nB&W" dark />
+          <img src="uploads/ankh transparent.png" alt="" style={{ position:'absolute', bottom:-10, right:-10, width:40, opacity:0.5 }} />
+        </div>
+      </div>
+
+      {/* ── STUDIO — white contrast (from C) ── */}
+      <div style={{ background: C.offwhite, padding:'22px 24px', position:'relative', borderTop:`3px solid ${C.black}` }}>
+        <SectionLabel text="04 studio" dark={false} />
+        <div className="wf-heading" style={{ fontSize:24, color:C.black, lineHeight:0.95, letterSpacing:-1 }}>
+          THE<br/>ALCHEMIST<br/>STUDIO
+        </div>
+        <ImgPlaceholder w="100%" h="90px" label="studio interior photo" dark={false} style={{ margin:'14px 0' }} />
+        <div className="wf-label" style={{ fontSize:9, color:'#666', marginBottom:14 }}>Professional recording. Mix. Master. Manchester.</div>
+        <WireBtn label="Book a Session →" filled dark={false} />
+        <Annotation text="white section = max contrast" style={{ top:8, right:32 }} />
+      </div>
+
+      {/* ── FOOTER ── */}
+      <div style={{ background:C.black, padding:'16px 24px', display:'flex', justifyContent:'space-between', alignItems:'center', borderTop:'1px solid #1a1a1a' }}>
+        <img src="uploads/ETA WHITE new cropped.png" alt="ELCEE" style={{ height:22 }} />
+        <div style={{ display:'flex', gap:14 }}>
+          {['IG','SC','SP','YT'].map(s=><span key={s} className="wf-label" style={{ fontSize:8, color:'#444', letterSpacing:1 }}>{s}</span>)}
+        </div>
+        <span className="wf-label" style={{ fontSize:8, color:'#333' }}>© 2025</span>
+      </div>
+    </div>
+  );
+};
+
+/* ══════════════════════════════════════════
+   MAIN RENDER
+══════════════════════════════════════════ */
+const App = () => (
+  <DesignCanvas title="Elcee The Alchemist — Homepage Wireframes">
+    <DCSection id="selected" title="→ Selected Direction">
+      <DCArtboard id="e" label="E — A Hero + C Editorial (Combined)" width={420} height={900}>
+        <WireframeE />
+      </DCArtboard>
+    </DCSection>
+    <DCSection id="concepts" title="All Concepts">
+      <DCArtboard id="a" label="A — Cinematic Hero" width={400} height={720}>
+        <WireframeA />
+      </DCArtboard>
+      <DCArtboard id="b" label="B — Type-First" width={400} height={720}>
+        <WireframeB />
+      </DCArtboard>
+      <DCArtboard id="c" label="C — Editorial Blocks" width={400} height={720}>
+        <WireframeC />
+      </DCArtboard>
+      <DCArtboard id="d" label="D — Scroll-Snap" width={400} height={730}>
+        <WireframeD />
+      </DCArtboard>
+    </DCSection>
+  </DesignCanvas>
+);
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

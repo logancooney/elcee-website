@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import Navigation from '../components/Navigation';
 import SiteFooter from '../components/SiteFooter';
 import { track } from '@vercel/analytics';
+import { CALENDLY_EVENT_URLS } from '../../lib/calendly-config';
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -137,9 +138,19 @@ function DiscountCaptureForm() {
 
   if (state === 'done') {
     return (
-      <p style={{ fontSize: 14, color: 'rgba(0,0,0,0.6)', letterSpacing: '0.05em' }}>
-        On its way — check your inbox.
-      </p>
+      <div>
+        <div style={{
+          background: 'rgba(0,0,0,0.08)',
+          border: '1px solid rgba(0,0,0,0.12)',
+          padding: '20px 24px',
+          marginBottom: 12,
+          display: 'inline-block',
+        }}>
+          <p style={{ fontSize: 9, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', marginBottom: 6 }}>Your discount code</p>
+          <p style={{ fontWeight: 900, fontSize: 22, letterSpacing: '0.15em', color: '#080808' }}>WELCOME10</p>
+        </div>
+        <p style={{ fontSize: 13, color: 'rgba(0,0,0,0.5)' }}>Also on its way to your inbox. Mention the code when booking.</p>
+      </div>
     );
   }
 
@@ -245,7 +256,7 @@ export default function FreePage() {
             20 minutes. Tell me what you&apos;re working on, and I&apos;ll tell you exactly how I can help — whether that&apos;s tutoring, studio time, or mixing. No commitment.
           </p>
           <a
-            href="https://calendly.com/elcee-mgmt/free-intro-call"
+            href={CALENDLY_EVENT_URLS.freeIntroCall}
             target="_blank"
             rel="noopener noreferrer"
             style={{

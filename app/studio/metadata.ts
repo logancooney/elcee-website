@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     siteName: 'Elcee the Alchemist',
     images: [
       {
-        url: 'https://elceethealchemist.com/studio-og-image.jpg',
+        url: 'https://elceethealchemist.com/api/og',
         width: 1200,
         height: 630,
         alt: 'Elcee the Alchemist Recording Studio Manchester',
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Recording Studio Manchester | Elcee the Alchemist',
     description: 'Professional recording, mixing & mastering from £35/hr',
-    images: ['https://elceethealchemist.com/studio-og-image.jpg'],
+    images: ['https://elceethealchemist.com/api/og'],
   },
   alternates: {
     canonical: 'https://elceethealchemist.com/studio',

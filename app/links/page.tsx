@@ -253,6 +253,21 @@ export default function LinksPage() {
           ))}
         </div>
 
+        {/* Book a free call — primary commercial CTA */}
+        <a
+          href="/free"
+          style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '16px 20px', marginBottom: 24,
+            fontWeight: 900, fontSize: 11, letterSpacing: '0.15em',
+            textTransform: 'uppercase', textDecoration: 'none',
+            background: '#fafafa', color: '#080808',
+          }}
+        >
+          Book a Free Call — Studio / Mixing / Tutoring
+          <span style={{ fontSize: 14, fontWeight: 400 }}>→</span>
+        </a>
+
         {/* Latest release */}
         <p style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 10 }}>
           Latest Release

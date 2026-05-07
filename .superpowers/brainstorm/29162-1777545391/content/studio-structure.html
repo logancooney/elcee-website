@@ -1,0 +1,97 @@
+<h2>Studio page — in depth</h2>
+<p class="subtitle">The studio offers two very different services: in-studio recording and remote mixing/mastering. That's the key design challenge.</p>
+
+<div class="section">
+  <h3>The problem — two audiences, one page</h3>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px;">
+    <div style="background: #111; border-radius: 8px; padding: 20px;">
+      <p style="color: #fafafa; font-weight: 900; font-size: 14px; margin-bottom: 8px;">Audience 1 — In-Studio Recording</p>
+      <p style="font-size: 12px; color: #aaa; line-height: 1.7;">Artists in Manchester who want to record. They care about the space, the engineer, and the rate. Book by the hour. Calendly booking.</p>
+      <p style="font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 8px;">£35/hr · 1–4hr sessions · Book calendar</p>
+    </div>
+    <div style="background: #111; border-radius: 8px; padding: 20px;">
+      <p style="color: #fafafa; font-weight: 900; font-size: 14px; margin-bottom: 8px;">Audience 2 — Remote Mix/Master</p>
+      <p style="font-size: 12px; color: #aaa; line-height: 1.7;">Artists anywhere who want their tracks mixed or mastered. They care about price, turnaround, and quality. Pay upfront, send files.</p>
+      <p style="font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 8px;">£40–£340 · Payment link · Send stems</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>How should the booking section handle both?</h3>
+  <div class="options">
+
+    <div class="option" data-choice="studio-split" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>Two booking blocks — one per service type</h3>
+        <p style="font-size: 12px; color: #aaa; margin-top: 8px; line-height: 1.7;">
+          <strong style="color: #fafafa;">Block 1 — Studio Recording</strong><br>
+          Free call (white, prominent) · Book Studio Time £35/hr → Calendly<br><br>
+          <strong style="color: #fafafa;">Block 2 — Remote Mixing & Mastering</strong><br>
+          Full Mix+Master £340 · Vocal Mix £190 · Mastering £40 — each a direct payment link. No Calendly needed.
+        </p>
+      </div>
+    </div>
+
+    <div class="option" data-choice="studio-unified" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>One booking block — free call leads, services beneath</h3>
+        <p style="font-size: 12px; color: #aaa; margin-top: 8px; line-height: 1.7;">
+          Free 20-Min Call (white, prominent) → same Calendly<br>
+          Book Studio Time £35/hr → Calendly<br>
+          Mix/Master → links to a separate section lower on the page<br><br>
+          Mixing prices live in their own section below, not in the booking block.
+        </p>
+      </div>
+    </div>
+
+    <div class="option" data-choice="studio-tabs" onclick="toggleSelect(this)">
+      <div class="letter">C</div>
+      <div class="content">
+        <h3>Two tabs — "Record" and "Mix/Master"</h3>
+        <p style="font-size: 12px; color: #aaa; margin-top: 8px; line-height: 1.7;">
+          Toggle between two booking views. "Record" shows the Calendly booking options. "Mix/Master" shows the payment links with prices.<br><br>
+          Keeps it in one compact block. Slightly more interactive.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <h3>Studio page structure (same B template as tutoring)</h3>
+  <div style="background: #111; border-radius: 10px; padding: 20px 24px; border: 2px solid #333; max-width: 560px; margin-top: 8px; font-size: 12px; color: #aaa; line-height: 2;">
+    <p style="color: #fafafa; font-weight: 900; margin-bottom: 4px;">Proposed order:</p>
+    ① Hero — "The Alchemist Studio" + rate + free call CTA<br>
+    ② Booking section — (depends on A/B/C above)<br>
+    ③ What you get — 3 tight bullets (space, engineer, turnaround)<br>
+    ④ Testimonials<br>
+    ⑤ FAQ<br>
+    <span style="color: rgba(255,255,255,0.3);">✂ Cut: Services grid, Pricing tables, Facility section, How It Works, separate Remote Services section</span>
+  </div>
+  <p class="subtitle" style="margin-top: 12px;">Pricing info folds into the booking options themselves — you see the price when you see the CTA. No separate pricing section needed.</p>
+</div>
+
+<div class="section">
+  <h3>One more question — the studio rate</h3>
+  <p class="subtitle">The current page shows £35/hr standard and £30/hr loyalty (£240/month subscription). Should the loyalty plan be on this page, or is that a conversation you have after the free call?</p>
+  <div class="options">
+    <div class="option" data-choice="loyalty-hide" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>Hide loyalty plan — just show £35/hr</h3>
+        <p>Simpler. Loyalty is something you offer after the relationship is built. Don't complicate the booking page with it.</p>
+      </div>
+    </div>
+    <div class="option" data-choice="loyalty-show" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>Show loyalty plan — it's a selling point</h3>
+        <p>Artists who record regularly will be attracted by the discount. Small mention alongside the standard rate.</p>
+      </div>
+    </div>
+  </div>
+</div>

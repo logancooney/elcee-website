@@ -2,6 +2,7 @@ import Link from "next/link";
 import Navigation from "../components/Navigation";
 import SiteFooter from "../components/SiteFooter";
 import { PRICES } from "../../content/prices";
+import { STUDIO_TESTIMONIALS } from "../../content/testimonials";
 
 export const metadata = {
   title: "Recording Studio Manchester | Professional Mixing & Mastering | Elcee the Alchemist",
@@ -44,11 +45,6 @@ const SERVICE_ITEMS = [
   },
 ];
 
-const TESTIMONIALS = [
-  { quote: "Working with Elcee transformed my sound. Professional setup, great ear for detail, and actually understands what independent artists need.", author: "Manchester Artist" },
-  { quote: "Best value recording studio in Manchester. Quality rivals the big studios but at a fraction of the price. Highly recommend.", author: "Local Producer" },
-  { quote: "As someone new to recording, Elcee made the whole process easy and stress-free. Explained everything clearly and got amazing results.", author: "Singer-Songwriter" },
-];
 
 export default function RecordingStudioManchesterPage() {
   return (
@@ -196,12 +192,12 @@ export default function RecordingStudioManchesterPage() {
             Trusted by<br />Manchester Artists
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-            {TESTIMONIALS.map((t) => (
+            {STUDIO_TESTIMONIALS.map((t) => (
               <div key={t.author} style={{ padding: '40px', border: '1px solid #1a1a1a', borderLeft: '3px solid rgba(255,255,255,0.3)' }}>
                 <p style={{ fontSize: 16, lineHeight: 1.8, fontStyle: 'italic', color: 'rgba(255,255,255,0.65)', marginBottom: 16 }}>
                   &ldquo;{t.quote}&rdquo;
                 </p>
-                <p style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>{t.author}</p>
+                <p style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>{t.author} — {t.location}</p>
               </div>
             ))}
           </div>
