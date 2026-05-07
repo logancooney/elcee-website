@@ -1,6 +1,24 @@
 # Dashboard MVP, Plan 1: Core Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For any executing agent (Claude, Codex, or human):** Work through tasks in order. Each task is a self-contained unit. Steps use checkbox `- [ ]` syntax. After each task, commit and move to the next. Stop and ask Logan if a step fails repeatedly, a decision is ambiguous, or you encounter unexpected behaviour. Do not guess at design choices, ask.
+
+## Project context
+
+This plan builds a personal management dashboard for Logan (Elcee the Alchemist), an independent rap artist and recording engineer in Manchester. The dashboard tracks his work across two streams (artist + business) and ships at `dash.elceethealchemist.com`.
+
+**Spec:** `docs/superpowers/specs/2026-05-07-career-management-dashboard-design.md` (read this first if you have any architectural questions during execution).
+
+**Existing infrastructure** (do not rebuild):
+- Supabase project (lives at the URL in `~/Claude/.env`, has `reddit_leads`, `instagram_drafts`, `facebook_leads`, `content_drafts` tables already, this plan adds 5 new tables to the same project)
+- Vercel account (deploys elceethealchemist.com)
+- Telegram bot (used for Reddit lead approvals, will be reused in Plan 3)
+- Hetzner server at `195.201.135.61` running existing crons (will host new cron in Plan 3)
+
+**Writing conventions** (must be followed in all code, commits, and copy):
+- English English always (`colour` not `color` in user-visible text, `realise` not `realize`, `centre` not `center`). CSS property names like `color:` stay as standard CSS.
+- Never use em dashes (`—`) in copy, labels, or UI text. Use commas, parentheses, full stops, or rephrase.
+- Never use hyphens to join words where avoidable. Prefer plain prose.
+- Logan's voice for any user-visible copy: direct, confident, restrained. No marketing-speak. No "dive into", "delve", "game-changer", "leverage", "foster", "nuanced".
 
 **Goal:** Build a working dashboard at `dash.elceethealchemist.com` with three views (Today, Week, Kanban), Google OAuth, and manual task management. Logan can log in, add tasks, see them organised by stream and time, complete them, and the UI matches the quality of elceethealchemist.com.
 
