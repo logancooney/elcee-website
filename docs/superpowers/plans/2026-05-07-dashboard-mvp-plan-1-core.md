@@ -429,7 +429,7 @@ git commit -m "feat(lib): add Task types and Supabase clients"
 import type { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 
-const ALLOWED_EMAILS = ['elcee.mgmt@gmail.com', 'elcee.automation@gmail.com'];
+const ALLOWED_EMAILS = ['elcee.mgmt@gmail.com'];
 
 export const authOptions: NextAuthOptions = {
   providers: [
