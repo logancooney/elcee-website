@@ -110,7 +110,7 @@ Four new tables in Supabase. All include `created_at`, `updated_at`, `user_id` (
 
 ### `projects`
 
-Multi task bodies of work. A release campaign, a 5 track mix package, a tutoring student's curriculum.
+Multi task bodies of work. A single release, an EP release, a client mix package, a build like this dashboard, a tutoring student's curriculum.
 
 | Field | Type | Notes |
 |---|---|---|
@@ -119,10 +119,57 @@ Multi task bodies of work. A release campaign, a 5 track mix package, a tutoring
 | `description` | text | |
 | `stream` | enum | `artist`, `business` |
 | `category` | enum | Same as tasks |
+| `template_id` | uuid | FK to `project_templates`, optional (manual projects skip this) |
+| `anchor_type` | enum | `target_date` (back tracked from a deadline) or `milestone` (organised by phase) |
+| `target_date` | date | Release day, delivery date, etc. Required if `anchor_type = target_date` |
+| `milestones` | jsonb | Ordered list of milestones with target dates, used if `anchor_type = milestone` |
+| `goals` | text | What "done" looks like in plain English |
 | `status` | enum | `active`, `paused`, `done`, `archived` |
 | `start_date` | date | |
-| `target_date` | date | |
-| `metadata` | jsonb | Project specific fields, e.g. release date, client name, song count |
+| `metadata` | jsonb | Type specific fields, e.g. song count for an EP, client name, build deliverables |
+
+### `project_templates`
+
+The framework for each project type. New ones get captured the first time Logan runs that type of project. Improved over time after each instance.
+
+| Field | Type | Notes |
+|---|---|---|
+| `id` | uuid | PK |
+| `name` | text | e.g. "Single Release", "EP Release", "Client Mix Package", "Claude Code Build" |
+| `category` | enum | Same as tasks |
+| `anchor_type` | enum | `target_date` or `milestone` |
+| `task_template` | jsonb | Ordered list of task definitions with relative timing |
+| `description` | text | What this template covers, when to use it |
+| `version` | int | Increments each time the template is refined |
+| `improvement_notes` | jsonb | History of changes, why each change was made |
+
+**`task_template` shape (jsonb):**
+
+```jsonc
+[
+  {
+    "title": "Book mastering",
+    "description": "Send final mix to mastering engineer. Standard turnaround 7 days.",
+    "stream": "artist",
+    "category": "releases",
+    "relative_timing": "T-12w",   // for target_date anchored
+    "est_minutes": 30,
+    "priority": 2
+  },
+  {
+    "title": "DistroKid upload",
+    "description": "Upload to DistroKid with 4-week lead time for editorial pitching window.",
+    "stream": "artist",
+    "category": "releases",
+    "relative_timing": "T-4w",
+    "est_minutes": 45,
+    "priority": 1
+  }
+  // ... more
+]
+```
+
+For `milestone` anchored templates, swap `relative_timing` for `milestone_index`.
 
 ### `recurring_rules`
 
@@ -156,6 +203,62 @@ Snapshots of each Sunday planning session, used by self improvement.
 | `notes` | text | Logan's free text reflection |
 | `claude_observations` | jsonb | Patterns Claude noticed (estimate accuracy, completion times of day, etc.) |
 | `next_week_adjustments` | text | What we agreed to do differently |
+
+---
+
+## Project Frameworks
+
+Without frameworks, `/plan-week` cannot generate project tasks. It only handles recurring work. Releases are the highest stakes projects in Logan's calendar, so frameworks are MVP scope, not deferred.
+
+### Project types that need frameworks
+
+Four project types cover the bulk of Logan's work. Each gets a template captured during its first run.
+
+| Type | Anchor | Typical lead time | Task count | Notes |
+|---|---|---|---|---|
+| **Single release** | release date | 6 to 8 weeks | 15 to 25 | High frequency, fast cycle |
+| **EP release** | release date | 12 to 16 weeks | 40 to 60 | Lower frequency, full campaign |
+| **Client work** | delivery date | 5 to 10 working days | 5 to 10 | Mix, master, multi track packages |
+| **Claude Code build** | milestones (no fixed end) | variable | variable | This dashboard, future tools |
+
+Other project types (festival applications, press campaigns, tutoring curricula, music videos) get added when Logan first runs them. The system asks: "I have not seen a project of this type before. Want to capture a template?" If yes, Claude walks Logan through the questions, captures the answers, generates the template.
+
+### How frameworks generate tasks
+
+When Logan creates a project from a template:
+
+1. Pick template (e.g. "Single Release").
+2. Set anchor (e.g. release date 15 August 2026).
+3. System computes absolute dates for every task in the template (T-12w from 15 Aug = 24 May).
+4. Tasks get written to the `tasks` table with `project_id` set, status `backlog`.
+5. As each task's date approaches, it surfaces in `/plan-week` for the relevant week.
+
+Logan can override any auto generated task before it lands in the calendar. Skipping a task is fine, the template does not become rigid.
+
+### Self improving templates
+
+After each project ends, Claude runs a **post project review** during the next `/plan-week`:
+
+- Which template tasks did you skip? (Should they be removed from the template?)
+- Which tasks were added manually that were not in the template? (Should they be added?)
+- Were any tasks scheduled too late or too early? (Adjust relative timing.)
+- Did anything go wrong because of a missing step? (Add it.)
+
+Logan accepts or rejects each suggestion. Approved changes update the template, increment the version, and log the reasoning in `improvement_notes`. The next single release uses the improved version.
+
+This is the system getting sharper over time. A release framework written today will look different and better six releases from now.
+
+### MVP framework: capture during first use
+
+The spec does not pre define every framework's content. Templates get built when Logan first runs each project type. For releases specifically, this likely happens in the first or second `/plan-week` after the dashboard ships, when Logan is setting up his next release. Claude leads the conversation:
+
+> "Walk me through what a single release needs from kickoff to one week post release. I will capture each task as we go, with timing relative to release day, who does it, how long it takes, and why it matters."
+
+The captured framework becomes the v1 template. Future releases use it. Each release's post project review refines it.
+
+### `/plan-week` integration with projects
+
+The Sunday flow gets a new step for project state. See updated flow below.
 
 ---
 
@@ -254,24 +357,33 @@ Claude reads Google Calendar for the upcoming 7 days. Lists existing obligations
 
 Asks Logan: "Anything coming up next week not on your calendar I should know about?" (Examples Claude prompts: a release? travel? a music video shoot?)
 
-**Step 3, Pull working data.**
+**Step 3, Pull project state.**
+
+For each active project, Claude pulls all tasks scheduled for the upcoming 7 days. Surfaces a summary:
+
+> "Active projects this week:
+> - Release 'Untitled 4' (single, T-4w): 6 tasks due, including DistroKid upload (Wed) and pre save link setup (Fri)
+> - Mix package for [client]: 2 tasks due, vocal mix revision and final master delivery
+> - Tutoring student [name]: next session Thursday, prep task due Wednesday"
+
+Logan confirms or adjusts: "Move the DistroKid upload to Tuesday, I have a session Wednesday." "Skip prep for [student] this week, we agreed to free form."
+
+**Step 4, Pull other working data.**
 
 Claude pulls from Supabase:
 - New leads needing follow up (Reddit, contact form, Calendly enquiries)
-- Active mix or master jobs and their status
-- Tutoring students and their next session topics
-- Content drafts ready to shoot or edit
-- Active releases and their stage
+- Content drafts ready to shoot or edit (independent of any release)
+- Anything else flagged for follow up
 
 Logan can scan and confirm: "Yes prioritise these, deprioritise those."
 
-**Step 4, Generate the plan.**
+**Step 5, Generate the plan.**
 
-Claude proposes the week. Specific tasks with time blocks, time estimates, descriptions tied to real assets. Organised by day, split by stream.
+Claude proposes the week. Specific tasks with time blocks, time estimates, descriptions tied to real assets. Organised by day, split by stream. Project tasks blended with recurring and one off work.
 
 Output is shown inline in the conversation as a draft (Markdown table or Claude's native formatting).
 
-**Step 5, Approve or refine.**
+**Step 6, Approve or refine.**
 
 Logan approves, adjusts, removes, or adds. Common adjustments:
 - "Too much on Tuesday, push the IG edit to Wednesday"
@@ -280,7 +392,7 @@ Logan approves, adjusts, removes, or adds. Common adjustments:
 
 Claude regenerates affected slots. Final approval before write.
 
-**Step 6, Trend and voice input (content tasks only).**
+**Step 7, Trend and voice input (content tasks only).**
 
 Before generating any content related task description, Claude asks:
 - "What audio are you seeing trending right now? Any saved posts you want me to reference?"
@@ -288,11 +400,15 @@ Before generating any content related task description, Claude asks:
 
 This is non negotiable per Design Principle 1.
 
-**Step 7, Write to Supabase + Google Calendar.**
+**Step 8, Post project review (only if a project ended in the past week).**
+
+For each project that completed last week, Claude asks the post project review questions and updates the relevant template (see Project Frameworks section). This is how templates get sharper over time.
+
+**Step 9, Write to Supabase + Google Calendar.**
 
 All approved tasks written. Calendar events created with task ID embedded in the description so two way sync works later.
 
-**Step 8, Save the weekly review.**
+**Step 10, Save the weekly review.**
 
 A new `weekly_reviews` row is created for the upcoming week. Filled in throughout the week as tasks complete.
 
@@ -301,7 +417,9 @@ A new `weekly_reviews` row is created for the upcoming week. Filled in throughou
 - Does not generate generic tasks ("plan content," "do admin").
 - Does not invent priorities Logan did not state.
 - Does not assume content trends. It asks.
+- Does not assume project task content. It uses templates and asks Logan.
 - Does not skip Step 1 (last week review). The whole self improvement loop depends on it.
+- Does not skip Step 8 when projects have ended. Template self improvement requires it.
 
 ---
 
@@ -444,18 +562,22 @@ When Logan posts a piece of content and updates `performance` in Supabase, that 
 
 ## MVP Scope
 
-What ships in the first build. Estimated 36 to 50 hours of focused work.
+What ships in the first build. Estimated 42 to 58 hours of focused work (revised after adding project frameworks).
 
-1. Database schemas (4 tables) and migrations
+1. Database schemas (5 tables, including `project_templates`) and migrations
 2. Auth flow, Google OAuth + Calendar scope
 3. Dashboard, three views, Daily + Weekly + Kanban
 4. Manual task add and edit (modal)
-5. Tap to complete, with optional feedback note
-6. Google Calendar one way write sync
-7. `/plan-week` skill, Sunday conversation flow
-8. Telegram morning briefing, 8am cron
-9. Content skills integration (task references, linked_data plumbing)
-10. End to end testing and UI polish pass
+5. Manual project create flow (pick template, set anchor, generate task tree)
+6. Tap to complete, with optional feedback note
+7. Google Calendar one way write sync
+8. `/plan-week` skill, Sunday conversation flow (10 steps including project state and post project review)
+9. Project framework capture flow (interactive, runs the first time Logan creates a project type without a stored template)
+10. Telegram morning briefing, 8am cron
+11. Content skills integration (task references, linked_data plumbing)
+12. End to end testing and UI polish pass
+
+Project frameworks (Single, EP, Client, Build) are MVP scope but not pre populated. They get captured when Logan first runs each project type, with Claude leading the capture conversation.
 
 ---
 
@@ -493,6 +615,7 @@ Resolved by Logan during spec review or first session.
 3. **Telegram briefing time:** 8am default, or different?
 4. **Default work hours:** 06:00–22:00 in Week view, or narrower (e.g. 09:00–19:00)?
 5. **Recurring rules MVP behaviour:** Table exists, but no engine. Do we hand seed any rules at MVP launch, or wait until v1.1?
+6. **First framework to capture:** Likely the Single Release framework, given releases are the priority. Are there any active or upcoming releases that should anchor the first capture session, so the framework is grounded in a real release rather than abstract?
 
 ---
 
