@@ -8,10 +8,8 @@ import type { ReactNode } from 'react';
 import SiteFooter from './components/SiteFooter';
 import MobileJumpNav from './components/MobileJumpNav';
 import Navigation from './components/Navigation';
-import StickyCallBar from './components/StickyCallBar';
 import { RELEASES } from '../content/releases';
 import { MARQUEE_ITEMS } from '../content/marquee';
-import { CALENDLY_EVENT_URLS } from '../lib/calendly-config';
 
 const outlineBtnStyle: React.CSSProperties = {
   display: 'inline-flex',
@@ -213,8 +211,9 @@ export default function Home() {
             Alternative Rap &nbsp;·&nbsp; Manchester
           </div>
           <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link
-              href="/studio"
+            <a
+              href="https://open.spotify.com/artist/6E8xwOloHnzGWVlNV9K8n7"
+              target="_blank" rel="noopener noreferrer"
               style={{
                 display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                 padding: '13px 28px', fontWeight: 900, fontSize: 10, letterSpacing: '0.18em',
@@ -224,11 +223,10 @@ export default function Home() {
                 minWidth: 152,
               }}
             >
-              Book Studio
-            </Link>
-            <a
-              href="https://open.spotify.com/artist/6E8xwOloHnzGWVlNV9K8n7"
-              target="_blank" rel="noopener noreferrer"
+              Listen Now
+            </a>
+            <Link
+              href="/studio"
               style={{
                 display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                 padding: '13px 28px', fontWeight: 900, fontSize: 10, letterSpacing: '0.18em',
@@ -238,8 +236,8 @@ export default function Home() {
                 transition: 'border-color 0.2s', minWidth: 152,
               }}
             >
-              Listen Now
-            </a>
+              Book Studio
+            </Link>
           </div>
         </div>
 
@@ -375,27 +373,19 @@ export default function Home() {
               Professional recording, engineering and tutoring in the heart of Manchester. Built for artists who refuse to compromise on sound.
             </p>
           </div>
-          <div>
-            <Link
-              href="/studio"
-              style={{
-                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                padding: '13px 28px', fontWeight: 900, fontSize: 10, letterSpacing: '0.18em',
-                textTransform: 'uppercase', textDecoration: 'none',
-                background: '#080808', color: '#fafafa',
-                border: 'none', cursor: 'pointer',
-                transition: 'opacity 0.2s',
-              }}
-            >
-              Book a Session →
-            </Link>
-            <p style={{ marginTop: 12, fontSize: 12, color: 'rgba(0,0,0,0.4)' }}>
-              Not sure yet?{' '}
-              <Link href="/free" style={{ color: 'rgba(0,0,0,0.6)', textDecoration: 'underline', textUnderlineOffset: 3 }}>
-                Book a free 20-min call first
-              </Link>
-            </p>
-          </div>
+          <Link
+            href="/studio"
+            style={{
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              padding: '13px 28px', fontWeight: 900, fontSize: 10, letterSpacing: '0.18em',
+              textTransform: 'uppercase', textDecoration: 'none',
+              background: '#080808', color: '#fafafa',
+              border: 'none', cursor: 'pointer',
+              transition: 'opacity 0.2s', alignSelf: 'flex-start',
+            }}
+          >
+            Book a Session →
+          </Link>
         </div>
 
         {/* Right — press shots */}
@@ -420,11 +410,6 @@ export default function Home() {
       </motion.section>
 
       <SiteFooter />
-
-      <StickyCallBar
-        url={CALENDLY_EVENT_URLS.freeIntroCall}
-        label="Book a Free Call →"
-      />
 
     </div>
   );

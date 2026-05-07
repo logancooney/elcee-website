@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Navigation from '../components/Navigation';
 import SiteFooter from '../components/SiteFooter';
+import ExitIntentPopup from '../components/ExitIntentPopup';
 import ServiceBookingBlock from '../components/ServiceBookingBlock';
 import StickyCallBar from '../components/StickyCallBar';
 import { CALENDLY_EVENT_URLS, CALENDLY_PAYMENT_LINKS, CALENDLY_BUNDLE_LINKS } from '../../lib/calendly-config';
@@ -205,6 +206,7 @@ export default function BookingContent() {
         url={CALENDLY_EVENT_URLS.freeIntroCall}
         label="Book a Free Call →"
       />
+      <ExitIntentPopup />
     </div>
   );
 }

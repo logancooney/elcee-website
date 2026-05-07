@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import StructuredDataPerson from "./components/StructuredDataPerson";
 import LenisProvider from "./components/LenisProvider";
-import ExitIntentPopup from "./components/ExitIntentPopup";
 import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
 
@@ -85,7 +84,6 @@ export default function RootLayout({
       <body className="antialiased">
         <LenisProvider>
           {children}
-          <ExitIntentPopup />
         </LenisProvider>
         <Analytics />
       </body>

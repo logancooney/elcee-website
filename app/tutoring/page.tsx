@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Navigation from '../components/Navigation';
 import SiteFooter from '../components/SiteFooter';
+import ExitIntentPopup from '../components/ExitIntentPopup';
 import ServiceBookingBlock from '../components/ServiceBookingBlock';
 import StickyCallBar from '../components/StickyCallBar';
 import Testimonials from './components/Testimonials';
@@ -268,6 +269,7 @@ export default function TutoringPage() {
         url={CALENDLY_EVENT_URLS.freeTutoringConsultation}
         label="Book Free Tutoring Consultation →"
       />
+      <ExitIntentPopup />
     </div>
   );
 }

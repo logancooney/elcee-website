@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Navigation from '../components/Navigation';
 import SiteFooter from '../components/SiteFooter';
+import ExitIntentPopup from '../components/ExitIntentPopup';
 import { track } from '@vercel/analytics';
 import { CALENDLY_EVENT_URLS } from '../../lib/calendly-config';
 
@@ -320,6 +321,7 @@ export default function FreePage() {
       {/* FREE DOWNLOADS — hidden until PDFs are ready */}
 
       <SiteFooter />
+      <ExitIntentPopup />
     </div>
   );
 }

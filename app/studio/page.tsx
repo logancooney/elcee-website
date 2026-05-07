@@ -8,6 +8,7 @@ import FAQ from './components/FAQ';
 import Testimonials from './components/Testimonials';
 import Navigation from '../components/Navigation';
 import SiteFooter from '../components/SiteFooter';
+import ExitIntentPopup from '../components/ExitIntentPopup';
 import ServiceBookingBlock from '../components/ServiceBookingBlock';
 import StickyCallBar from '../components/StickyCallBar';
 import { CALENDLY_EVENT_URLS, CALENDLY_PAYMENT_LINKS } from '../../lib/calendly-config';
@@ -368,6 +369,7 @@ export default function StudioPage() {
         url={CALENDLY_EVENT_URLS.freeStudioEnquiry}
         label="Book Free Studio Enquiry →"
       />
+      <ExitIntentPopup />
     </div>
   );
 }
